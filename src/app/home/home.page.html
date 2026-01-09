@@ -1,20 +1,201 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Nursing Report</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="container">
+    <!-- Header Branding -->
+    <div class="report-header ion-margin-bottom">
+      <div class="logo-section">
+        <h1 class="vighter-text">VIGHTER</h1>
+      </div>
+      <div class="address-section ion-text-end">
+        <p>10010 San Pedro Ave Ste 850, San Antonio, TX 78216</p>
+        <p>Main: 1.210.774.5393 | www.vighter.com</p>
+      </div>
+    </div>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+      <h2 class="ion-text-center">Nursing Report</h2>
+
+      <ion-grid>
+        <!-- Row 1: Date, Site -->
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="12" size-md="6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Site</mat-label>
+              <input matInput formControlName="site">
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <!-- Row 2: Crew -->
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>ICE Flight RN</mat-label>
+              <input matInput formControlName="iceFlightRN">
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="12" size-md="6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>2nd ICE Flight RN</mat-label>
+              <input matInput formControlName="secondICEFlightRN">
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <!-- Row 3: Tail, Mission -->
+        <ion-row>
+          <ion-col size="6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Tail #</mat-label>
+              <input matInput formControlName="tailNumber">
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Mission #</mat-label>
+              <input matInput formControlName="missionNumber">
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <!-- Row 4: FOIC, Lead, Site Stops -->
+        <ion-row>
+          <ion-col size="12" size-md="4">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>FOIC (Title)</mat-label>
+              <input matInput formControlName="foicTitle">
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="12" size-md="4">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>ASO Lead</mat-label>
+              <input matInput formControlName="asoLead">
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="12" size-md="4">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Site stops</mat-label>
+              <input matInput formControlName="siteStops">
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <mat-divider class="ion-margin-vertical"></mat-divider>
+
+        <!-- Row 5: Checks & Logistics -->
+        <ion-row>
+          <!-- Left: Checks -->
+          <ion-col size="12" size-md="6">
+            <div class="checkbox-group">
+              <mat-checkbox formControlName="preflightMEBCheck">Preflight MEB Check</mat-checkbox>
+              <mat-checkbox formControlName="preflightMEKO2AED">Preflight MEK, O2 Tanks, AED</mat-checkbox>
+              <mat-checkbox formControlName="safetyBriefingCompleted">Safety Briefing Completed</mat-checkbox>
+              <mat-checkbox formControlName="seatBeltsSecured">Seat Belts Secured</mat-checkbox>
+            </div>
+            
+            <mat-form-field appearance="outline" class="full-width ion-margin-top">
+              <mat-label>Narc Record</mat-label>
+              <input matInput formControlName="narcRecord">
+            </mat-form-field>
+          </ion-col>
+
+          <!-- Right: Times -->
+          <ion-col size="12" size-md="6">
+            <h3>Flight Times (Z)</h3>
+            <ion-row>
+              <ion-col size="4">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Showtime</mat-label>
+                  <input matInput formControlName="showtimeZ1">
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="4">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Block time</mat-label>
+                  <input matInput formControlName="blockTimeZ1">
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="4">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>End time</mat-label>
+                  <input matInput formControlName="endTimeZ1">
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+
+            <mat-checkbox formControlName="ronUsed" class="ion-margin-top">Use if RON</mat-checkbox>
+            <ion-row *ngIf="reportForm.get('ronUsed')?.value">
+              <ion-col size="4">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Showtime</mat-label>
+                  <input matInput formControlName="showtimeZ2">
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="4">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Block time</mat-label>
+                  <input matInput formControlName="blockTimeZ2">
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="4">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>End time</mat-label>
+                  <input matInput formControlName="endTimeZ2">
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+
+        <mat-divider class="ion-margin-vertical"></mat-divider>
+
+        <!-- Narrative Section -->
+        <h3>Narrative Log</h3>
+        <div formArrayName="notes">
+          <ion-row *ngFor="let note of notes.controls; let i = index" [formGroupName]="i" class="note-row">
+            <ion-col size="2">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Time (L)</mat-label>
+                <input matInput formControlName="timeL">
+              </mat-form-field>
+            </ion-col>
+            <ion-col size="9">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Notes</mat-label>
+                <textarea matInput formControlName="note" rows="2"></textarea>
+              </mat-form-field>
+            </ion-col>
+            <ion-col size="1" class="ion-align-self-center">
+              <button mat-icon-button color="warn" (click)="removeNote(i)" type="button">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </ion-col>
+          </ion-row>
+        </div>
+        <button mat-stroked-button color="primary" type="button" (click)="addNote()">
+          <mat-icon>add</mat-icon> Add Note
+        </button>
+
+      </ion-grid>
+
+      <div class="ion-margin-top ion-padding">
+        <button mat-raised-button color="primary" class="full-width" type="submit">
+          Save Draft
+        </button>
+      </div>
+    </form>
   </div>
 </ion-content>

@@ -1,0 +1,34 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+  .signature-container {
+    background: white;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.signature-container {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 10px;
+  background: #f9f9f9;
+}
+
+.signature-pad {
+  width: 100%;
+  height: 300px;
+  display: block;
+}
+
+h3 {
+  margin-top: 0;
+  color: var(--ion-color-primary);
+}
