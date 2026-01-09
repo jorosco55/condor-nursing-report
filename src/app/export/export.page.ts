@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -26,20 +26,15 @@ import { ReportService } from '../services/report.service';
     MatDividerModule
   ]
 })
-export class ExportPage implements OnInit, AfterViewInit {
+export class ExportPage implements AfterViewInit {
   @ViewChild('canvas1', { static: false }) canvas1!: ElementRef;
   @ViewChild('canvas2', { static: false }) canvas2!: ElementRef;
-  
+
   signaturePad1!: SignaturePad;
   signaturePad2!: SignaturePad;
 
-  constructor(
-    private reportService: ReportService,
-    private toastCtrl: ToastController
-  ) { }
-
-  ngOnInit() {
-  }
+  private reportService = inject(ReportService);
+  private toastCtrl = inject(ToastController);
 
   ngAfterViewInit() {
     this.signaturePad1 = new SignaturePad(this.canvas1.nativeElement);

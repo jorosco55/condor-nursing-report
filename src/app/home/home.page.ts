@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -35,11 +35,9 @@ import { ReportService } from '../services/report.service';
 export class HomePage implements OnInit {
   reportForm!: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private reportService: ReportService,
-    private toastCtrl: ToastController
-  ) {}
+  private fb = inject(FormBuilder);
+  private reportService = inject(ReportService);
+  private toastCtrl = inject(ToastController);
 
   ngOnInit() {
     this.initForm();
