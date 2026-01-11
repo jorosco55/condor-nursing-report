@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import SignaturePad from 'signature_pad';
 import * as pdfMake from 'pdfmake/build/pdfmake';
@@ -22,7 +21,6 @@ import { ReportService } from '../services/report.service';
     IonicModule,
     MatButtonModule,
     MatIconModule,
-    MatCardModule,
     MatDividerModule
   ]
 })
