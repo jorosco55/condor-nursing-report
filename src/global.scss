@@ -66,3 +66,28 @@ app-export {
 .cdk-overlay-container {
   z-index: 99999 !important;
 }
+
+// ============================================
+// Material Form Field Styling
+// ============================================
+mat-form-field {
+  &.mat-mdc-form-field {
+    width: 100%;
+    
+    // Make the outline background white for better contrast
+    .mat-mdc-text-field-wrapper {
+      background-color: white;
+      border-radius: 4px;
+    }
+    
+    // Ensure proper height and padding
+    .mdc-text-field {
+      border-radius: 4px;
+    }
+  }
+}
+
+// Make sure full-width class works everywhere
+.full-width {
+  width: 100%;
+}
