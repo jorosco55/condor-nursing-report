@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="95" fill="white" fill-opacity="0.1" stroke="white" stroke-width="2"/>
+
+  <!-- Condor Bird Silhouette - Soaring -->
+  <g fill="white">
+    <!-- Body -->
+    <ellipse cx="100" cy="105" rx="25" ry="15" />
+
+    <!-- Head -->
+    <circle cx="130" cy="98" r="10" />
+
+    <!-- Beak -->
+    <path d="M138 98 L155 95 L145 100 Z" />
+
+    <!-- Left Wing (top) -->
+    <path d="M75 105
+             Q 40 85, 15 70
+             Q 25 80, 35 90
+             Q 50 95, 75 100
+             Z" />
+
+    <!-- Left Wing (bottom feathers) -->
+    <path d="M75 110
+             Q 45 115, 20 130
+             Q 35 120, 50 112
+             Q 65 108, 75 108
+             Z" />
+
+    <!-- Right Wing (top) -->
+    <path d="M125 105
+             Q 160 85, 185 70
+             Q 175 80, 165 90
+             Q 150 95, 125 100
+             Z" />
+
+    <!-- Right Wing (bottom feathers) -->
+    <path d="M125 110
+             Q 155 115, 180 130
+             Q 165 120, 150 112
+             Q 135 108, 125 108
+             Z" />
+
+    <!-- Tail Feathers -->
+    <path d="M75 110
+             Q 70 125, 60 145
+             Q 75 135, 85 120
+             Q 90 115, 90 112
+             Z" />
+
+    <!-- Wing Detail Lines -->
+    <path d="M50 90 Q 60 95, 75 100" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+    <path d="M35 100 Q 50 105, 70 108" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+    <path d="M150 90 Q 140 95, 125 100" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+    <path d="M165 100 Q 150 105, 130 108" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+  </g>
+
+  <!-- Eye -->
+  <circle cx="133" cy="96" r="2" fill="#1a237e"/>
+</svg>

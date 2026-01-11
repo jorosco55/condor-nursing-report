@@ -1,0 +1,51 @@
+<ion-content class="login-content">
+  <div class="login-container">
+    <!-- Condor Logo -->
+    <div class="logo-section">
+      <img src="assets/images/condor-logo.svg" alt="Condor Logo" class="condor-logo">
+      <p class="tagline">Powered by Condor</p>
+    </div>
+
+    <!-- Company Name -->
+    <div class="company-section">
+      <h1 class="company-name">VIGHTER</h1>
+      <p class="company-subtitle">Flight Nursing Report System</p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="login-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput
+               [(ngModel)]="username"
+               placeholder="Enter your username"
+               autocomplete="username">
+        <mat-icon matPrefix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput
+               [(ngModel)]="password"
+               [type]="hidePassword ? 'password' : 'text'"
+               placeholder="Enter your password"
+               autocomplete="current-password"
+               (keyup.enter)="onLogin()">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="login-button" (click)="onLogin()">
+        <mat-icon>login</mat-icon>
+        Sign In
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <div class="login-footer">
+      <p>&copy; 2026 Vighter LLC. All rights reserved.</p>
+    </div>
+  </div>
+</ion-content>
