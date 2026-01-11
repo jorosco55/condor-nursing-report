@@ -23,7 +23,7 @@ $theme: mat.define-theme();
 
 :root {
   @include mat.all-component-themes($theme);
-  
+
   --ion-background-color: #dee2e6;
   --ion-text-color: #212529;
 }
@@ -41,4 +41,28 @@ $theme: mat.define-theme();
   width: 100%;
   height: 200px;
   background: white;
+}
+
+// ============================================
+// FIX: Ionic + Angular Material Compatibility
+// ============================================
+// The ion-router-outlet captures pointer events by default,
+// which blocks interactions with Angular Material components.
+// This fix passes events through to the actual page content.
+
+ion-router-outlet {
+  pointer-events: none !important;
+}
+
+ion-router-outlet .ion-page,
+ion-router-outlet > *,
+app-home,
+app-export {
+  pointer-events: auto !important;
+  touch-action: auto !important;
+}
+
+// Ensure Material overlays (datepicker, select, etc.) appear above Ionic
+.cdk-overlay-container {
+  z-index: 99999 !important;
 }

@@ -12,9 +12,13 @@ import { AppRoutingModule } from './app-routing.module';
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule, 
+    BrowserModule,
     BrowserAnimationsModule,
-    IonicModule.forRoot(), 
+    IonicModule.forRoot({
+      mode: 'md',
+      scrollAssist: false,
+      scrollPadding: false
+    }),
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule

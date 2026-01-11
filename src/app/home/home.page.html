@@ -1,10 +1,10 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar color="primary">
     <ion-title>Nursing Report</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content class="ion-padding" [scrollY]="true">
   <div class="container">
     <!-- Header Branding -->
     <div class="report-header ion-margin-bottom">
@@ -105,7 +105,7 @@
               <mat-checkbox formControlName="safetyBriefingCompleted">Safety Briefing Completed</mat-checkbox>
               <mat-checkbox formControlName="seatBeltsSecured">Seat Belts Secured</mat-checkbox>
             </div>
-            
+
             <mat-form-field appearance="outline" class="full-width ion-margin-top">
               <mat-label>Narc Record</mat-label>
               <input matInput formControlName="narcRecord">

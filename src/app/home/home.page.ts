@@ -63,12 +63,12 @@ export class HomePage implements OnInit {
       safetyBriefingCompleted: [false],
       seatBeltsSecured: [false],
       narcRecord: [''],
-      
+
       // Logistics
       showtimeZ1: [''],
       blockTimeZ1: [''],
       endTimeZ1: [''],
-      
+
       showtimeZ2: [''], // RON
       blockTimeZ2: [''], // RON
       endTimeZ2: [''], // RON
@@ -102,7 +102,7 @@ export class HomePage implements OnInit {
   addNote() {
     const now = new Date();
     const timeL = now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0');
-    
+
     const noteGroup = this.fb.group({
       timeL: [timeL],
       note: ['']
