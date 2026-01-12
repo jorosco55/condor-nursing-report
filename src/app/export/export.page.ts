@@ -40,9 +40,22 @@ export class ExportPage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.signaturePad1 = new SignaturePad(this.canvas1.nativeElement);
-    this.signaturePad2 = new SignaturePad(this.canvas2.nativeElement);
+    // Configure SignaturePad with touch-optimized settings
+    const signaturePadOptions = {
+      minWidth: 1,
+      maxWidth: 3,
+      throttle: 0,
+      velocityFilterWeight: 0.7,
+      dotSize: 1.5,
+      penColor: 'rgb(0, 0, 0)',
+      backgroundColor: 'rgb(255, 255, 255)'
+    };
+
+    this.signaturePad1 = new SignaturePad(this.canvas1.nativeElement, signaturePadOptions);
+    this.signaturePad2 = new SignaturePad(this.canvas2.nativeElement, signaturePadOptions);
+    
     this.resizeCanvases();
+    this.setupTouchListeners();
   }
 
   resizeCanvases() {
@@ -57,6 +70,30 @@ export class ExportPage implements OnInit, AfterViewInit {
     
     this.signaturePad1.clear();
     this.signaturePad2.clear();
+  }
+
+  setupTouchListeners() {
+    // Prevent page scroll when drawing on signature pads
+    [this.canvas1, this.canvas2].forEach(canvasRef => {
+      const canvas = canvasRef.nativeElement;
+      
+      // Prevent default touch behavior to avoid scrolling while signing
+      canvas.addEventListener('touchstart', (e: TouchEvent) => {
+        e.preventDefault();
+      }, { passive: false });
+      
+      canvas.addEventListener('touchmove', (e: TouchEvent) => {
+        e.preventDefault();
+      }, { passive: false });
+      
+      // Ensure smooth drawing on touch devices
+      canvas.style.touchAction = 'none';
+    });
+
+    // Handle window resize for responsive signature pads
+    window.addEventListener('resize', () => {
+      this.resizeCanvases();
+    });
   }
 
   clearSignature(padNumber: number) {

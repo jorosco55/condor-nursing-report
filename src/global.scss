@@ -28,6 +28,103 @@ $theme: mat.define-theme();
   --ion-text-color: #212529;
 }
 
+// ============================================
+// Touch Screen & Scroll Optimizations
+// ============================================
+
+// Enable smooth touch scrolling globally
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+}
+
+// Optimize all scrollable areas for touch
+ion-content {
+  --offset-bottom: auto !important;
+  
+  &::part(scroll) {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+  }
+}
+
+// Touch-friendly tap targets (minimum 44x44 per accessibility guidelines)
+button, 
+a, 
+.clickable,
+mat-checkbox,
+mat-radio-button,
+ion-item,
+ion-button {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+// Prevent text selection on UI elements during touch interactions
+button,
+.mat-button,
+.mat-icon-button,
+mat-checkbox,
+mat-radio-button {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+// Optimize input fields for touch
+input,
+textarea,
+select {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+// Smooth scroll behavior for all scrollable elements
+.scrollable,
+.overflow-auto,
+.overflow-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+// Prevent pull-to-refresh on non-content areas
+ion-header,
+ion-footer,
+.no-overscroll {
+  overscroll-behavior-y: none;
+}
+
+// Active/focus states for better touch feedback
+button:active,
+.mat-mdc-button:active,
+ion-button:active {
+  opacity: 0.7;
+  transform: scale(0.98);
+  transition: all 0.1s ease;
+}
+
+// Remove default outline on touch devices, add custom focus
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--ion-color-primary);
+  outline-offset: 2px;
+}
+
 // Tablet optimizations
 @media (min-width: 768px) {
   .container {
@@ -59,7 +156,7 @@ ion-router-outlet > *,
 app-home,
 app-export {
   pointer-events: auto !important;
-  touch-action: auto !important;
+  touch-action: pan-y pinch-zoom !important;
 }
 
 // Ensure Material overlays (datepicker, select, etc.) appear above Ionic
@@ -90,4 +187,89 @@ mat-form-field {
 // Make sure full-width class works everywhere
 .full-width {
   width: 100%;
+}
+
+// ============================================
+// Keyboard Handling Styles
+// ============================================
+
+:root {
+  --keyboard-height: 0px;
+}
+
+// When keyboard is visible, adjust the layout
+body.keyboard-visible {
+  // Prevent body scroll when keyboard is open
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+
+  ion-content {
+    --padding-bottom: var(--keyboard-height);
+
+    // Ensure content scrolls properly
+    &::part(scroll) {
+      padding-bottom: var(--keyboard-height);
+    }
+  }
+
+  // Adjust fixed elements
+  .fixed-bottom,
+  ion-footer {
+    transform: translateY(calc(-1 * var(--keyboard-height)));
+    transition: transform 0.25s ease-out;
+  }
+
+  // Ensure form fields are visible when focused
+  .container {
+    padding-bottom: calc(var(--keyboard-height) + 20px);
+  }
+}
+
+// Smooth transitions for keyboard show/hide
+ion-content {
+  transition: --padding-bottom 0.25s ease-out;
+  
+  // Enhanced touch scrolling for keyboard interactions
+  &::part(scroll) {
+    scroll-padding-bottom: 100px;
+  }
+}
+
+// iOS safe area handling with keyboard
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  body.keyboard-visible {
+    ion-content {
+      --padding-bottom: calc(var(--keyboard-height) + env(safe-area-inset-bottom));
+    }
+  }
+}
+
+// Accessory bar styling (if using keyboard accessory bar)
+.keyboard-accessory-bar {
+  position: fixed;
+  bottom: var(--keyboard-height);
+  left: 0;
+  right: 0;
+  background: #f0f0f0;
+  border-top: 1px solid #ccc;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  z-index: 99998;
+
+  button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    background: var(--ion-color-primary);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:active {
+      opacity: 0.8;
+    }
+  }
 }

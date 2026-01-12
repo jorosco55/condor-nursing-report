@@ -37,5 +37,6 @@ export interface NursingReport {
 
 export interface NarrativeNote {
   timeL: string;
+  rn: string;    // Selected RN for this note
   note: string;
 }
