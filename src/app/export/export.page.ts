@@ -163,6 +163,38 @@ export class ExportPage implements OnInit, AfterViewInit {
     // Initialize pdfMake vfs inside the method to avoid initialization issues
     (pdfMake as any).vfs = (pdfFonts as any).pdfMake.vfs;
 
+    const yesNo = (value: boolean | undefined) => (value ? 'Yes' : 'No');
+    const formatVitals = (entry: any) => {
+      if (entry?.vitalsNa) return 'N/A';
+      const parts = [] as string[];
+      if (entry?.bpSystolic || entry?.bpDiastolic) {
+        parts.push(`BP ${entry.bpSystolic || ''}/${entry.bpDiastolic || ''} mmHg`.trim());
+      }
+      if (entry?.hr) parts.push(`HR ${entry.hr}`);
+      if (entry?.resp) parts.push(`Resp ${entry.resp}`);
+      if (entry?.temp) parts.push(`Temp ${entry.temp}`);
+      if (entry?.o2Sat) parts.push(`O2 Sat ${entry.o2Sat}%`);
+      if (entry?.ratePercent) parts.push(`Rate% ${entry.ratePercent}%`);
+      if (entry?.bs) parts.push(`BS ${entry.bs}`);
+      return parts.length > 0 ? parts.join(', ') : 'N/A';
+    };
+
+    const paxMedicatedRows = report.paxMedicated && report.paxMedicated.length > 0
+      ? report.paxMedicated.map(entry => [
+          entry.aNumber || 'N/A',
+          entry.medication || 'N/A',
+          entry.dose || 'N/A',
+          entry.route || 'N/A',
+          entry.prnGiven ? 'Yes' : 'No',
+          formatVitals(entry),
+          entry.annotatedOnMtf || 'N/A'
+        ])
+      : [[{ text: 'No PAX medications recorded', colSpan: 7 }, '', '', '', '', '', '']];
+
+    const delayReasons = report.delayReasons && report.delayReasons.length > 0
+      ? report.delayReasons.join(', ')
+      : 'N/A';
+
     const docDefinition: any = {
       content: [
         { text: 'VIGHTER - Nursing Report', style: 'header' },
@@ -179,6 +211,94 @@ export class ExportPage implements OnInit, AfterViewInit {
               [{ text: '2nd ICE Flight RN:', bold: true }, report.secondICEFlightRN || 'N/A'],
               [{ text: 'Tail #:', bold: true }, report.tailNumber],
               [{ text: 'Mission #:', bold: true }, report.missionNumber],
+            ]
+          }
+        },
+        { text: 'Flight Times', style: 'sectionHeader', margin: [0, 20, 0, 10] },
+        {
+          table: {
+            widths: ['*', '*'],
+            body: [
+              [{ text: 'Wheels Up Site:', bold: true }, report.wheelsUpSite || 'N/A'],
+              [{ text: 'Wheels Up Time (Z):', bold: true }, report.wheelsUpTime || 'N/A'],
+              [{ text: 'Wheels Down Site:', bold: true }, report.wheelsDownSite || 'N/A'],
+              [{ text: 'Wheels Down Time (Z):', bold: true }, report.wheelsDownTime || 'N/A']
+            ]
+          }
+        },
+        { text: 'Transfer of Care', style: 'sectionHeader', margin: [0, 20, 0, 10] },
+        {
+          table: {
+            widths: ['*', '*'],
+            body: [
+              [{ text: 'Transfer of care to ICE LEAD (Site):', bold: true }, report.transferOfCareSite || 'N/A'],
+              [{ text: 'Received care:', bold: true }, yesNo(report.receivedCare)]
+            ]
+          }
+        },
+        { text: 'PAX Medicated', style: 'sectionHeader', margin: [0, 20, 0, 10] },
+        {
+          table: {
+            widths: [60, 90, 50, 50, 40, 90, '*'],
+            body: [
+              [
+                { text: 'A-Number', bold: true },
+                { text: 'Medication', bold: true },
+                { text: 'Dose', bold: true },
+                { text: 'Route', bold: true },
+                { text: 'PRN', bold: true },
+                { text: 'Vitals', bold: true },
+                { text: 'Annotated on MTF', bold: true }
+              ],
+              ...paxMedicatedRows
+            ]
+          }
+        },
+        { text: 'Cleared Medical with FOIC', style: 'sectionHeader', margin: [0, 20, 0, 10] },
+        {
+          table: {
+            widths: ['*', '*'],
+            body: [
+              [{ text: 'Cleared Medical with FOIC:', bold: true }, yesNo(report.clearedMedicalWithFoic)],
+              [{ text: '# PAX Total:', bold: true }, report.paxTotal ?? 'N/A'],
+              [{ text: '# PAX Females:', bold: true }, report.paxFemales ?? 'N/A'],
+              [{ text: 'Pre-flight not pregnant (count):', bold: true }, report.paxFemaleNotPregnantConfirmed ?? 'N/A'],
+              [{ text: '# PAX Male:', bold: true }, report.paxMale ?? 'N/A'],
+              [{ text: '# PAX Minors:', bold: true }, report.paxMinors ?? 'N/A'],
+              [{ text: '# PAX with Medications:', bold: true }, report.paxWithMedications ?? 'N/A'],
+              [{ text: '# PAX needing <72-hour RN assessment:', bold: true }, report.paxNeeding72HrAssessment ?? 'N/A']
+            ]
+          }
+        },
+        { text: 'Operational', style: 'sectionHeader', margin: [0, 20, 0, 10] },
+        {
+          table: {
+            widths: ['*', '*'],
+            body: [
+              [{ text: 'All PAX safely on-boarded:', bold: true }, yesNo(report.allPaxSafelyOnboarded)],
+              [{ text: 'All PAX given food, water and lavatory breaks:', bold: true }, yesNo(report.allPaxGivenFoodWaterLavBreaks)]
+            ]
+          }
+        },
+        { text: 'Delay', style: 'sectionHeader', margin: [0, 20, 0, 10] },
+        {
+          table: {
+            widths: ['*', '*'],
+            body: [
+              [{ text: 'Delay reason(s):', bold: true }, delayReasons]
+            ]
+          }
+        },
+        { text: 'Special Circumstances', style: 'sectionHeader', margin: [0, 20, 0, 10] },
+        {
+          table: {
+            widths: ['*', '*'],
+            body: [
+              [{ text: 'PAX wrapped:', bold: true }, yesNo(report.specialCircumstancePaxWrapped)],
+              [{ text: 'Medical complaint assessment completed:', bold: true }, yesNo(report.specialCircumstanceMedicalComplaintAssessed)],
+              [{ text: 'Vighter Medical Control contacted:', bold: true }, yesNo(report.specialCircumstanceMedicalControlContacted)],
+              [{ text: 'Site supervisor advised:', bold: true }, yesNo(report.specialCircumstanceSiteSupervisorAdvised)],
+              [{ text: 'Medical emergency on-board EMS contacted:', bold: true }, yesNo(report.specialCircumstanceMedicalEmergencyOnboardEms)]
             ]
           }
         },

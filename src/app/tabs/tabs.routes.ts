@@ -15,6 +15,14 @@ export const TABS_ROUTES: Routes = [
         loadComponent: () => import('../export/export.page').then(m => m.ExportPage)
       },
       {
+        path: 'narcotics',
+        loadComponent: () => import('../narcotics/narcotics.page').then(m => m.NarcoticsPage)
+      },
+      {
+        path: 'meds',
+        loadComponent: () => import('../meds/meds.page').then(m => m.MedsPage)
+      },
+      {
         path: '',
         redirectTo: '/tabs/report',
         pathMatch: 'full'

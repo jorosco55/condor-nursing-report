@@ -1,0 +1,28 @@
+.narcotics-row {
+  margin-bottom: 12px;
+}
+
+.section-block {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.section-title {
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  margin-bottom: 8px;
+}
+
+.section-compact {
+  margin-top: 12px;
+}
+
+:host ::ng-deep .field-alert .mdc-notched-outline {
+  border-color: #b00020;
+}
+
+:host ::ng-deep .field-alert .mdc-floating-label {
+  color: #b00020;
+}

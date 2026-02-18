@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(ls:*)",
+      "Bash(del \"C:\\\\Users\\\\JasonOrosco\\\\condorIV\\\\condor-app\\\\src\\\\app\\\\app.component.scss\")",
+      "Bash(del \"C:\\\\Users\\\\JasonOrosco\\\\condorIV\\\\condor-app\\\\src\\\\app\\\\tabs\\\\tabs.page.scss\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(ionic serve)",
+      "Bash(npm install:*)"
+    ]
+  }
+}

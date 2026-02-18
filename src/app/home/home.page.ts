@@ -63,6 +63,18 @@ export class HomePage implements OnInit, OnDestroy {
     'Christopher Lee, RN'
   ];
 
+  wheelsSiteOptions: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
+  transferOfCareSites: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
+  delayOptions: string[] = [
+    'Flight Crew',
+    'Mechanical',
+    'Ground delay R/t ICE',
+    'Weather delay',
+    'GEO delay',
+    'PAX Emergency delay',
+    'Vighter Flight delay'
+  ];
+
   // PAX tags array (PAX#1 to PAX#50) for slash command
   paxTags: string[] = Array.from({ length: 50 }, (_, i) => `PAX#${i + 1}`);
 
@@ -197,12 +209,18 @@ export class HomePage implements OnInit, OnDestroy {
       preflightMEKO2AED: [false],
       safetyBriefingCompleted: [false],
       seatBeltsSecured: [false],
-      narcRecord: [''],
+      narcRecordStatus: [''],
+      medicationRecordStatus: [''],
 
       // Logistics
       showtimeZ1: [''],
       blockTimeZ1: [''],
       endTimeZ1: [''],
+
+      wheelsUpSite: [''],
+      wheelsUpTime: [''],
+      wheelsDownSite: [''],
+      wheelsDownTime: [''],
 
       showtimeZ2: [''], // RON
       blockTimeZ2: [''], // RON
@@ -211,6 +229,35 @@ export class HomePage implements OnInit, OnDestroy {
 
       // Narrative
       notes: this.fb.array([])
+      ,
+      // Transfer of Care
+      transferOfCareSite: [''],
+      receivedCare: [false],
+
+
+      // Cleared Medical with FOIC
+      clearedMedicalWithFoic: [false],
+      paxTotal: [null],
+      paxFemales: [null],
+      paxFemaleNotPregnantConfirmed: [null],
+      paxMale: [null],
+      paxMinors: [null],
+      paxWithMedications: [null],
+      paxNeeding72HrAssessment: [null],
+
+      // Operational
+      allPaxSafelyOnboarded: [false],
+      allPaxGivenFoodWaterLavBreaks: [false],
+
+      // Delay
+      delayReasons: [[]],
+
+      // Special Circumstances
+      specialCircumstancePaxWrapped: [false],
+      specialCircumstanceMedicalComplaintAssessed: [false],
+      specialCircumstanceMedicalControlContacted: [false],
+      specialCircumstanceSiteSupervisorAdvised: [false],
+      specialCircumstanceMedicalEmergencyOnboardEms: [false]
     });
   }
 
@@ -218,6 +265,8 @@ export class HomePage implements OnInit, OnDestroy {
     const report = await this.reportService.getLatestReport();
     if (report) {
       this.reportForm.patchValue(report);
+      this.reportService.setNarcRecordStatus(report.narcRecordStatus || '');
+      this.reportService.setMedicationRecordStatus(report.medicationRecordStatus || '');
       // Clear notes array and rebuild
       while (this.notes.length !== 0) {
         this.notes.removeAt(0);
@@ -234,6 +283,7 @@ export class HomePage implements OnInit, OnDestroy {
     return this.reportForm.get('notes') as FormArray;
   }
 
+
   addNote() {
     const now = new Date();
     const timeL = now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0');
@@ -245,6 +295,7 @@ export class HomePage implements OnInit, OnDestroy {
     });
     this.notes.push(noteGroup);
   }
+
 
   removeNote(index: number) {
     this.notes.removeAt(index);
@@ -443,9 +494,38 @@ export class HomePage implements OnInit, OnDestroy {
     }, 200);
   }
 
+  onNarcRecordChange(checked: boolean, status: 'N/A' | 'Administered') {
+    const control = this.reportForm.get('narcRecordStatus');
+    if (!control) return;
+    if (checked) {
+      control.setValue(status);
+    } else if (control.value === status) {
+      control.setValue('');
+    }
+    this.reportService.setNarcRecordStatus(control.value || '');
+  }
+
+  onMedicationRecordChange(checked: boolean, status: 'N/A' | 'Administered') {
+    const control = this.reportForm.get('medicationRecordStatus');
+    if (!control) return;
+    if (checked) {
+      control.setValue(status);
+    } else if (control.value === status) {
+      control.setValue('');
+    }
+    this.reportService.setMedicationRecordStatus(control.value || '');
+  }
+
   async onSubmit() {
     if (this.reportForm.valid) {
-      await this.reportService.saveReport(this.reportForm.value);
+      const existingReport = await this.reportService.getLatestReport();
+      const reportPayload = {
+        ...(existingReport || {}),
+        ...this.reportForm.value,
+        narcotics: existingReport?.narcotics || [],
+        paxMedicated: existingReport?.paxMedicated || []
+      };
+      await this.reportService.saveReport(reportPayload);
       const toast = await this.toastCtrl.create({
         message: 'Report draft saved successfully!',
         duration: 2000,

@@ -27,142 +27,346 @@
       <h2 class="ion-text-center">Nursing Report</h2>
 
       <ion-grid>
-        <!-- Row 1: Date, Site -->
+        <!-- Flight Info -->
         <ion-row>
-          <ion-col size="12" size-md="6">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Date</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="date">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-          </ion-col>
-          <ion-col size="12" size-md="6">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Site</mat-label>
-              <input matInput formControlName="site">
-            </mat-form-field>
-          </ion-col>
-        </ion-row>
+          <ion-col size="12">
+            <div class="section-block section-tight">
+              <div class="section-title">Flight Info</div>
 
-        <!-- Row 2: Crew -->
-        <ion-row>
-          <ion-col size="12" size-md="6">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>ICE Flight RN</mat-label>
-              <input matInput formControlName="iceFlightRN">
-            </mat-form-field>
-          </ion-col>
-          <ion-col size="12" size-md="6">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>2nd ICE Flight RN</mat-label>
-              <input matInput formControlName="secondICEFlightRN">
-            </mat-form-field>
-          </ion-col>
-        </ion-row>
+              <!-- Row 1: Date, Site -->
+              <ion-row>
+                <ion-col size="12" size-md="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="12" size-md="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Site</mat-label>
+                    <input matInput formControlName="site">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
 
-        <!-- Row 3: Tail, Mission -->
-        <ion-row>
-          <ion-col size="6">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Tail #</mat-label>
-              <input matInput formControlName="tailNumber">
-            </mat-form-field>
-          </ion-col>
-          <ion-col size="6">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Mission #</mat-label>
-              <input matInput formControlName="missionNumber">
-            </mat-form-field>
-          </ion-col>
-        </ion-row>
+              <!-- Row 2: Crew -->
+              <ion-row>
+                <ion-col size="12" size-md="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>ICE Flight RN</mat-label>
+                    <input matInput formControlName="iceFlightRN">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="12" size-md="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>2nd ICE Flight RN</mat-label>
+                    <input matInput formControlName="secondICEFlightRN">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
 
-        <!-- Row 4: FOIC, Lead, Site Stops -->
-        <ion-row>
-          <ion-col size="12" size-md="4">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>FOIC (Title)</mat-label>
-              <input matInput formControlName="foicTitle">
-            </mat-form-field>
-          </ion-col>
-          <ion-col size="12" size-md="4">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>ASO Lead</mat-label>
-              <input matInput formControlName="asoLead">
-            </mat-form-field>
-          </ion-col>
-          <ion-col size="12" size-md="4">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Site stops</mat-label>
-              <input matInput formControlName="siteStops">
-            </mat-form-field>
+              <!-- Row 3: Tail, Mission -->
+              <ion-row>
+                <ion-col size="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Tail #</mat-label>
+                    <input matInput formControlName="tailNumber">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Mission #</mat-label>
+                    <input matInput formControlName="missionNumber">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <!-- Row 4: FOIC, Lead, Site Stops -->
+              <ion-row>
+                <ion-col size="12" size-md="4">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>FOIC (Title)</mat-label>
+                    <input matInput formControlName="foicTitle">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="12" size-md="4">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>ASO Lead</mat-label>
+                    <input matInput formControlName="asoLead">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="12" size-md="4">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Site stops</mat-label>
+                    <input matInput formControlName="siteStops">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <div class="section-block section-tight section-compact">
+                <div class="section-title">Pre-Flight Check</div>
+                <div class="checkbox-row">
+                  <mat-checkbox formControlName="preflightMEBCheck">Preflight MEB Check</mat-checkbox>
+                  <mat-checkbox formControlName="preflightMEKO2AED">Preflight MEK, O2 Tanks, AED</mat-checkbox>
+                  <mat-checkbox formControlName="safetyBriefingCompleted">Safety Briefing Completed</mat-checkbox>
+                  <mat-checkbox formControlName="seatBeltsSecured">Seat Belts Secured</mat-checkbox>
+                </div>
+              </div>
+            </div>
           </ion-col>
         </ion-row>
 
         <mat-divider class="ion-margin-vertical"></mat-divider>
 
-        <!-- Row 5: Checks & Logistics -->
+        <!-- Row 5: Flight Times -->
         <ion-row>
-          <!-- Left: Checks -->
-          <ion-col size="12" size-md="6">
-            <div class="checkbox-group">
-              <mat-checkbox formControlName="preflightMEBCheck">Preflight MEB Check</mat-checkbox>
-              <mat-checkbox formControlName="preflightMEKO2AED">Preflight MEK, O2 Tanks, AED</mat-checkbox>
-              <mat-checkbox formControlName="safetyBriefingCompleted">Safety Briefing Completed</mat-checkbox>
-              <mat-checkbox formControlName="seatBeltsSecured">Seat Belts Secured</mat-checkbox>
+          <ion-col size="12">
+            <div class="section-block section-tight">
+              <div class="section-title">Flight Times (Z)</div>
+              <ion-row>
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Showtime</mat-label>
+                    <input matInput formControlName="showtimeZ1">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Block time</mat-label>
+                    <input matInput formControlName="blockTimeZ1">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>End time</mat-label>
+                    <input matInput formControlName="endTimeZ1">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <h4 class="section-subtitle">Wheels Up</h4>
+              <ion-row>
+                <ion-col size="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Site</mat-label>
+                    <mat-select formControlName="wheelsUpSite">
+                      <mat-option value="">-- Select Site --</mat-option>
+                      <mat-option *ngFor="let site of wheelsSiteOptions" [value]="site">{{ site }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Time (Z)</mat-label>
+                    <input matInput formControlName="wheelsUpTime" placeholder="HHMM">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <h4 class="section-subtitle">Wheels Down</h4>
+              <ion-row>
+                <ion-col size="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Site</mat-label>
+                    <mat-select formControlName="wheelsDownSite">
+                      <mat-option value="">-- Select Site --</mat-option>
+                      <mat-option *ngFor="let site of wheelsSiteOptions" [value]="site">{{ site }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Time (Z)</mat-label>
+                    <input matInput formControlName="wheelsDownTime" placeholder="HHMM">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <mat-checkbox formControlName="ronUsed" class="ion-margin-top">Use if RON</mat-checkbox>
+              <ion-row *ngIf="reportForm.get('ronUsed')?.value">
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Showtime</mat-label>
+                    <input matInput formControlName="showtimeZ2">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Block time</mat-label>
+                    <input matInput formControlName="blockTimeZ2">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>End time</mat-label>
+                    <input matInput formControlName="endTimeZ2">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
             </div>
-
-            <mat-form-field appearance="outline" class="full-width ion-margin-top">
-              <mat-label>Narc Record</mat-label>
-              <input matInput formControlName="narcRecord">
-            </mat-form-field>
           </ion-col>
+        </ion-row>
 
-          <!-- Right: Times -->
+        <!-- Row 6: Narcotics & Medication Reports -->
+        <ion-row>
           <ion-col size="12" size-md="6">
-            <h3>Flight Times (Z)</h3>
-            <ion-row>
-              <ion-col size="4">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Showtime</mat-label>
-                  <input matInput formControlName="showtimeZ1">
-                </mat-form-field>
-              </ion-col>
-              <ion-col size="4">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Block time</mat-label>
-                  <input matInput formControlName="blockTimeZ1">
-                </mat-form-field>
-              </ion-col>
-              <ion-col size="4">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>End time</mat-label>
-                  <input matInput formControlName="endTimeZ1">
-                </mat-form-field>
-              </ion-col>
-            </ion-row>
+            <div class="section-block section-tight">
+              <div class="section-title">Narcotics Report</div>
+              <div class="checkbox-row">
+                <mat-checkbox
+                  [checked]="reportForm.get('narcRecordStatus')?.value === 'N/A'"
+                  (change)="onNarcRecordChange($event.checked, 'N/A')">
+                  N/A
+                </mat-checkbox>
+                <mat-checkbox
+                  [checked]="reportForm.get('narcRecordStatus')?.value === 'Administered'"
+                  (change)="onNarcRecordChange($event.checked, 'Administered')">
+                  Administered
+                </mat-checkbox>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="12" size-md="6">
+            <div class="section-block section-tight">
+              <div class="section-title">Medication Report</div>
+              <div class="checkbox-row">
+                <mat-checkbox
+                  [checked]="reportForm.get('medicationRecordStatus')?.value === 'N/A'"
+                  (change)="onMedicationRecordChange($event.checked, 'N/A')">
+                  N/A
+                </mat-checkbox>
+                <mat-checkbox
+                  [checked]="reportForm.get('medicationRecordStatus')?.value === 'Administered'"
+                  (change)="onMedicationRecordChange($event.checked, 'Administered')">
+                  Administered
+                </mat-checkbox>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
 
-            <mat-checkbox formControlName="ronUsed" class="ion-margin-top">Use if RON</mat-checkbox>
-            <ion-row *ngIf="reportForm.get('ronUsed')?.value">
-              <ion-col size="4">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Showtime</mat-label>
-                  <input matInput formControlName="showtimeZ2">
-                </mat-form-field>
-              </ion-col>
-              <ion-col size="4">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Block time</mat-label>
-                  <input matInput formControlName="blockTimeZ2">
-                </mat-form-field>
-              </ion-col>
-              <ion-col size="4">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>End time</mat-label>
-                  <input matInput formControlName="endTimeZ2">
-                </mat-form-field>
-              </ion-col>
-            </ion-row>
+        <!-- Row 7: Transfer of Care -->
+        <ion-row>
+          <ion-col size="12">
+            <div class="section-block section-tight">
+              <div class="section-title">Transfer of Care</div>
+              <ion-row>
+                <ion-col size="12" size-md="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Transfer of care to ICE LEAD (Site)</mat-label>
+                    <mat-select formControlName="transferOfCareSite">
+                      <mat-option value="">-- Select Site --</mat-option>
+                      <mat-option *ngFor="let site of transferOfCareSites" [value]="site">{{ site }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="12" size-md="6" class="ion-align-self-center">
+                  <mat-checkbox formControlName="receivedCare">Received care</mat-checkbox>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!-- Row 8: Cleared Medical with FOIC -->
+        <ion-row>
+          <ion-col size="12">
+            <div class="section-block section-tight">
+              <div class="section-title">Cleared Medical with FOIC</div>
+              <mat-checkbox formControlName="clearedMedicalWithFoic">Cleared Medical with FOIC</mat-checkbox>
+              <ion-row>
+                <ion-col size="6" size-md="3">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label># PAX Total</mat-label>
+                    <input matInput type="number" formControlName="paxTotal">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="6" size-md="3">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label># PAX Females</mat-label>
+                    <input matInput type="number" formControlName="paxFemales">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="6" size-md="3">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Pre-flight not pregnant (count)</mat-label>
+                    <input matInput type="number" formControlName="paxFemaleNotPregnantConfirmed">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="6" size-md="3">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label># PAX Male</mat-label>
+                    <input matInput type="number" formControlName="paxMale">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6" size-md="3">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label># PAX Minors</mat-label>
+                    <input matInput type="number" formControlName="paxMinors">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="6" size-md="3">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label># PAX with Medications</mat-label>
+                    <input matInput type="number" formControlName="paxWithMedications">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="12" size-md="6">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label># PAX needing <72-hour RN assessment</mat-label>
+                    <input matInput type="number" formControlName="paxNeeding72HrAssessment">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!-- Row 10: Operational -->
+        <ion-row>
+          <ion-col size="12">
+            <div class="section-block section-tight">
+              <div class="section-title">Operational</div>
+              <div class="checkbox-row">
+                <mat-checkbox formControlName="allPaxSafelyOnboarded">All PAX safely on-boarded</mat-checkbox>
+                <mat-checkbox formControlName="allPaxGivenFoodWaterLavBreaks">All PAX given food, water and lavatory breaks</mat-checkbox>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!-- Row 11: Delay -->
+        <ion-row>
+          <ion-col size="12">
+            <div class="section-block section-tight">
+              <div class="section-title">Delay</div>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Delay reason(s)</mat-label>
+                <mat-select formControlName="delayReasons" multiple>
+                  <mat-option *ngFor="let delay of delayOptions" [value]="delay">{{ delay }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!-- Row 12: Special Circumstances -->
+        <ion-row>
+          <ion-col size="12">
+            <div class="section-block section-tight">
+              <div class="section-title">Special Circumstances</div>
+              <div class="checkbox-row">
+                <mat-checkbox formControlName="specialCircumstancePaxWrapped">PAX wrapped</mat-checkbox>
+                <mat-checkbox formControlName="specialCircumstanceMedicalComplaintAssessed">Medical complaint assessment completed</mat-checkbox>
+                <mat-checkbox formControlName="specialCircumstanceMedicalControlContacted">Vighter Medical Control contacted</mat-checkbox>
+                <mat-checkbox formControlName="specialCircumstanceSiteSupervisorAdvised">Site supervisor advised</mat-checkbox>
+                <mat-checkbox formControlName="specialCircumstanceMedicalEmergencyOnboardEms">Medical emergency on-board EMS contacted</mat-checkbox>
+              </div>
+            </div>
           </ion-col>
         </ion-row>
 

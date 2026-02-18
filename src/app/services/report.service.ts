@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { NursingReport } from '../models/report.model';
 
 @Injectable({
@@ -6,8 +7,43 @@ import { NursingReport } from '../models/report.model';
 })
 export class ReportService {
   private STORAGE_KEY = 'vighter_nursing_reports';
+  private narcRecordStatusSubject = new BehaviorSubject<string>('');
+  private medicationRecordStatusSubject = new BehaviorSubject<string>('');
+  private hasNarcoticSelectionSubject = new BehaviorSubject<boolean>(false);
+  private hasMedsSelectionSubject = new BehaviorSubject<boolean>(false);
+
+  narcRecordStatus$ = this.narcRecordStatusSubject.asObservable();
+  medicationRecordStatus$ = this.medicationRecordStatusSubject.asObservable();
+  hasNarcoticSelection$ = this.hasNarcoticSelectionSubject.asObservable();
+  hasMedsSelection$ = this.hasMedsSelectionSubject.asObservable();
 
   constructor() { }
+
+  setNarcRecordStatus(status: string) {
+    this.narcRecordStatusSubject.next(status);
+  }
+
+  setMedicationRecordStatus(status: string) {
+    this.medicationRecordStatusSubject.next(status);
+  }
+
+  setHasNarcoticSelection(hasSelection: boolean) {
+    this.hasNarcoticSelectionSubject.next(hasSelection);
+  }
+
+  setHasMedsSelection(hasSelection: boolean) {
+    this.hasMedsSelectionSubject.next(hasSelection);
+  }
+
+  async hydrateNarcoticsState(): Promise<void> {
+    const report = await this.getLatestReport();
+    this.setNarcRecordStatus(report?.narcRecordStatus || '');
+    this.setMedicationRecordStatus(report?.medicationRecordStatus || '');
+    const hasSelection = (report?.narcotics || []).some(entry => (entry.narcoticName || '').trim().length > 0);
+    this.setHasNarcoticSelection(hasSelection);
+    const hasMedsSelection = (report?.paxMedicated || []).some(entry => (entry.medication || '').trim().length > 0);
+    this.setHasMedsSelection(hasMedsSelection);
+  }
 
   async saveReport(report: NursingReport): Promise<void> {
     const reports = await this.getAllReports();

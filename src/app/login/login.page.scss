@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   background: #6b7aff !important;
-  
+
   ion-content {
     --background: #6b7aff;
   }
@@ -13,11 +13,11 @@
 .login-content {
   --background: #6b7aff;
   background: #6b7aff !important;
-  
+
   &::part(background) {
     background: #6b7aff !important;
   }
-  
+
   &::part(scroll) {
     background: #6b7aff !important;
   }

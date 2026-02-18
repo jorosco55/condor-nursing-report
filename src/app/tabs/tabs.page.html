@@ -6,6 +6,16 @@
       <ion-label>Nursing Report</ion-label>
     </ion-tab-button>
 
+    <ion-tab-button tab="narcotics" [class.tab-alert]="narcoticsAlert">
+      <ion-icon name="medkit-outline"></ion-icon>
+      <ion-label>Narcotics</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="meds" [class.tab-alert]="medsAlert">
+      <ion-icon name="bandage-outline"></ion-icon>
+      <ion-label>Meds</ion-label>
+    </ion-tab-button>
+
     <ion-tab-button tab="export">
       <ion-icon name="share-outline"></ion-icon>
       <ion-label>Export / Sign</ion-label>

@@ -24,8 +24,9 @@ $theme: mat.define-theme();
 :root {
   @include mat.all-component-themes($theme);
 
-  --ion-background-color: #dee2e6;
+  --ion-background-color: #eee9f8;
   --ion-text-color: #212529;
+  --app-surface-tint: #eef2f7;
 }
 
 // ============================================
@@ -47,18 +48,43 @@ html, body {
 // Optimize all scrollable areas for touch
 ion-content {
   --offset-bottom: auto !important;
-  
+
   &::part(scroll) {
     -webkit-overflow-scrolling: touch;
     overflow-scrolling: touch;
-    scroll-behavior: smooth;
     overscroll-behavior: contain;
+    overflow-y: auto;
+    overflow-x: hidden;
+    pointer-events: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #9aa0a6 transparent;
   }
 }
 
+ion-content::part(scroll)::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+ion-content::part(scroll)::-webkit-scrollbar-thumb {
+  background: #9aa0a6;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+ion-content::part(scroll)::-webkit-scrollbar-thumb:hover {
+  background: #7f868d;
+  background-clip: content-box;
+}
+
+ion-content::part(scroll)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 // Touch-friendly tap targets (minimum 44x44 per accessibility guidelines)
-button, 
-a, 
+button,
+a,
 .clickable,
 mat-checkbox,
 mat-radio-button,
@@ -140,25 +166,6 @@ ion-button:active {
   background: white;
 }
 
-// ============================================
-// FIX: Ionic + Angular Material Compatibility
-// ============================================
-// The ion-router-outlet captures pointer events by default,
-// which blocks interactions with Angular Material components.
-// This fix passes events through to the actual page content.
-
-ion-router-outlet {
-  pointer-events: none !important;
-}
-
-ion-router-outlet .ion-page,
-ion-router-outlet > *,
-app-home,
-app-export {
-  pointer-events: auto !important;
-  touch-action: pan-y pinch-zoom !important;
-}
-
 // Ensure Material overlays (datepicker, select, etc.) appear above Ionic
 .cdk-overlay-container {
   z-index: 99999 !important;
@@ -170,13 +177,13 @@ app-export {
 mat-form-field {
   &.mat-mdc-form-field {
     width: 100%;
-    
+
     // Make the outline background white for better contrast
     .mat-mdc-text-field-wrapper {
       background-color: white;
       border-radius: 4px;
     }
-    
+
     // Ensure proper height and padding
     .mdc-text-field {
       border-radius: 4px;
@@ -187,6 +194,12 @@ mat-form-field {
 // Make sure full-width class works everywhere
 .full-width {
   width: 100%;
+}
+
+.container {
+  background: var(--app-surface-tint);
+  padding: 12px;
+  border-radius: 8px;
 }
 
 // ============================================
@@ -229,7 +242,7 @@ body.keyboard-visible {
 // Smooth transitions for keyboard show/hide
 ion-content {
   transition: --padding-bottom 0.25s ease-out;
-  
+
   // Enhanced touch scrolling for keyboard interactions
   &::part(scroll) {
     scroll-padding-bottom: 100px;
