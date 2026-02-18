@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -28,10 +28,8 @@ export class LoginPage {
   password: string = '';
   hidePassword: boolean = true;
 
-  constructor(
-    private router: Router,
-    private toastCtrl: ToastController
-  ) {}
+  private router = inject(Router);
+  private toastCtrl = inject(ToastController);
 
   async onLogin() {
     // Generic login - accept any non-empty credentials for now

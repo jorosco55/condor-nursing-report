@@ -42,23 +42,53 @@ $theme: mat.define-theme();
 html, body {
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
-  overscroll-behavior-y: none;
+  height: 100%;
+  overflow: hidden;
+}
+
+ion-app,
+ion-router-outlet {
+  height: 100%;
+  pointer-events: auto;
+}
+
+ion-router-outlet {
+  display: contents;
+}
+
+ion-tabs,
+ion-tabs *,
+ion-router-outlet *,
+.ion-page,
+ion-content,
+ion-content::part(scroll) {
+  pointer-events: auto;
+}
+
+.ion-page.ion-page-hidden {
+  pointer-events: none;
 }
 
 // Optimize all scrollable areas for touch
 ion-content {
   --offset-bottom: auto !important;
+  --overflow: auto;
+  height: 100%;
 
   &::part(scroll) {
     -webkit-overflow-scrolling: touch;
     overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    overflow-y: auto;
-    overflow-x: hidden;
-    pointer-events: auto;
     scrollbar-width: thin;
     scrollbar-color: #9aa0a6 transparent;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    touch-action: pan-y;
   }
+}
+
+.ion-page {
+  height: 100%;
 }
 
 ion-content::part(scroll)::-webkit-scrollbar {

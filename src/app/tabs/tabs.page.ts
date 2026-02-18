@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { combineLatest, Subject } from 'rxjs';
@@ -17,7 +17,7 @@ export class TabsPage implements OnInit, OnDestroy {
   medsAlert = false;
   private destroy$ = new Subject<void>();
 
-  constructor(private reportService: ReportService) { }
+  private reportService = inject(ReportService);
 
   ngOnInit() {
     this.reportService.hydrateNarcoticsState();

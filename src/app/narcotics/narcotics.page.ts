@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -63,11 +63,9 @@ export class NarcoticsPage implements OnInit, OnDestroy {
 
   private totalEntries = 5;
 
-  constructor(
-    private fb: FormBuilder,
-    private reportService: ReportService,
-    private toastCtrl: ToastController
-  ) {}
+  private fb = inject(FormBuilder);
+  private reportService = inject(ReportService);
+  private toastCtrl = inject(ToastController);
 
   ngOnInit() {
     this.initForm();
