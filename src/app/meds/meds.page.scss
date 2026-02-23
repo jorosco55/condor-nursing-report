@@ -19,20 +19,28 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   background: #ffffff;
-  padding: 8px;
+  padding: 12px;
 }
 
 .card-title {
   font-weight: 600;
   color: var(--ion-color-primary);
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+}
+
+.med-card ion-row {
+  margin-bottom: 10px;
+}
+
+.med-card ion-row:last-child {
+  margin-bottom: 0;
 }
 
 
 .vitals-section {
   border-top: 1px solid #e5e5e5;
-  padding-top: 10px;
-  margin-top: 6px;
+  padding-top: 12px;
+  margin-top: 8px;
 }
 
 .vitals-title {

@@ -175,15 +175,20 @@ export class ExportPage implements AfterViewInit {
     };
 
     const paxMedicatedRows = report.paxMedicated && report.paxMedicated.length > 0
-      ? report.paxMedicated.map(entry => [
-          entry.aNumber || 'N/A',
-          entry.medication || 'N/A',
-          entry.dose || 'N/A',
-          entry.route || 'N/A',
-          entry.prnGiven ? 'Yes' : 'No',
-          formatVitals(entry),
-          entry.annotatedOnMtf || 'N/A'
-        ])
+      ? report.paxMedicated.map(entry => {
+          const doseValue = entry.dose
+            ? `${entry.dose}${entry.doseUnit ? ` ${entry.doseUnit}` : ''}`
+            : 'N/A';
+          return [
+            entry.aNumber || 'N/A',
+            entry.medication || 'N/A',
+            doseValue,
+            entry.route || 'N/A',
+            entry.prnGiven ? 'Yes' : 'No',
+            formatVitals(entry),
+            entry.annotatedOnMtf || 'N/A'
+          ];
+        })
       : [[{ text: 'No PAX medications recorded', colSpan: 7 }, '', '', '', '', '', '']];
 
     const delayReasons = report.delayReasons && report.delayReasons.length > 0
@@ -205,7 +210,7 @@ export class ExportPage implements AfterViewInit {
               [{ text: 'ICE Flight RN:', bold: true }, report.iceFlightRN],
               [{ text: '2nd ICE Flight RN:', bold: true }, report.secondICEFlightRN || 'N/A'],
               [{ text: 'Tail #:', bold: true }, report.tailNumber],
-              [{ text: 'Mission #:', bold: true }, report.missionNumber],
+              [{ text: 'Mission #:', bold: true }, report.missionNumber]
             ]
           }
         },
@@ -213,14 +218,20 @@ export class ExportPage implements AfterViewInit {
         {
           table: {
             widths: ['*', '*'],
-            body: [
-              [{ text: 'Wheels Up Site:', bold: true }, report.wheelsUpSite || 'N/A'],
-              [{ text: 'Wheels Up Time (Z):', bold: true }, report.wheelsUpTime || 'N/A'],
-              [{ text: 'Wheels Down Site:', bold: true }, report.wheelsDownSite || 'N/A'],
-              [{ text: 'Wheels Down Time (Z):', bold: true }, report.wheelsDownTime || 'N/A']
-            ]
-          }
-        },
+              body: [
+                [{ text: 'Doors Close Time (L):', bold: true }, report.doorsCloseTimeL || 'N/A'],
+                [{ text: 'Doors Close Time (Z):', bold: true }, report.doorsCloseTime || 'N/A'],
+                [{ text: 'Doors Open Time (L):', bold: true }, report.doorsOpenTimeL || 'N/A'],
+                [{ text: 'Doors Open Time (Z):', bold: true }, report.doorsOpenTime || 'N/A'],
+                [{ text: 'Wheels Up Site:', bold: true }, report.wheelsUpSite || 'N/A'],
+                [{ text: 'Wheels Up Time (L):', bold: true }, report.wheelsUpTimeL || 'N/A'],
+                [{ text: 'Wheels Up Time (Z):', bold: true }, report.wheelsUpTime || 'N/A'],
+                [{ text: 'Wheels Down Site:', bold: true }, report.wheelsDownSite || 'N/A'],
+                [{ text: 'Wheels Down Time (L):', bold: true }, report.wheelsDownTimeL || 'N/A'],
+                [{ text: 'Wheels Down Time (Z):', bold: true }, report.wheelsDownTime || 'N/A']
+              ]
+            }
+          },
         { text: 'Transfer of Care', style: 'sectionHeader', margin: [0, 20, 0, 10] },
         {
           table: {
@@ -288,15 +299,16 @@ export class ExportPage implements AfterViewInit {
         {
           table: {
             widths: ['*', '*'],
-            body: [
-              [{ text: 'PAX wrapped:', bold: true }, yesNo(report.specialCircumstancePaxWrapped)],
-              [{ text: 'Medical complaint assessment completed:', bold: true }, yesNo(report.specialCircumstanceMedicalComplaintAssessed)],
-              [{ text: 'Vighter Medical Control contacted:', bold: true }, yesNo(report.specialCircumstanceMedicalControlContacted)],
-              [{ text: 'Site supervisor advised:', bold: true }, yesNo(report.specialCircumstanceSiteSupervisorAdvised)],
-              [{ text: 'Medical emergency on-board EMS contacted:', bold: true }, yesNo(report.specialCircumstanceMedicalEmergencyOnboardEms)]
-            ]
-          }
-        },
+              body: [
+                [{ text: 'PAX wrapped:', bold: true }, yesNo(report.specialCircumstancePaxWrapped)],
+                [{ text: 'Medical complaint assessment completed:', bold: true }, yesNo(report.specialCircumstanceMedicalComplaintAssessed)],
+                [{ text: 'Vighter Medical Control contacted:', bold: true }, yesNo(report.specialCircumstanceMedicalControlContacted)],
+                [{ text: 'Site supervisor advised:', bold: true }, yesNo(report.specialCircumstanceSiteSupervisorAdvised)],
+                [{ text: 'Medical emergency on-board EMS contacted:', bold: true }, yesNo(report.specialCircumstanceMedicalEmergencyOnboardEms)],
+                [{ text: 'Violent Incident:', bold: true }, yesNo(report.specialCircumstanceViolentIncident)]
+              ]
+            }
+          },
         { text: 'Narrative Log', style: 'sectionHeader', margin: [0, 20, 0, 10] },
         {
           table: {

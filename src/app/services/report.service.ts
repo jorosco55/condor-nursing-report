@@ -7,6 +7,8 @@ import { NursingReport } from '../models/report.model';
 })
 export class ReportService {
   private STORAGE_KEY = 'vighter_nursing_reports';
+  private ACTIVE_REPORT_KEY = 'vighter_active_report_id';
+  private FORCE_NEW_REPORT_KEY = 'vighter_force_new_report';
   private narcRecordStatusSubject = new BehaviorSubject<string>('');
   private medicationRecordStatusSubject = new BehaviorSubject<string>('');
   private hasNarcoticSelectionSubject = new BehaviorSubject<boolean>(false);
@@ -55,8 +57,10 @@ export class ReportService {
     } else {
       report.id = Date.now();
       reports.push(report);
+      this.clearForceNewReport();
     }
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(reports));
+    this.setActiveReportId(report.id || null);
   }
 
   async getAllReports(): Promise<NursingReport[]> {
@@ -66,6 +70,44 @@ export class ReportService {
 
   async getLatestReport(): Promise<NursingReport | null> {
     const reports = await this.getAllReports();
+    const activeId = this.getActiveReportId();
+    if (activeId) {
+      const activeReport = reports.find(report => report.id === activeId) || null;
+      if (activeReport) {
+        return activeReport;
+      }
+    }
+    if (this.isForceNewReport()) {
+      return null;
+    }
     return reports.length > 0 ? reports[reports.length - 1] : null;
+  }
+
+  setActiveReportId(id: number | null): void {
+    if (!id) {
+      localStorage.removeItem(this.ACTIVE_REPORT_KEY);
+      return;
+    }
+    localStorage.setItem(this.ACTIVE_REPORT_KEY, id.toString());
+  }
+
+  getActiveReportId(): number | null {
+    const value = localStorage.getItem(this.ACTIVE_REPORT_KEY);
+    if (!value) return null;
+    const parsed = Number(value);
+    return Number.isNaN(parsed) ? null : parsed;
+  }
+
+  startNewReport(): void {
+    localStorage.setItem(this.FORCE_NEW_REPORT_KEY, 'true');
+    this.setActiveReportId(null);
+  }
+
+  isForceNewReport(): boolean {
+    return localStorage.getItem(this.FORCE_NEW_REPORT_KEY) === 'true';
+  }
+
+  clearForceNewReport(): void {
+    localStorage.removeItem(this.FORCE_NEW_REPORT_KEY);
   }
 }

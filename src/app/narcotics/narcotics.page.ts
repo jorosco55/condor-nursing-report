@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -112,10 +112,72 @@ export class NarcoticsPage implements OnInit, OnDestroy {
     return this.fb.group({
       narcoticName: [data?.narcoticName || ''],
       dosageUnit: [data?.dosageUnit || ''],
-      timeZ: [data?.timeZ || ''],
+      timeZ: [data?.timeZ || '', [this.timeHHMMValidator]],
       rnName: [data?.rnName || ''],
       rnSignature: [data?.rnSignature || '']
     });
+  }
+
+  timeHHMMValidator(control: AbstractControl): ValidationErrors | null {
+    const value = (control.value || '').toString().trim();
+    if (!value) return null;
+    const isValid = /^([01]\d|2[0-3])[0-5]\d$/.test(value) || /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+    return isValid ? null : { invalidTime: true };
+  }
+
+  stampEntryTime(index: number) {
+    const control = this.entries.at(index).get('timeZ');
+    if (!control) return;
+    control.setValue(this.getCurrentTimestamp());
+  }
+
+  handleEntryTimeBlur(index: number) {
+    const control = this.entries.at(index).get('timeZ');
+    if (!control) return;
+    const rawValue = (control.value || '').toString().trim();
+    if (!rawValue) {
+      control.setValue(this.getCurrentTimestamp());
+      return;
+    }
+    const normalized = this.normalizeTimeValue(rawValue);
+    if (normalized !== rawValue) {
+      control.setValue(normalized);
+    }
+  }
+
+  normalizeTimeValue(value: string): string {
+    if (/^\d{4}$/.test(value)) {
+      return value;
+    }
+    const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(value);
+    if (match) {
+      return `${match[1]}${match[2]}`;
+    }
+    return value;
+  }
+
+  openTimePicker(input: HTMLInputElement) {
+    if (typeof input.showPicker === 'function') {
+      input.showPicker();
+    } else {
+      input.focus();
+    }
+  }
+
+  applyEntryTimePicker(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    const rawValue = (input.value || '').toString().trim();
+    if (!rawValue) return;
+    const normalized = this.normalizeTimeValue(rawValue);
+    const control = this.entries.at(index).get('timeZ');
+    if (!control) return;
+    control.setValue(normalized);
+    control.markAsTouched();
+  }
+
+  getCurrentTimestamp(): string {
+    const now = new Date();
+    return now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0');
   }
 
   async loadLatestReport() {

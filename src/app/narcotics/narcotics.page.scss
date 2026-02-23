@@ -19,6 +19,50 @@
   margin-top: 12px;
 }
 
+.time-picker-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.time-suffix {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: -4px;
+}
+
+.time-picker-button {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0;
+}
+
+.time-now-button {
+  min-height: 24px;
+  height: 24px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  line-height: 24px;
+  text-transform: none;
+  min-width: 0;
+}
+
+.time-hint {
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  color: #6b6b6b;
+}
+
+mat-form-field {
+  .mat-mdc-form-field-subscript-wrapper {
+    min-height: 16px;
+  }
+}
+
 :host ::ng-deep .field-alert .mdc-notched-outline {
   border-color: #b00020;
 }

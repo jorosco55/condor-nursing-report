@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Records</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="container">
+    <div class="records-header">
+      <h2>Records</h2>
+      <button mat-raised-button color="primary" type="button" (click)="startNewRecord()">New Record</button>
+    </div>
+
+    <div class="records-filters">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Search</mat-label>
+        <input matInput [(ngModel)]="searchTerm" placeholder="Mission # or Site">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="status-filter">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="statusFilter">
+          <mat-option value="All">All</mat-option>
+          <mat-option value="Open">Open</mat-option>
+          <mat-option value="Closed">Closed</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="empty-state" *ngIf="filteredRecords.length === 0">
+      <div class="empty-title">No records yet</div>
+      <div class="empty-subtitle">Create your first report to get started.</div>
+      <button mat-stroked-button color="primary" type="button" (click)="startNewRecord()">Create Record</button>
+    </div>
+
+    <ion-list *ngIf="filteredRecords.length > 0">
+      <ion-item *ngFor="let record of filteredRecords" lines="full">
+        <ion-label>
+          <div class="record-row">
+            <div class="record-main">
+              <div class="record-title">Mission #{{ record.missionNumber || 'N/A' }}</div>
+              <div class="record-meta">
+                <span>{{ formatDate(record.date) }}</span>
+                <span>Site: {{ record.site || 'N/A' }}</span>
+                <span class="mock-pill" *ngIf="record.id && record.id >= 9001">Mock</span>
+              </div>
+            </div>
+            <ion-badge [color]="record.reportStatus === 'Closed' ? 'medium' : 'success'">
+              {{ record.reportStatus || 'Open' }}
+            </ion-badge>
+          </div>
+          <div class="record-details" *ngIf="expandedRecordId === record.id">
+            <div class="detail-item">ICE Flight RN: {{ record.iceFlightRN || 'N/A' }}</div>
+            <div class="detail-item">2nd ICE Flight RN: {{ record.secondICEFlightRN || 'N/A' }}</div>
+            <div class="detail-item">Tail #: {{ record.tailNumber || 'N/A' }}</div>
+            <div class="detail-item">Mission #: {{ record.missionNumber || 'N/A' }}</div>
+          </div>
+        </ion-label>
+        <div class="record-actions">
+          <ion-button size="small" fill="clear" (click)="toggleDetails(record)">
+            <mat-icon>{{ expandedRecordId === record.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </ion-button>
+          <ion-button size="small" fill="clear" (click)="duplicateRecord(record)">Duplicate</ion-button>
+          <ion-button size="small" fill="clear" (click)="toggleStatus(record)">
+            {{ record.reportStatus === 'Closed' ? 'Reopen' : 'Close' }}
+          </ion-button>
+          <ion-button size="small" (click)="openRecord(record)">Open</ion-button>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

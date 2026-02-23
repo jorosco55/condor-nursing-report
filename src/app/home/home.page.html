@@ -46,7 +46,10 @@
                 <ion-col size="12" size-md="6">
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Site</mat-label>
-                    <input matInput formControlName="site">
+                    <mat-select formControlName="site">
+                      <mat-option value="">-- Select Site --</mat-option>
+                      <mat-option *ngFor="let site of transferOfCareSites" [value]="site">{{ site }}</mat-option>
+                    </mat-select>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -56,13 +59,19 @@
                 <ion-col size="12" size-md="6">
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>ICE Flight RN</mat-label>
-                    <input matInput formControlName="iceFlightRN">
+                    <mat-select formControlName="iceFlightRN">
+                      <mat-option value="">-- Select RN --</mat-option>
+                      <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
+                    </mat-select>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="12" size-md="6">
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>2nd ICE Flight RN</mat-label>
-                    <input matInput formControlName="secondICEFlightRN">
+                    <mat-select formControlName="secondICEFlightRN">
+                      <mat-option value="">-- Select RN --</mat-option>
+                      <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
+                    </mat-select>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -105,6 +114,7 @@
                 </ion-col>
               </ion-row>
 
+
               <div class="section-block section-tight section-compact">
                 <div class="section-title">Pre-Flight Check</div>
                 <div class="checkbox-row">
@@ -127,28 +137,156 @@
               <div class="section-title">Flight Times (Z)</div>
               <ion-row>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width">
+                  <mat-form-field appearance="outline" class="full-width time-field">
                     <mat-label>Showtime</mat-label>
-                    <input matInput formControlName="showtimeZ1">
+                    <input matInput formControlName="showtimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('showtimeZ1')">
+                    <input #showtimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'showtimeZ1')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('showtimeZ1')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(showtimeZ1Picker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('showtimeZ1')?.hasError('invalidTime') && (reportForm.get('showtimeZ1')?.touched || reportForm.get('showtimeZ1')?.dirty)">
+                      Use HHMM (0000-2359).
+                    </mat-error>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width">
+                  <mat-form-field appearance="outline" class="full-width time-field">
                     <mat-label>Block time</mat-label>
-                    <input matInput formControlName="blockTimeZ1">
+                    <input matInput formControlName="blockTimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('blockTimeZ1')">
+                    <input #blockTimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'blockTimeZ1')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('blockTimeZ1')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(blockTimeZ1Picker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('blockTimeZ1')?.hasError('invalidTime') && (reportForm.get('blockTimeZ1')?.touched || reportForm.get('blockTimeZ1')?.dirty)">
+                      Use HHMM (0000-2359).
+                    </mat-error>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width">
+                  <mat-form-field appearance="outline" class="full-width time-field">
                     <mat-label>End time</mat-label>
-                    <input matInput formControlName="endTimeZ1">
+                    <input matInput formControlName="endTimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('endTimeZ1')">
+                    <input #endTimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'endTimeZ1')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('endTimeZ1')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(endTimeZ1Picker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('endTimeZ1')?.hasError('invalidTime') && (reportForm.get('endTimeZ1')?.touched || reportForm.get('endTimeZ1')?.dirty)">
+                      Use HHMM (0000-2359).
+                    </mat-error>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
 
+              <h4 class="section-subtitle">Doors Close</h4>
+              <ion-row>
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width time-field">
+                    <mat-label>Time (L)</mat-label>
+                    <input matInput formControlName="doorsCloseTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('doorsCloseTimeL')">
+                    <input #doorsCloseTimeLPicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'doorsCloseTimeL')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('doorsCloseTimeL')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(doorsCloseTimeLPicker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('doorsCloseTimeL')?.hasError('invalidTime') && reportForm.get('doorsCloseTimeL')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width time-field">
+                    <mat-label>Time</mat-label>
+                    <input matInput formControlName="doorsCloseTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('doorsCloseTime')">
+                    <input #doorsCloseTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'doorsCloseTime')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('doorsCloseTime')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(doorsCloseTimePicker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('doorsCloseTime')?.hasError('invalidTime') && reportForm.get('doorsCloseTime')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+
+              <h4 class="section-subtitle">Doors Open</h4>
+              <ion-row>
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width time-field">
+                    <mat-label>Time (L)</mat-label>
+                    <input matInput formControlName="doorsOpenTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('doorsOpenTimeL')">
+                    <input #doorsOpenTimeLPicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'doorsOpenTimeL')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('doorsOpenTimeL')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(doorsOpenTimeLPicker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('doorsOpenTimeL')?.hasError('invalidTime') && reportForm.get('doorsOpenTimeL')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width time-field">
+                    <mat-label>Time</mat-label>
+                    <input matInput formControlName="doorsOpenTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('doorsOpenTime')">
+                    <input #doorsOpenTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'doorsOpenTime')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('doorsOpenTime')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(doorsOpenTimePicker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('doorsOpenTime')?.hasError('invalidTime') && reportForm.get('doorsOpenTime')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+
               <h4 class="section-subtitle">Wheels Up</h4>
               <ion-row>
-                <ion-col size="6">
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width time-field">
+                    <mat-label>Time (L)</mat-label>
+                    <input matInput formControlName="wheelsUpTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('wheelsUpTimeL')">
+                    <input #wheelsUpTimeLPicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsUpTimeL')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('wheelsUpTimeL')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(wheelsUpTimeLPicker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('wheelsUpTimeL')?.hasError('invalidTime') && reportForm.get('wheelsUpTimeL')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4">
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Site</mat-label>
                     <mat-select formControlName="wheelsUpSite">
@@ -157,17 +295,45 @@
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
-                <ion-col size="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Time (Z)</mat-label>
-                    <input matInput formControlName="wheelsUpTime" placeholder="HHMM">
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width time-field">
+                    <mat-label>Time</mat-label>
+                    <input matInput formControlName="wheelsUpTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('wheelsUpTime')">
+                    <input #wheelsUpTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsUpTime')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('wheelsUpTime')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(wheelsUpTimePicker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('wheelsUpTime')?.hasError('invalidTime') && reportForm.get('wheelsUpTime')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
 
               <h4 class="section-subtitle">Wheels Down</h4>
               <ion-row>
-                <ion-col size="6">
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width time-field">
+                    <mat-label>Time (L)</mat-label>
+                    <input matInput formControlName="wheelsDownTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('wheelsDownTimeL')">
+                    <input #wheelsDownTimeLPicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsDownTimeL')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('wheelsDownTimeL')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(wheelsDownTimeLPicker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('wheelsDownTimeL')?.hasError('invalidTime') && reportForm.get('wheelsDownTimeL')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="4">
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Site</mat-label>
                     <mat-select formControlName="wheelsDownSite">
@@ -176,10 +342,21 @@
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
-                <ion-col size="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Time (Z)</mat-label>
-                    <input matInput formControlName="wheelsDownTime" placeholder="HHMM">
+                <ion-col size="4">
+                  <mat-form-field appearance="outline" class="full-width time-field">
+                    <mat-label>Time</mat-label>
+                    <input matInput formControlName="wheelsDownTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('wheelsDownTime')">
+                    <input #wheelsDownTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsDownTime')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('wheelsDownTime')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(wheelsDownTimePicker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('wheelsDownTime')?.hasError('invalidTime') && reportForm.get('wheelsDownTime')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -187,21 +364,54 @@
               <mat-checkbox formControlName="ronUsed" class="ion-margin-top">Use if RON</mat-checkbox>
               <ion-row *ngIf="reportForm.get('ronUsed')?.value">
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width">
+                  <mat-form-field appearance="outline" class="full-width time-field">
                     <mat-label>Showtime</mat-label>
-                    <input matInput formControlName="showtimeZ2">
+                    <input matInput formControlName="showtimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('showtimeZ2')">
+                    <input #showtimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'showtimeZ2')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('showtimeZ2')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(showtimeZ2Picker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('showtimeZ2')?.hasError('invalidTime') && reportForm.get('showtimeZ2')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width">
+                  <mat-form-field appearance="outline" class="full-width time-field">
                     <mat-label>Block time</mat-label>
-                    <input matInput formControlName="blockTimeZ2">
+                    <input matInput formControlName="blockTimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('blockTimeZ2')">
+                    <input #blockTimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'blockTimeZ2')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('blockTimeZ2')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(blockTimeZ2Picker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('blockTimeZ2')?.hasError('invalidTime') && reportForm.get('blockTimeZ2')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width">
+                  <mat-form-field appearance="outline" class="full-width time-field">
                     <mat-label>End time</mat-label>
-                    <input matInput formControlName="endTimeZ2">
+                    <input matInput formControlName="endTimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleTimeBlur('endTimeZ2')">
+                    <input #endTimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'endTimeZ2')">
+                    <span matSuffix class="time-suffix">
+                      <button mat-button class="time-now-button" type="button" (click)="stampTime('endTimeZ2')">Now</button>
+                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(endTimeZ2Picker)" aria-label="Open time picker">
+                        <mat-icon>schedule</mat-icon>
+                      </button>
+                    </span>
+                    <mat-hint class="time-hint">HHMM</mat-hint>
+                    <mat-error *ngIf="reportForm.get('endTimeZ2')?.hasError('invalidTime') && reportForm.get('endTimeZ2')?.touched">
+                      Use HHMM (0000-2359).
+                    </mat-error>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -365,6 +575,7 @@
                 <mat-checkbox formControlName="specialCircumstanceMedicalControlContacted">Vighter Medical Control contacted</mat-checkbox>
                 <mat-checkbox formControlName="specialCircumstanceSiteSupervisorAdvised">Site supervisor advised</mat-checkbox>
                 <mat-checkbox formControlName="specialCircumstanceMedicalEmergencyOnboardEms">Medical emergency on-board EMS contacted</mat-checkbox>
+                <mat-checkbox formControlName="specialCircumstanceViolentIncident">Violent Incident</mat-checkbox>
               </div>
             </div>
           </ion-col>
@@ -384,9 +595,20 @@
         <div formArrayName="notes">
           <ion-row *ngFor="let note of notes.controls; let i = index" [formGroupName]="i" class="note-row">
             <ion-col size="2">
-              <mat-form-field appearance="outline" class="full-width">
+              <mat-form-field appearance="outline" class="full-width time-field">
                 <mat-label>Time (L)</mat-label>
-                <input matInput formControlName="timeL">
+                <input matInput formControlName="timeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleNoteTimeBlur(i)">
+                <input #noteTimePicker type="time" class="time-picker-input" (change)="applyNoteTimePicker($event, i)">
+                <span matSuffix class="time-suffix">
+                  <button mat-button class="time-now-button" type="button" (click)="stampNoteTime(i)">Now</button>
+                  <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(noteTimePicker)" aria-label="Open time picker">
+                    <mat-icon>schedule</mat-icon>
+                  </button>
+                </span>
+                <mat-hint class="time-hint">HHMM</mat-hint>
+                <mat-error *ngIf="notes.at(i).get('timeL')?.hasError('invalidTime') && notes.at(i).get('timeL')?.touched">
+                  Use HHMM (0000-2359).
+                </mat-error>
               </mat-form-field>
             </ion-col>
             <ion-col size="2">

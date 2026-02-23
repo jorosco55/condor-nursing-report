@@ -22,9 +22,18 @@ export interface NursingReport {
   endTimeZ1: string;
 
   wheelsUpSite: string;
+  wheelsUpTimeL: string;
   wheelsUpTime: string;
   wheelsDownSite: string;
+  wheelsDownTimeL: string;
   wheelsDownTime: string;
+  doorsCloseTimeL: string;
+  doorsCloseTime: string;
+  doorsOpenTimeL: string;
+  doorsOpenTime: string;
+
+  // Record Status
+  reportStatus: 'Open' | 'Closed';
   
   showtimeZ2: string; // RON
   blockTimeZ2: string; // RON
@@ -67,6 +76,7 @@ export interface NursingReport {
   specialCircumstanceMedicalControlContacted: boolean;
   specialCircumstanceSiteSupervisorAdvised: boolean;
   specialCircumstanceMedicalEmergencyOnboardEms: boolean;
+  specialCircumstanceViolentIncident: boolean;
   
   // Signatures
   rnSignature?: string; // Base64
@@ -85,6 +95,7 @@ export interface PaxMedicationEntry {
   aNumber: string;
   medication: string;
   dose: string;
+  doseUnit: string;
   route: string;
   prnGiven: boolean;
   vitalsNa: boolean;

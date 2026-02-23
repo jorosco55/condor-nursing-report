@@ -38,9 +38,20 @@
             </ion-col>
 
             <ion-col size="12" size-md="2">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Time (Z)</mat-label>
-                <input matInput formControlName="timeZ" placeholder="HHMM">
+              <mat-form-field appearance="outline" class="full-width time-field">
+                <mat-label>Time</mat-label>
+                <input matInput formControlName="timeZ" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleEntryTimeBlur(i)">
+                <input #narcTimePicker type="time" class="time-picker-input" (change)="applyEntryTimePicker($event, i)">
+                <span matSuffix class="time-suffix">
+                  <button mat-button class="time-now-button" type="button" (click)="stampEntryTime(i)">Now</button>
+                  <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(narcTimePicker)" aria-label="Open time picker">
+                    <mat-icon>schedule</mat-icon>
+                  </button>
+                </span>
+                <mat-hint class="time-hint">HHMM</mat-hint>
+                <mat-error *ngIf="entries.at(i).get('timeZ')?.hasError('invalidTime') && entries.at(i).get('timeZ')?.touched">
+                  Use HHMM (0000-2359).
+                </mat-error>
               </mat-form-field>
             </ion-col>
 

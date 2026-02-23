@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IonicModule, ToastController, IonContent, GestureController } from '@ionic/angular';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +17,23 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { Capacitor } from '@capacitor/core';
 import { ReportService } from '../services/report.service';
+import { NarrativeNote } from '../models/report.model';
+
+type ReportTimeControl =
+  | 'showtimeZ1'
+  | 'blockTimeZ1'
+  | 'endTimeZ1'
+  | 'showtimeZ2'
+  | 'blockTimeZ2'
+  | 'endTimeZ2'
+  | 'wheelsUpTimeL'
+  | 'wheelsDownTimeL'
+  | 'wheelsUpTime'
+  | 'wheelsDownTime'
+  | 'doorsCloseTimeL'
+  | 'doorsCloseTime'
+  | 'doorsOpenTimeL'
+  | 'doorsOpenTime';
 
 @Component({
   selector: 'app-home',
@@ -211,18 +228,26 @@ export class HomePage implements OnInit, OnDestroy {
       medicationRecordStatus: [''],
 
       // Logistics
-      showtimeZ1: [''],
-      blockTimeZ1: [''],
-      endTimeZ1: [''],
+      showtimeZ1: ['', [this.timeHHMMValidator]],
+      blockTimeZ1: ['', [this.timeHHMMValidator]],
+      endTimeZ1: ['', [this.timeHHMMValidator]],
 
       wheelsUpSite: [''],
-      wheelsUpTime: [''],
+      wheelsUpTimeL: ['', [this.timeHHMMValidator]],
+      wheelsUpTime: ['', [this.timeHHMMValidator]],
       wheelsDownSite: [''],
-      wheelsDownTime: [''],
+      wheelsDownTimeL: ['', [this.timeHHMMValidator]],
+      wheelsDownTime: ['', [this.timeHHMMValidator]],
+      doorsCloseTimeL: ['', [this.timeHHMMValidator]],
+      doorsCloseTime: ['', [this.timeHHMMValidator]],
+      doorsOpenTimeL: ['', [this.timeHHMMValidator]],
+      doorsOpenTime: ['', [this.timeHHMMValidator]],
 
-      showtimeZ2: [''], // RON
-      blockTimeZ2: [''], // RON
-      endTimeZ2: [''], // RON
+      reportStatus: ['Open'],
+
+      showtimeZ2: ['', [this.timeHHMMValidator]], // RON
+      blockTimeZ2: ['', [this.timeHHMMValidator]], // RON
+      endTimeZ2: ['', [this.timeHHMMValidator]], // RON
       ronUsed: [false],
 
       // Narrative
@@ -255,8 +280,10 @@ export class HomePage implements OnInit, OnDestroy {
       specialCircumstanceMedicalComplaintAssessed: [false],
       specialCircumstanceMedicalControlContacted: [false],
       specialCircumstanceSiteSupervisorAdvised: [false],
-      specialCircumstanceMedicalEmergencyOnboardEms: [false]
+      specialCircumstanceMedicalEmergencyOnboardEms: [false],
+      specialCircumstanceViolentIncident: [false]
     });
+
   }
 
   async loadLatestDraft() {
@@ -269,8 +296,8 @@ export class HomePage implements OnInit, OnDestroy {
       while (this.notes.length !== 0) {
         this.notes.removeAt(0);
       }
-      report.notes.forEach(note => {
-        this.notes.push(this.fb.group(note));
+      report.notes.forEach((note: NarrativeNote) => {
+        this.notes.push(this.buildNoteGroup(note));
       });
     } else {
       this.addNote();
@@ -282,16 +309,107 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
 
-  addNote() {
-    const now = new Date();
-    const timeL = now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0');
 
-    const noteGroup = this.fb.group({
-      timeL: [timeL],
-      rn: [''],  // RN stored separately from notes
-      note: ['']
+  addNote() {
+    this.notes.push(this.buildNoteGroup());
+  }
+
+  buildNoteGroup(note?: NarrativeNote) {
+    const timeL = note?.timeL || this.getCurrentTimestamp();
+    return this.fb.group({
+      timeL: [timeL, [this.timeHHMMValidator]],
+      rn: [note?.rn || ''],
+      note: [note?.note || '']
     });
-    this.notes.push(noteGroup);
+  }
+
+  timeHHMMValidator(control: AbstractControl): ValidationErrors | null {
+    const value = (control.value || '').toString().trim();
+    if (!value) return null;
+    const isValid = /^([01]\d|2[0-3])[0-5]\d$/.test(value) || /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+    return isValid ? null : { invalidTime: true };
+  }
+
+  stampTime(controlName: ReportTimeControl) {
+    const control = this.reportForm.get(controlName);
+    if (!control) return;
+    control.setValue(this.getCurrentTimestamp());
+  }
+
+  handleTimeBlur(controlName: ReportTimeControl) {
+    const control = this.reportForm.get(controlName);
+    if (!control) return;
+    const rawValue = (control.value || '').toString().trim();
+    if (!rawValue) {
+      control.setValue(this.getCurrentTimestamp());
+      return;
+    }
+    const normalized = this.normalizeTimeValue(rawValue);
+    if (normalized !== rawValue) {
+      control.setValue(normalized);
+    }
+  }
+
+  normalizeTimeValue(value: string): string {
+    if (/^\d{4}$/.test(value)) {
+      return value;
+    }
+    const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(value);
+    if (match) {
+      return `${match[1]}${match[2]}`;
+    }
+    return value;
+  }
+
+  openTimePicker(input: HTMLInputElement) {
+    if (typeof input.showPicker === 'function') {
+      input.showPicker();
+    } else {
+      input.focus();
+    }
+  }
+
+  applyTimePicker(event: Event, controlName: ReportTimeControl) {
+    const input = event.target as HTMLInputElement;
+    const rawValue = (input.value || '').toString().trim();
+    if (!rawValue) return;
+    const normalized = this.normalizeTimeValue(rawValue);
+    const control = this.reportForm.get(controlName);
+    if (!control) return;
+    control.setValue(normalized);
+    control.markAsTouched();
+  }
+
+
+  stampNoteTime(noteIndex: number) {
+    const control = this.notes.at(noteIndex).get('timeL');
+    if (!control) return;
+    control.setValue(this.getCurrentTimestamp());
+  }
+
+  handleNoteTimeBlur(noteIndex: number) {
+    const control = this.notes.at(noteIndex).get('timeL');
+    if (!control) return;
+    const rawValue = (control.value || '').toString().trim();
+    if (!rawValue) {
+      control.setValue(this.getCurrentTimestamp());
+      return;
+    }
+    const normalized = this.normalizeTimeValue(rawValue);
+    if (normalized !== rawValue) {
+      control.setValue(normalized);
+    }
+  }
+
+  applyNoteTimePicker(event: Event, noteIndex: number) {
+    const input = event.target as HTMLInputElement;
+    const rawValue = (input.value || '').toString().trim();
+    if (!rawValue) return;
+    const normalized = this.normalizeTimeValue(rawValue);
+    const control = this.notes.at(noteIndex).get('timeL');
+    if (!control) return;
+    control.setValue(normalized);
+    control.markAsTouched();
   }
 
 

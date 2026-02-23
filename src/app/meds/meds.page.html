@@ -26,13 +26,28 @@
                   <ion-col size="12" size-md="3">
                     <mat-form-field appearance="outline" class="full-width" [class.field-alert]="medsRequired && !hasAnyMedsSelection()">
                       <mat-label>Medication</mat-label>
-                      <input matInput formControlName="medication">
+                      <mat-select formControlName="medication">
+                        <mat-option value="">-- Select --</mat-option>
+                        <mat-option *ngFor="let medication of medicationOptions" [value]="medication">{{ medication }}</mat-option>
+                      </mat-select>
                     </mat-form-field>
                   </ion-col>
                   <ion-col size="12" size-md="2">
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>Dose</mat-label>
-                      <input matInput formControlName="dose">
+                      <mat-select formControlName="dose">
+                        <mat-option value="">-- Select --</mat-option>
+                        <mat-option *ngFor="let dose of doseOptions" [value]="dose">{{ dose }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </ion-col>
+                  <ion-col size="12" size-md="2">
+                    <mat-form-field appearance="outline" class="full-width">
+                      <mat-label>Dose Units</mat-label>
+                      <mat-select formControlName="doseUnit">
+                        <mat-option value="">-- Select --</mat-option>
+                        <mat-option *ngFor="let unit of doseUnits" [value]="unit">{{ unit }}</mat-option>
+                      </mat-select>
                     </mat-form-field>
                   </ion-col>
                   <ion-col size="12" size-md="2">
@@ -47,7 +62,10 @@
                   <ion-col size="12" size-md="1" class="ion-align-self-center">
                     <mat-checkbox formControlName="prnGiven">PRN</mat-checkbox>
                   </ion-col>
-                  <ion-col size="12" size-md="4">
+                </ion-row>
+
+                <ion-row>
+                  <ion-col size="12" size-md="11">
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>Annotated on MTF</mat-label>
                       <input matInput formControlName="annotatedOnMtf">

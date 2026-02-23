@@ -11,6 +11,10 @@ const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.routes').then(m => m.TABS_ROUTES)
   },
   {
+    path: 'records',
+    loadComponent: () => import('./records/records.page').then(m => m.RecordsPage)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

@@ -34,6 +34,43 @@ export class MedsPage implements OnInit {
   medsRequired = false;
 
   routeOptions: string[] = ['PO', 'IM', 'IV', 'IN', 'SQ', 'SL'];
+  medicationOptions: string[] = [
+    'Acetaminophen',
+    'Albuterol',
+    'Amiodarone',
+    'Aspirin',
+    'Atropine',
+    'Dextrose 50%',
+    'Diphenhydramine',
+    'Epinephrine',
+    'Fentanyl',
+    'Furosemide',
+    'Glucagon',
+    'Heparin',
+    'Hydrocortisone',
+    'Ibuprofen',
+    'Ketamine',
+    'Lidocaine',
+    'Lorazepam',
+    'Magnesium Sulfate',
+    'Methylprednisolone',
+    'Midazolam',
+    'Morphine',
+    'Naloxone',
+    'Nitroglycerin',
+    'Norepinephrine',
+    'Ondansetron',
+    'Oxygen',
+    'Potassium Chloride',
+    'Prednisone',
+    'Propofol',
+    'Rocuronium',
+    'Sodium Bicarbonate',
+    'Succinylcholine',
+    'Vasopressin'
+  ];
+  doseOptions: string[] = ['0.5', '1', '2', '5', '10', '20', '50', '100'];
+  doseUnits: string[] = ['mg', 'mcg', 'g', 'mL', 'units', 'mEq', 'tab'];
 
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
@@ -69,6 +106,7 @@ export class MedsPage implements OnInit {
       aNumber: [data?.aNumber || ''],
       medication: [data?.medication || ''],
       dose: [data?.dose || ''],
+      doseUnit: [data?.doseUnit || ''],
       route: [data?.route || ''],
       prnGiven: [data?.prnGiven || false],
       vitalsNa: [data?.vitalsNa || false],

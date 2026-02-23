@@ -46,7 +46,7 @@ export class LoginPage {
       toast.present();
 
       // Navigate to main app
-      this.router.navigate(['/tabs/report']);
+      this.router.navigate(['/records']);
     } else {
       const toast = await this.toastCtrl.create({
         message: 'Please enter username and password.',
