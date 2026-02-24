@@ -27,9 +27,7 @@ export interface NursingReport {
   wheelsDownSite: string;
   wheelsDownTimeL: string;
   wheelsDownTime: string;
-  doorsCloseTimeL: string;
   doorsCloseTime: string;
-  doorsOpenTimeL: string;
   doorsOpenTime: string;
 
   // Record Status
@@ -68,7 +66,8 @@ export interface NursingReport {
   allPaxGivenFoodWaterLavBreaks: boolean;
 
   // Delay
-  delayReasons: string[];
+  delayReasons: string;
+  delayEntries?: DelayEntry[];
 
   // Special Circumstances
   specialCircumstancePaxWrapped: boolean;
@@ -83,6 +82,11 @@ export interface NursingReport {
   dateSigned?: string;
   secondRnSignature?: string; // Base64
   secondDateSigned?: string;
+}
+
+export interface DelayEntry {
+  timeL: string;
+  reasons: string[];
 }
 
 export interface NarrativeNote {

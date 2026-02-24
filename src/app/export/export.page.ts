@@ -191,9 +191,14 @@ export class ExportPage implements AfterViewInit {
         })
       : [[{ text: 'No PAX medications recorded', colSpan: 7 }, '', '', '', '', '', '']];
 
-    const delayReasons = report.delayReasons && report.delayReasons.length > 0
-      ? report.delayReasons.join(', ')
-      : 'N/A';
+    const delayReasons = Array.isArray(report.delayReasons)
+      ? (report.delayReasons[0] || 'N/A')
+      : (report.delayReasons || 'N/A');
+    const delayEntries = report.delayEntries && report.delayEntries.length > 0
+      ? report.delayEntries
+        .map(entry => `${entry.timeL || '----'} - ${(entry.reasons || []).join(', ') || 'N/A'}`)
+        .join('\n')
+      : delayReasons;
 
     const docDefinition: any = {
       content: [
@@ -219,10 +224,8 @@ export class ExportPage implements AfterViewInit {
           table: {
             widths: ['*', '*'],
               body: [
-                [{ text: 'Doors Close Time (L):', bold: true }, report.doorsCloseTimeL || 'N/A'],
-                [{ text: 'Doors Close Time (Z):', bold: true }, report.doorsCloseTime || 'N/A'],
-                [{ text: 'Doors Open Time (L):', bold: true }, report.doorsOpenTimeL || 'N/A'],
-                [{ text: 'Doors Open Time (Z):', bold: true }, report.doorsOpenTime || 'N/A'],
+                [{ text: 'Doors Close Time:', bold: true }, report.doorsCloseTime || 'N/A'],
+                [{ text: 'Doors Open Time:', bold: true }, report.doorsOpenTime || 'N/A'],
                 [{ text: 'Wheels Up Site:', bold: true }, report.wheelsUpSite || 'N/A'],
                 [{ text: 'Wheels Up Time (L):', bold: true }, report.wheelsUpTimeL || 'N/A'],
                 [{ text: 'Wheels Up Time (Z):', bold: true }, report.wheelsUpTime || 'N/A'],
@@ -291,7 +294,7 @@ export class ExportPage implements AfterViewInit {
           table: {
             widths: ['*', '*'],
             body: [
-              [{ text: 'Delay reason(s):', bold: true }, delayReasons]
+              [{ text: 'Delay reason(s):', bold: true }, delayEntries]
             ]
           }
         },

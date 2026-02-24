@@ -17,7 +17,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { Capacitor } from '@capacitor/core';
 import { ReportService } from '../services/report.service';
-import { NarrativeNote } from '../models/report.model';
+import { DelayEntry, NarrativeNote } from '../models/report.model';
 
 type ReportTimeControl =
   | 'showtimeZ1'
@@ -30,10 +30,9 @@ type ReportTimeControl =
   | 'wheelsDownTimeL'
   | 'wheelsUpTime'
   | 'wheelsDownTime'
-  | 'doorsCloseTimeL'
   | 'doorsCloseTime'
-  | 'doorsOpenTimeL'
-  | 'doorsOpenTime';
+  | 'doorsOpenTime'
+  | 'delayTimeL';
 
 @Component({
   selector: 'app-home',
@@ -238,9 +237,7 @@ export class HomePage implements OnInit, OnDestroy {
       wheelsDownSite: [''],
       wheelsDownTimeL: ['', [this.timeHHMMValidator]],
       wheelsDownTime: ['', [this.timeHHMMValidator]],
-      doorsCloseTimeL: ['', [this.timeHHMMValidator]],
       doorsCloseTime: ['', [this.timeHHMMValidator]],
-      doorsOpenTimeL: ['', [this.timeHHMMValidator]],
       doorsOpenTime: ['', [this.timeHHMMValidator]],
 
       reportStatus: ['Open'],
@@ -273,7 +270,9 @@ export class HomePage implements OnInit, OnDestroy {
       allPaxGivenFoodWaterLavBreaks: [false],
 
       // Delay
-      delayReasons: [[]],
+      delayReasons: [''],
+      delayEntries: this.fb.array([]),
+      delayTimeL: ['', [this.timeHHMMValidator]],
 
       // Special Circumstances
       specialCircumstancePaxWrapped: [false],
@@ -289,7 +288,13 @@ export class HomePage implements OnInit, OnDestroy {
   async loadLatestDraft() {
     const report = await this.reportService.getLatestReport();
     if (report) {
-      this.reportForm.patchValue(report);
+      const normalizedDelay = Array.isArray((report as unknown as { delayReasons?: string[] }).delayReasons)
+        ? ((report as unknown as { delayReasons?: string[] }).delayReasons || [])[0] || ''
+        : (report.delayReasons || '');
+      this.reportForm.patchValue({
+        ...report,
+        delayReasons: normalizedDelay
+      });
       this.reportService.setNarcRecordStatus(report.narcRecordStatus || '');
       this.reportService.setMedicationRecordStatus(report.medicationRecordStatus || '');
       // Clear notes array and rebuild
@@ -298,6 +303,15 @@ export class HomePage implements OnInit, OnDestroy {
       }
       report.notes.forEach((note: NarrativeNote) => {
         this.notes.push(this.buildNoteGroup(note));
+      });
+      while (this.delayEntries.length !== 0) {
+        this.delayEntries.removeAt(0);
+      }
+      (report.delayEntries || []).forEach((entry: DelayEntry) => {
+        this.delayEntries.push(this.fb.group({
+          timeL: [entry.timeL, [this.timeHHMMValidator]],
+          reasons: [entry.reasons || []]
+        }));
       });
     } else {
       this.addNote();
@@ -308,10 +322,34 @@ export class HomePage implements OnInit, OnDestroy {
     return this.reportForm.get('notes') as FormArray;
   }
 
+  get delayEntries() {
+    return this.reportForm.get('delayEntries') as FormArray;
+  }
+
 
 
   addNote() {
     this.notes.push(this.buildNoteGroup());
+  }
+
+  addDelayEntry() {
+    const reason = (this.reportForm.get('delayReasons')?.value || '').toString().trim();
+    if (!reason) return;
+    const timeControl = this.reportForm.get('delayTimeL');
+    if (!timeControl || !timeControl.value) {
+      timeControl?.setValue(this.getCurrentTimestamp());
+    }
+    const timeL = (this.reportForm.get('delayTimeL')?.value || '').toString().trim();
+    this.delayEntries.push(this.fb.group({
+      timeL: [timeL, [this.timeHHMMValidator]],
+      reasons: [[reason]]
+    }));
+    this.reportForm.get('delayReasons')?.setValue('');
+    this.reportForm.get('delayTimeL')?.setValue('');
+  }
+
+  removeDelayEntry(index: number) {
+    this.delayEntries.removeAt(index);
   }
 
   buildNoteGroup(note?: NarrativeNote) {

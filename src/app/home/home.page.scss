@@ -60,10 +60,23 @@
 }
 
 .section-block {
-  padding: 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
+  position: relative;
+  padding: 14px 14px 16px;
+  border: 1px solid #dfe3e8;
+  border-radius: 10px;
   background: #ffffff;
+  box-shadow: 0 6px 16px rgba(26, 26, 26, 0.08);
+  overflow: hidden;
+}
+
+.section-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(31, 78, 137, 0.25), rgba(31, 78, 137, 0.05));
 }
 
 .section-compact {
@@ -78,6 +91,44 @@
   font-weight: 600;
   color: var(--ion-color-primary);
   margin-bottom: 8px;
+}
+
+.delay-actions {
+  margin-top: 6px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.delay-list {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.delay-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  background: #fdfdfd;
+}
+
+.delay-entry-main {
+  display: grid;
+  gap: 2px;
+}
+
+.delay-entry-time {
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+.delay-entry-reasons {
+  color: #666;
+  font-size: 0.85rem;
 }
 
 .checkbox-row {
@@ -106,6 +157,10 @@ h3 {
   color: #4a4a4a;
   font-weight: 600;
   font-size: 0.95rem;
+}
+
+.doors-row {
+  column-gap: 16px;
 }
 
 

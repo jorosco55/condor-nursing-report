@@ -17,13 +17,13 @@
               <div class="med-card">
                 <div class="card-title">Medication</div>
                 <ion-row>
-                  <ion-col size="12" size-md="2">
+                  <ion-col size="12" size-sm="6" size-md="2">
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>A-Number</mat-label>
                       <input matInput formControlName="aNumber">
                     </mat-form-field>
                   </ion-col>
-                  <ion-col size="12" size-md="3">
+                  <ion-col size="12" size-sm="6" size-md="3">
                     <mat-form-field appearance="outline" class="full-width" [class.field-alert]="medsRequired && !hasAnyMedsSelection()">
                       <mat-label>Medication</mat-label>
                       <mat-select formControlName="medication">
@@ -32,7 +32,7 @@
                       </mat-select>
                     </mat-form-field>
                   </ion-col>
-                  <ion-col size="12" size-md="2">
+                  <ion-col size="12" size-sm="6" size-md="2">
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>Dose</mat-label>
                       <mat-select formControlName="dose">
@@ -41,7 +41,7 @@
                       </mat-select>
                     </mat-form-field>
                   </ion-col>
-                  <ion-col size="12" size-md="2">
+                  <ion-col size="12" size-sm="6" size-md="2">
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>Dose Units</mat-label>
                       <mat-select formControlName="doseUnit">
@@ -50,7 +50,7 @@
                       </mat-select>
                     </mat-form-field>
                   </ion-col>
-                  <ion-col size="12" size-md="2">
+                  <ion-col size="12" size-sm="6" size-md="2">
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>Route</mat-label>
                       <mat-select formControlName="route">
@@ -59,19 +59,19 @@
                       </mat-select>
                     </mat-form-field>
                   </ion-col>
-                  <ion-col size="12" size-md="1" class="ion-align-self-center">
+                  <ion-col size="12" size-sm="6" size-md="1" class="ion-align-self-center">
                     <mat-checkbox formControlName="prnGiven">PRN</mat-checkbox>
                   </ion-col>
                 </ion-row>
 
                 <ion-row>
-                  <ion-col size="12" size-md="11">
+                  <ion-col size="12" size-sm="10" size-md="11">
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>Annotated on MTF</mat-label>
                       <input matInput formControlName="annotatedOnMtf">
                     </mat-form-field>
                   </ion-col>
-                  <ion-col size="12" size-md="1" class="ion-align-self-center">
+                  <ion-col size="12" size-sm="2" size-md="1" class="ion-align-self-center">
                     <button mat-icon-button color="warn" (click)="removePaxMedicated(i)" type="button">
                       <mat-icon>delete</mat-icon>
                     </button>
