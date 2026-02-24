@@ -47,6 +47,7 @@ export class NarcoticsPage implements OnInit, OnDestroy {
   ];
 
   dosageUnits: string[] = ['mg', 'mcg', 'g', 'mL', 'units', 'oz'];
+  doseOptions: string[] = ['0.5', '1', '2', '5', '10', '20', '50', '100'];
 
   rnList: string[] = [
     'Sarah Johnson, RN',
@@ -61,7 +62,7 @@ export class NarcoticsPage implements OnInit, OnDestroy {
     'Christopher Lee, RN'
   ];
 
-  private totalEntries = 5;
+  private minEntries = 3;
 
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
@@ -103,14 +104,16 @@ export class NarcoticsPage implements OnInit, OnDestroy {
       entries: this.fb.array([])
     });
 
-    for (let i = 0; i < this.totalEntries; i++) {
+    for (let i = 0; i < this.minEntries; i++) {
       this.entries.push(this.createEntry());
     }
   }
 
   createEntry(data?: Partial<NarcoticEntry>): FormGroup {
     return this.fb.group({
+      aNumber: [data?.aNumber || ''],
       narcoticName: [data?.narcoticName || ''],
+      dose: [data?.dose || ''],
       dosageUnit: [data?.dosageUnit || ''],
       timeZ: [data?.timeZ || '', [this.timeHHMMValidator]],
       rnName: [data?.rnName || ''],
@@ -187,10 +190,12 @@ export class NarcoticsPage implements OnInit, OnDestroy {
     }
 
     this.entries.clear();
-    const entriesFromReport = (report.narcotics || []).slice(0, this.totalEntries);
-    while (entriesFromReport.length < this.totalEntries) {
+    const entriesFromReport = report.narcotics || [];
+    while (entriesFromReport.length < this.minEntries) {
       entriesFromReport.push({
+        aNumber: '',
         narcoticName: '',
+        dose: '',
         dosageUnit: '',
         timeZ: '',
         rnName: '',
@@ -250,5 +255,9 @@ export class NarcoticsPage implements OnInit, OnDestroy {
       color: 'success'
     });
     toast.present();
+  }
+
+  addEntry() {
+    this.entries.push(this.createEntry());
   }
 }

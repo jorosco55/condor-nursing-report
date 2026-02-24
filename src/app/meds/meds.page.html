@@ -12,159 +12,158 @@
       <div class="section-block">
         <div class="section-title">Medication</div>
         <div formArrayName="paxMedicated">
-          <ion-row *ngFor="let paxEntry of paxMedicated.controls; let i = index" [formGroupName]="i" class="meds-row">
-            <ion-col size="12">
-              <div class="med-card">
-                <div class="card-title">Medication</div>
-                <ion-row>
-                  <ion-col size="12" size-sm="6" size-md="2">
-                    <mat-form-field appearance="outline" class="full-width">
-                      <mat-label>A-Number</mat-label>
-                      <input matInput formControlName="aNumber">
-                    </mat-form-field>
-                  </ion-col>
-                  <ion-col size="12" size-sm="6" size-md="3">
-                    <mat-form-field appearance="outline" class="full-width" [class.field-alert]="medsRequired && !hasAnyMedsSelection()">
-                      <mat-label>Medication</mat-label>
-                      <mat-select formControlName="medication">
-                        <mat-option value="">-- Select --</mat-option>
-                        <mat-option *ngFor="let medication of medicationOptions" [value]="medication">{{ medication }}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </ion-col>
-                  <ion-col size="12" size-sm="6" size-md="2">
-                    <mat-form-field appearance="outline" class="full-width">
-                      <mat-label>Dose</mat-label>
-                      <mat-select formControlName="dose">
-                        <mat-option value="">-- Select --</mat-option>
-                        <mat-option *ngFor="let dose of doseOptions" [value]="dose">{{ dose }}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </ion-col>
-                  <ion-col size="12" size-sm="6" size-md="2">
-                    <mat-form-field appearance="outline" class="full-width">
-                      <mat-label>Dose Units</mat-label>
-                      <mat-select formControlName="doseUnit">
-                        <mat-option value="">-- Select --</mat-option>
-                        <mat-option *ngFor="let unit of doseUnits" [value]="unit">{{ unit }}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </ion-col>
-                  <ion-col size="12" size-sm="6" size-md="2">
-                    <mat-form-field appearance="outline" class="full-width">
-                      <mat-label>Route</mat-label>
-                      <mat-select formControlName="route">
-                        <mat-option value="">-- Select --</mat-option>
-                        <mat-option *ngFor="let route of routeOptions" [value]="route">{{ route }}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </ion-col>
-                  <ion-col size="12" size-sm="6" size-md="1" class="ion-align-self-center">
-                    <mat-checkbox formControlName="prnGiven">PRN</mat-checkbox>
-                  </ion-col>
-                </ion-row>
+          <ng-container *ngFor="let paxEntry of paxMedicated.controls; let i = index">
+            <ion-row [formGroupName]="i" class="meds-row">
+              <ion-col size="12">
+                <div class="med-card">
+                <div class="card-title">Med Info</div>
+                  <ion-row>
+                    <ion-col size="12" size-sm="6" size-md="2">
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>A-Number</mat-label>
+                        <input matInput formControlName="aNumber">
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="12" size-sm="6" size-md="3">
+                      <mat-form-field appearance="outline" class="full-width" [class.field-alert]="medsRequired && !hasAnyMedsSelection()">
+                        <mat-label>Medication</mat-label>
+                        <mat-select formControlName="medication">
+                          <mat-option value="">-- Select --</mat-option>
+                          <mat-option *ngFor="let medication of medicationOptions" [value]="medication">{{ medication }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="12" size-sm="6" size-md="2">
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Dose</mat-label>
+                        <mat-select formControlName="dose">
+                          <mat-option value="">-- Select --</mat-option>
+                          <mat-option *ngFor="let dose of doseOptions" [value]="dose">{{ dose }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="12" size-sm="6" size-md="2">
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Dose Units</mat-label>
+                        <mat-select formControlName="doseUnit">
+                          <mat-option value="">-- Select --</mat-option>
+                          <mat-option *ngFor="let unit of doseUnits" [value]="unit">{{ unit }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="12" size-sm="6" size-md="2">
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Route</mat-label>
+                        <mat-select formControlName="route">
+                          <mat-option value="">-- Select --</mat-option>
+                          <mat-option *ngFor="let route of routeOptions" [value]="route">{{ route }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="12" size-sm="6" size-md="1" class="ion-align-self-center">
+                      <mat-checkbox formControlName="prnGiven">PRN</mat-checkbox>
+                    </ion-col>
+                  </ion-row>
 
-                <ion-row>
-                  <ion-col size="12" size-sm="10" size-md="11">
-                    <mat-form-field appearance="outline" class="full-width">
-                      <mat-label>Annotated on MTF</mat-label>
-                      <input matInput formControlName="annotatedOnMtf">
-                    </mat-form-field>
-                  </ion-col>
-                  <ion-col size="12" size-sm="2" size-md="1" class="ion-align-self-center">
-                    <button mat-icon-button color="warn" (click)="removePaxMedicated(i)" type="button">
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </ion-col>
-                </ion-row>
+                  <ion-row>
+                    <ion-col size="12" size-sm="10" size-md="11">
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Annotated on MTF</mat-label>
+                        <input matInput formControlName="annotatedOnMtf">
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="12" size-sm="2" size-md="1" class="ion-align-self-center">
+                      <button mat-icon-button color="warn" (click)="removePaxMedicated(i)" type="button">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </ion-col>
+                  </ion-row>
 
-                <ion-row>
-                  <ion-col size="12">
-                    <div class="vitals-section">
-                      <div class="vitals-title">
-                        <span>Vitals</span>
-                        <mat-checkbox formControlName="vitalsNa">N/A</mat-checkbox>
-                      </div>
-                      <div class="vitals-hint" *ngIf="paxEntry.get('vitalsNa')?.value">
-                        Vitals hidden (N/A)
-                      </div>
-                      <div class="vitals-grid" *ngIf="!paxEntry.get('vitalsNa')?.value">
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="vitals-section">
+                        <div class="vitals-title">
+                          <span>Vitals</span>
+                          <mat-checkbox formControlName="vitalsNa">N/A</mat-checkbox>
+                        </div>
+                        <div class="vitals-hint" *ngIf="paxEntry.get('vitalsNa')?.value">
+                          Vitals hidden (N/A)
+                        </div>
+                        <div class="vitals-grid" *ngIf="!paxEntry.get('vitalsNa')?.value">
                         <div class="vitals-item">
                           <ion-icon name="swap-vertical-outline"></ion-icon>
                           <label>BP (mmHg)</label>
                           <div class="bp-inputs">
-                            <mat-form-field appearance="outline">
-                              <mat-label>Sys</mat-label>
-                              <input matInput formControlName="bpSystolic">
-                            </mat-form-field>
-                            <span class="bp-divider">/</span>
-                            <mat-form-field appearance="outline">
-                              <mat-label>Dia</mat-label>
-                              <input matInput formControlName="bpDiastolic">
-                            </mat-form-field>
+                            <div class="bp-combined-field">
+                              <input type="text" inputmode="numeric" placeholder="Sys" aria-label="Systolic" formControlName="bpSystolic">
+                              <span class="bp-divider">/</span>
+                              <input type="text" inputmode="numeric" placeholder="Dia" aria-label="Diastolic" formControlName="bpDiastolic">
+                            </div>
                           </div>
                         </div>
 
-                        <div class="vitals-item">
-                          <ion-icon name="heart-outline"></ion-icon>
-                          <label>HR</label>
-                          <mat-form-field appearance="outline">
-                            <mat-label>bpm</mat-label>
-                            <input matInput formControlName="hr">
-                          </mat-form-field>
-                        </div>
+                          <div class="vitals-item">
+                            <ion-icon name="heart-outline"></ion-icon>
+                            <label>HR</label>
+                            <mat-form-field appearance="outline">
+                              <mat-label>bpm</mat-label>
+                              <input matInput formControlName="hr">
+                            </mat-form-field>
+                          </div>
 
-                        <div class="vitals-item">
-                          <ion-icon name="pulse-outline"></ion-icon>
-                          <label>Resp</label>
-                          <mat-form-field appearance="outline">
-                            <mat-label>rpm</mat-label>
-                            <input matInput formControlName="resp">
-                          </mat-form-field>
-                        </div>
+                          <div class="vitals-item">
+                            <ion-icon name="pulse-outline"></ion-icon>
+                            <label>Resp</label>
+                            <mat-form-field appearance="outline">
+                              <mat-label>rpm</mat-label>
+                              <input matInput formControlName="resp">
+                            </mat-form-field>
+                          </div>
 
-                        <div class="vitals-item">
-                          <ion-icon name="thermometer-outline"></ion-icon>
-                          <label>Temp</label>
-                          <mat-form-field appearance="outline">
-                            <mat-label>F</mat-label>
-                            <input matInput formControlName="temp">
-                          </mat-form-field>
-                        </div>
+                          <div class="vitals-item">
+                            <ion-icon name="thermometer-outline"></ion-icon>
+                            <label>Temp</label>
+                            <mat-form-field appearance="outline">
+                              <mat-label>F</mat-label>
+                              <input matInput formControlName="temp">
+                            </mat-form-field>
+                          </div>
 
-                        <div class="vitals-item">
-                          <ion-icon name="water-outline"></ion-icon>
-                          <label>O2 Sat</label>
-                          <mat-form-field appearance="outline">
-                            <mat-label>%</mat-label>
-                            <input matInput formControlName="o2Sat">
-                          </mat-form-field>
-                        </div>
+                          <div class="vitals-item">
+                            <ion-icon name="water-outline"></ion-icon>
+                            <label>O2 Sat</label>
+                            <mat-form-field appearance="outline">
+                              <mat-label>%</mat-label>
+                              <input matInput formControlName="o2Sat">
+                            </mat-form-field>
+                          </div>
 
-                        <div class="vitals-item">
-                          <ion-icon name="speedometer-outline"></ion-icon>
-                          <label>Rate%</label>
-                          <mat-form-field appearance="outline">
-                            <mat-label>%</mat-label>
-                            <input matInput formControlName="ratePercent">
-                          </mat-form-field>
-                        </div>
+                          <div class="vitals-item">
+                            <ion-icon name="speedometer-outline"></ion-icon>
+                            <label>Rate%</label>
+                            <mat-form-field appearance="outline">
+                              <mat-label>%</mat-label>
+                              <input matInput formControlName="ratePercent">
+                            </mat-form-field>
+                          </div>
 
-                        <div class="vitals-item">
-                          <ion-icon name="analytics-outline"></ion-icon>
-                          <label>BS</label>
-                          <mat-form-field appearance="outline">
-                            <mat-label>mg/dL</mat-label>
-                            <input matInput formControlName="bs">
-                          </mat-form-field>
+                          <div class="vitals-item">
+                            <ion-icon name="analytics-outline"></ion-icon>
+                            <label>BS</label>
+                            <mat-form-field appearance="outline">
+                              <mat-label>mg/dL</mat-label>
+                              <input matInput formControlName="bs">
+                            </mat-form-field>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </ion-col>
-                </ion-row>
-              </div>
-            </ion-col>
-          </ion-row>
+                    </ion-col>
+                  </ion-row>
+                </div>
+              </ion-col>
+            </ion-row>
+            <mat-divider class="card-divider" *ngIf="i < paxMedicated.length - 1"></mat-divider>
+          </ng-container>
         </div>
         <button mat-stroked-button color="primary" type="button" (click)="addPaxMedicated()">
           <mat-icon>add</mat-icon> Add PAX

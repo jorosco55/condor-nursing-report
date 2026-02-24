@@ -115,7 +115,9 @@ export interface PaxMedicationEntry {
 }
 
 export interface NarcoticEntry {
+  aNumber: string;
   narcoticName: string;
+  dose: string;
   dosageUnit: string;
   timeZ: string;
   rnName: string;

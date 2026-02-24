@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 import { ReportService } from '../services/report.service';
 import { PaxMedicationEntry, NursingReport } from '../models/report.model';
 
@@ -26,7 +27,8 @@ import { PaxMedicationEntry, NursingReport } from '../models/report.model';
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatDividerModule
   ]
 })
 export class MedsPage implements OnInit {

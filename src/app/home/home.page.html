@@ -119,6 +119,8 @@
           </ion-col>
         </ion-row>
 
+        <mat-divider class="ion-margin-vertical"></mat-divider>
+
         <ion-row>
           <ion-col size="12">
             <div class="section-block section-tight">
@@ -385,6 +387,8 @@
           </ion-col>
         </ion-row>
 
+        <mat-divider class="ion-margin-vertical"></mat-divider>
+
         <!-- Row 6: Narcotics & Medication Reports -->
         <ion-row>
           <ion-col size="12" size-sm="6" size-md="6">
@@ -423,6 +427,8 @@
           </ion-col>
         </ion-row>
 
+        <mat-divider class="ion-margin-vertical"></mat-divider>
+
         <!-- Row 7: Transfer of Care -->
         <ion-row>
           <ion-col size="12">
@@ -445,6 +451,8 @@
             </div>
           </ion-col>
         </ion-row>
+
+        <mat-divider class="ion-margin-vertical"></mat-divider>
 
         <!-- Row 8: Cleared Medical with FOIC -->
         <ion-row>
@@ -502,6 +510,8 @@
           </ion-col>
         </ion-row>
 
+        <mat-divider class="ion-margin-vertical"></mat-divider>
+
         <!-- Row 10: Operational -->
         <ion-row>
           <ion-col size="12">
@@ -514,6 +524,8 @@
             </div>
           </ion-col>
         </ion-row>
+
+        <mat-divider class="ion-margin-vertical"></mat-divider>
 
         <!-- Row 11: Delay -->
         <ion-row>
@@ -549,7 +561,10 @@
                 </ion-col>
               </ion-row>
               <div class="delay-actions">
-                <button mat-stroked-button color="primary" type="button" (click)="addDelayEntry()">Add</button>
+                <button mat-stroked-button color="primary" type="button" (click)="addDelayEntry()">
+                  <mat-icon>add</mat-icon>
+                  add
+                </button>
               </div>
               <div class="delay-list" *ngIf="delayEntries.length > 0">
                 <div class="delay-entry" *ngFor="let entry of delayEntries.controls; let i = index">
@@ -565,6 +580,8 @@
             </div>
           </ion-col>
         </ion-row>
+
+        <mat-divider class="ion-margin-vertical"></mat-divider>
 
         <!-- Row 12: Special Circumstances -->
         <ion-row>
@@ -586,108 +603,110 @@
         <mat-divider class="ion-margin-vertical"></mat-divider>
 
         <!-- Narrative Section -->
-        <h3>Narrative Log</h3>
-        <p class="slash-hint">
-          Type <strong>/</strong> in notes for quick commands:
-          <span class="cmd-tag">/PAX</span>
-          <span class="cmd-tag">/DRUG</span>
-          <span class="cmd-tag">/WU</span>
-          <span class="cmd-tag">/WD</span>
-        </p>
-        <div formArrayName="notes">
-          <ion-row *ngFor="let note of notes.controls; let i = index" [formGroupName]="i" class="note-row">
-            <ion-col size="2">
-              <mat-form-field appearance="outline" class="full-width time-field">
-                <mat-label>Time (L)</mat-label>
-                <input matInput formControlName="timeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleNoteTimeBlur(i)">
-                <input #noteTimePicker type="time" class="time-picker-input" (change)="applyNoteTimePicker($event, i)">
-                <span matSuffix class="time-suffix">
-                  <button mat-button class="time-now-button" type="button" (click)="stampNoteTime(i)">Now</button>
-                  <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(noteTimePicker)" aria-label="Open time picker">
-                    <mat-icon>schedule</mat-icon>
-                  </button>
-                </span>
-                <mat-hint class="time-hint">HHMM</mat-hint>
-                <mat-error *ngIf="notes.at(i).get('timeL')?.hasError('invalidTime') && notes.at(i).get('timeL')?.touched">
-                  Use HHMM (0000-2359).
-                </mat-error>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="2">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>RN</mat-label>
-                <mat-select formControlName="rn">
-                  <mat-option value="">-- Select RN --</mat-option>
-                  <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="7">
-              <div class="note-input-container">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Notes (type / for commands)</mat-label>
-                  <textarea
-                    matInput
-                    formControlName="note"
-                    rows="2"
-                    #noteTextarea
-                    (input)="onNoteInput($event, i)"
-                    (focus)="onNoteFocus(i)"
-                    (blur)="onNoteBlur(i)"></textarea>
+        <div class="section-block section-tight">
+          <div class="section-title">Narrative Log</div>
+          <p class="slash-hint">
+            Type <strong>/</strong> in notes for quick commands:
+            <span class="cmd-tag">/PAX</span>
+            <span class="cmd-tag">/DRUG</span>
+            <span class="cmd-tag">/WU</span>
+            <span class="cmd-tag">/WD</span>
+          </p>
+          <div formArrayName="notes">
+            <ion-row *ngFor="let note of notes.controls; let i = index" [formGroupName]="i" class="note-row">
+              <ion-col size="2">
+                <mat-form-field appearance="outline" class="full-width time-field">
+                  <mat-label>Time (L)</mat-label>
+                  <input matInput formControlName="timeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleNoteTimeBlur(i)">
+                  <input #noteTimePicker type="time" class="time-picker-input" (change)="applyNoteTimePicker($event, i)">
+                  <span matSuffix class="time-suffix">
+                    <button mat-button class="time-now-button" type="button" (click)="stampNoteTime(i)">Now</button>
+                    <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(noteTimePicker)" aria-label="Open time picker">
+                      <mat-icon>schedule</mat-icon>
+                    </button>
+                  </span>
+                  <mat-hint class="time-hint">HHMM</mat-hint>
+                  <mat-error *ngIf="notes.at(i).get('timeL')?.hasError('invalidTime') && notes.at(i).get('timeL')?.touched">
+                    Use HHMM (0000-2359).
+                  </mat-error>
                 </mat-form-field>
+              </ion-col>
+              <ion-col size="2">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>RN</mat-label>
+                  <mat-select formControlName="rn">
+                    <mat-option value="">-- Select RN --</mat-option>
+                    <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="7">
+                <div class="note-input-container">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Notes (type / for commands)</mat-label>
+                    <textarea
+                      matInput
+                      formControlName="note"
+                      rows="2"
+                      #noteTextarea
+                      (input)="onNoteInput($event, i)"
+                      (focus)="onNoteFocus(i)"
+                      (blur)="onNoteBlur(i)"></textarea>
+                  </mat-form-field>
 
-                <!-- Slash Command Menu -->
-                <div class="slash-menu" *ngIf="showCommandList[i]" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
-                  <div class="slash-menu-header">Commands</div>
-                  <div
-                    class="slash-menu-item"
-                    *ngFor="let cmd of filteredCommands"
-                    (mousedown)="selectCommand(cmd.command, i)"
-                    (touchend)="onTouchSelectCommand($event, cmd.command, i)">
-                    <span class="command-name">{{ cmd.command }}</span>
-                    <span class="command-desc">{{ cmd.description }}</span>
-                  </div>
-                </div>
-
-                <!-- PAX Selection Menu -->
-                <div class="slash-menu pax-menu" *ngIf="showSlashMenu[i] && activeMenuType === 'pax'" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
-                  <div class="slash-menu-header">Select PAX</div>
-                  <div class="pax-menu-scroll">
+                  <!-- Slash Command Menu -->
+                  <div class="slash-menu" *ngIf="showCommandList[i]" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
+                    <div class="slash-menu-header">Commands</div>
                     <div
                       class="slash-menu-item"
-                      *ngFor="let pax of filteredPaxTags"
-                      (mousedown)="selectPaxTag(pax, i)"
-                      (touchend)="onTouchSelectPaxTag($event, pax, i)">
-                      {{ pax }}
+                      *ngFor="let cmd of filteredCommands"
+                      (mousedown)="selectCommand(cmd.command, i)"
+                      (touchend)="onTouchSelectCommand($event, cmd.command, i)">
+                      <span class="command-name">{{ cmd.command }}</span>
+                      <span class="command-desc">{{ cmd.description }}</span>
+                    </div>
+                  </div>
+
+                  <!-- PAX Selection Menu -->
+                  <div class="slash-menu pax-menu" *ngIf="showSlashMenu[i] && activeMenuType === 'pax'" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
+                    <div class="slash-menu-header">Select PAX</div>
+                    <div class="pax-menu-scroll">
+                      <div
+                        class="slash-menu-item"
+                        *ngFor="let pax of filteredPaxTags"
+                        (mousedown)="selectPaxTag(pax, i)"
+                        (touchend)="onTouchSelectPaxTag($event, pax, i)">
+                        {{ pax }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Drug Selection Menu -->
+                  <div class="slash-menu drug-menu" *ngIf="showSlashMenu[i] && activeMenuType === 'drug'" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
+                    <div class="slash-menu-header">Select Drug</div>
+                    <div class="drug-menu-scroll">
+                      <div
+                        class="slash-menu-item"
+                        *ngFor="let drug of filteredDrugs"
+                        (mousedown)="selectDrug(drug, i)"
+                        (touchend)="onTouchSelectDrug($event, drug, i)">
+                        {{ drug }}
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <!-- Drug Selection Menu -->
-                <div class="slash-menu drug-menu" *ngIf="showSlashMenu[i] && activeMenuType === 'drug'" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
-                  <div class="slash-menu-header">Select Drug</div>
-                  <div class="drug-menu-scroll">
-                    <div
-                      class="slash-menu-item"
-                      *ngFor="let drug of filteredDrugs"
-                      (mousedown)="selectDrug(drug, i)"
-                      (touchend)="onTouchSelectDrug($event, drug, i)">
-                      {{ drug }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ion-col>
-            <ion-col size="1" class="ion-align-self-center">
-              <button mat-icon-button color="warn" (click)="removeNote(i)" type="button">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </ion-col>
-          </ion-row>
+              </ion-col>
+              <ion-col size="1" class="ion-align-self-center">
+                <button mat-icon-button color="warn" (click)="removeNote(i)" type="button">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </ion-col>
+            </ion-row>
+          </div>
+          <button mat-stroked-button color="primary" type="button" (click)="addNote()">
+            <mat-icon>add</mat-icon> Add Note
+          </button>
         </div>
-        <button mat-stroked-button color="primary" type="button" (click)="addNote()">
-          <mat-icon>add</mat-icon> Add Note
-        </button>
 
       </ion-grid>
 
