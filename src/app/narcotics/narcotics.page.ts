@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -11,6 +11,7 @@ import { ReportService } from '../services/report.service';
 import { NarcoticEntry, NursingReport } from '../models/report.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import SignaturePad from 'signature_pad';
 
 @Component({
   selector: 'app-narcotics',
@@ -29,11 +30,23 @@ import { takeUntil } from 'rxjs/operators';
     MatIconModule
   ]
 })
-export class NarcoticsPage implements OnInit, OnDestroy {
+export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
   narcoticsForm!: FormGroup;
   narcoticsRequired = false;
   private destroy$ = new Subject<void>();
   private currentNarcoticsAdministered = false;
+  private signaturePads: SignaturePad[] = [];
+  private signaturePadOptions = {
+    minWidth: 1,
+    maxWidth: 3,
+    throttle: 0,
+    velocityFilterWeight: 0.7,
+    dotSize: 1.5,
+    penColor: 'rgb(0, 0, 0)',
+    backgroundColor: 'rgb(255, 255, 255)'
+  };
+
+  @ViewChildren('rnSignatureCanvas') rnSignatureCanvases!: QueryList<ElementRef<HTMLCanvasElement>>;
 
   narcoticOptions: string[] = [
     'Morphine',
@@ -62,7 +75,7 @@ export class NarcoticsPage implements OnInit, OnDestroy {
     'Christopher Lee, RN'
   ];
 
-  private minEntries = 3;
+  private minEntries = 1;
 
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
@@ -86,11 +99,20 @@ export class NarcoticsPage implements OnInit, OnDestroy {
       });
   }
 
+  ngAfterViewInit() {
+    this.setupSignaturePads();
+    this.rnSignatureCanvases.changes
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.setupSignaturePads());
+    window.addEventListener('resize', this.handleSignatureResize);
+  }
+
   ionViewWillEnter() {
     this.loadLatestReport();
   }
 
   ngOnDestroy() {
+    window.removeEventListener('resize', this.handleSignatureResize);
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -107,6 +129,69 @@ export class NarcoticsPage implements OnInit, OnDestroy {
     for (let i = 0; i < this.minEntries; i++) {
       this.entries.push(this.createEntry());
     }
+  }
+
+  setupSignaturePads() {
+    const canvases = this.rnSignatureCanvases?.toArray() ?? [];
+    this.signaturePads = canvases.map((canvasRef, index) => {
+      const canvas = canvasRef.nativeElement;
+      this.resizeSignatureCanvas(canvas);
+      this.attachSignatureTouchHandlers(canvas);
+      const pad = new SignaturePad(canvas, this.signaturePadOptions);
+      const existingValue = this.entries.at(index)?.get('rnSignature')?.value;
+      if (existingValue) {
+        pad.fromDataURL(existingValue);
+      }
+      (pad as unknown as { onEnd?: () => void }).onEnd = () => {
+        const control = this.entries.at(index)?.get('rnSignature');
+        if (!control) return;
+        control.setValue(pad.isEmpty() ? '' : pad.toDataURL());
+      };
+      return pad;
+    });
+  }
+
+  clearSignature(index: number) {
+    const pad = this.signaturePads[index];
+    if (pad) {
+      pad.clear();
+    }
+    this.entries.at(index)?.get('rnSignature')?.setValue('');
+  }
+
+  private handleSignatureResize = () => {
+    this.signaturePads.forEach((pad, index) => {
+      const canvas = this.rnSignatureCanvases?.toArray()[index]?.nativeElement;
+      if (!canvas) return;
+      const data = pad.isEmpty() ? '' : pad.toDataURL();
+      this.resizeSignatureCanvas(canvas);
+      pad.clear();
+      if (data) {
+        pad.fromDataURL(data);
+      }
+    });
+  };
+
+  private resizeSignatureCanvas(canvas: HTMLCanvasElement) {
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    const context = canvas.getContext('2d');
+    if (context) {
+      context.scale(ratio, ratio);
+    }
+  }
+
+  private attachSignatureTouchHandlers(canvas: HTMLCanvasElement) {
+    if (canvas.dataset['signatureBound'] === 'true') return;
+    canvas.addEventListener('touchstart', (event: TouchEvent) => {
+      event.preventDefault();
+    }, { passive: false });
+    canvas.addEventListener('touchmove', (event: TouchEvent) => {
+      event.preventDefault();
+    }, { passive: false });
+    canvas.style.touchAction = 'none';
+    canvas.dataset['signatureBound'] = 'true';
   }
 
   createEntry(data?: Partial<NarcoticEntry>): FormGroup {
@@ -131,6 +216,14 @@ export class NarcoticsPage implements OnInit, OnDestroy {
   stampEntryTime(index: number) {
     const control = this.entries.at(index).get('timeZ');
     if (!control) return;
+    control.setValue(this.getCurrentTimestamp());
+  }
+
+  stampEntryTimeOnFocus(index: number) {
+    const control = this.entries.at(index).get('timeZ');
+    if (!control) return;
+    const currentValue = (control.value || '').toString().trim();
+    if (currentValue) return;
     control.setValue(this.getCurrentTimestamp());
   }
 
@@ -259,5 +352,10 @@ export class NarcoticsPage implements OnInit, OnDestroy {
 
   addEntry() {
     this.entries.push(this.createEntry());
+  }
+
+  removeEntry(index: number) {
+    if (index === 0) return;
+    this.entries.removeAt(index);
   }
 }

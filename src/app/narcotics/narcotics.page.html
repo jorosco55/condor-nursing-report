@@ -11,91 +11,100 @@
 
       <div class="section-block">
         <div class="section-title">Narcotics</div>
-        <ion-grid formArrayName="entries">
-          <ion-row *ngFor="let entry of entries.controls; let i = index" [formGroupName]="i" class="narcotics-row">
-            <ion-col size="12">
+        <div formArrayName="entries" class="narcotics-list">
+          <div *ngFor="let entry of entries.controls; let i = index" [formGroupName]="i" class="narcotic-card">
+            <div class="narcotic-card-header">
               <h4>Narcotic {{ i + 1 }}</h4>
-            </ion-col>
+              <button *ngIf="i > 0" mat-stroked-button color="warn" type="button" (click)="removeEntry(i)">
+                Remove
+              </button>
+            </div>
 
-            <ion-col size="12">
-              <ion-row>
-                <ion-col size="12" size-sm="6" size-md="3">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>A-Number</mat-label>
-                    <input matInput formControlName="aNumber">
-                  </mat-form-field>
-                </ion-col>
+            <ion-row>
+              <ion-col size="12" size-sm="6" size-md="3">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>A-Number</mat-label>
+                  <input matInput formControlName="aNumber">
+                </mat-form-field>
+              </ion-col>
 
-                <ion-col size="12" size-sm="6" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width" [class.field-alert]="narcoticsRequired && !hasAnyNarcoticSelection()">
-                    <mat-label>Narcotic</mat-label>
-                    <mat-select formControlName="narcoticName">
-                      <mat-option value="">-- Select --</mat-option>
-                      <mat-option *ngFor="let narcotic of narcoticOptions" [value]="narcotic">{{ narcotic }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </ion-col>
+              <ion-col size="12" size-sm="6" size-md="4">
+                <mat-form-field appearance="outline" class="full-width" [class.field-alert]="narcoticsRequired && !hasAnyNarcoticSelection()">
+                  <mat-label>Narcotic</mat-label>
+                  <mat-select formControlName="narcoticName">
+                    <mat-option value="">-- Select --</mat-option>
+                    <mat-option *ngFor="let narcotic of narcoticOptions" [value]="narcotic">{{ narcotic }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ion-col>
 
-                <ion-col size="12" size-sm="6" size-md="2">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Dose</mat-label>
-                    <mat-select formControlName="dose">
-                      <mat-option value="">-- Select --</mat-option>
-                      <mat-option *ngFor="let dose of doseOptions" [value]="dose">{{ dose }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </ion-col>
+              <ion-col size="12" size-sm="6" size-md="2">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Dose</mat-label>
+                  <mat-select formControlName="dose">
+                    <mat-option value="">-- Select --</mat-option>
+                    <mat-option *ngFor="let dose of doseOptions" [value]="dose">{{ dose }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ion-col>
 
-                <ion-col size="12" size-sm="6" size-md="3">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Dosage Unit</mat-label>
-                    <mat-select formControlName="dosageUnit">
-                      <mat-option value="">-- Select --</mat-option>
-                      <mat-option *ngFor="let unit of dosageUnits" [value]="unit">{{ unit }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </ion-col>
-              </ion-row>
+              <ion-col size="12" size-sm="6" size-md="3">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Dosage Unit</mat-label>
+                  <mat-select formControlName="dosageUnit">
+                    <mat-option value="">-- Select --</mat-option>
+                    <mat-option *ngFor="let unit of dosageUnits" [value]="unit">{{ unit }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
 
-              <ion-row>
-                <ion-col size="12" size-sm="6" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Time</mat-label>
-                    <input matInput formControlName="timeZ" placeholder="HHMM" inputmode="numeric" maxlength="4" (blur)="handleEntryTimeBlur(i)">
-                    <input #narcTimePicker type="time" class="time-picker-input" (change)="applyEntryTimePicker($event, i)">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampEntryTime(i)">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(narcTimePicker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
-                    </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="entries.at(i).get('timeZ')?.hasError('invalidTime') && entries.at(i).get('timeZ')?.touched">
-                      Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
-                </ion-col>
+            <ion-row>
+              <ion-col size="12" size-sm="6" size-md="4">
+                <mat-form-field appearance="outline" class="full-width time-field">
+                  <mat-label>Time</mat-label>
+                  <input matInput formControlName="timeZ" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampEntryTimeOnFocus(i)" (blur)="handleEntryTimeBlur(i)">
+                  <input #narcTimePicker type="time" class="time-picker-input" (change)="applyEntryTimePicker($event, i)">
+                  <span matSuffix class="time-suffix">
+                    <button mat-button class="time-now-button" type="button" (click)="stampEntryTime(i)">Now</button>
+                    <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(narcTimePicker)" aria-label="Open time picker">
+                      <mat-icon>schedule</mat-icon>
+                    </button>
+                  </span>
+                  <mat-hint class="time-hint">HHMM</mat-hint>
+                  <mat-error *ngIf="entries.at(i).get('timeZ')?.hasError('invalidTime') && entries.at(i).get('timeZ')?.touched">
+                    Use HHMM (0000-2359).
+                  </mat-error>
+                </mat-form-field>
+              </ion-col>
 
-                <ion-col size="12" size-sm="6" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>RN</mat-label>
-                    <mat-select formControlName="rnName">
-                      <mat-option value="">-- Select RN --</mat-option>
-                      <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </ion-col>
+              <ion-col size="12" size-sm="6" size-md="4">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>RN</mat-label>
+                  <mat-select formControlName="rnName">
+                    <mat-option value="">-- Select RN --</mat-option>
+                    <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
 
-                <ion-col size="12" size-sm="6" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>RN Signature</mat-label>
-                    <input matInput formControlName="rnSignature" placeholder="Initials / Signature">
-                  </mat-form-field>
-                </ion-col>
-              </ion-row>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="signature-field">
+                  <div class="signature-header">
+                    <span>RN Signature</span>
+                    <button mat-stroked-button type="button" (click)="clearSignature(i)">Clear</button>
+                  </div>
+                  <div class="signature-canvas-wrap" [class.has-signature]="entry.get('rnSignature')?.value">
+                    <canvas #rnSignatureCanvas class="signature-canvas"></canvas>
+                    <div class="signature-hint">Sign here (finger or stylus)</div>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </div>
+        </div>
         <div class="narcotics-actions">
           <button mat-stroked-button color="primary" type="button" (click)="addEntry()">
             <mat-icon>add</mat-icon>

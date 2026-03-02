@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, F
 import { IonicModule, ToastController, IonContent, GestureController } from '@ionic/angular';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,7 +17,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { Capacitor } from '@capacitor/core';
 import { ReportService } from '../services/report.service';
-import { DelayEntry, NarrativeNote } from '../models/report.model';
+import { DelayEntry, DoorEvent, NarrativeNote, NursingReport, WheelsEvent } from '../models/report.model';
 
 type ReportTimeControl =
   | 'showtimeZ1'
@@ -30,9 +30,19 @@ type ReportTimeControl =
   | 'wheelsDownTimeL'
   | 'wheelsUpTime'
   | 'wheelsDownTime'
-  | 'doorsCloseTime'
-  | 'doorsOpenTime'
   | 'delayTimeL';
+
+type PreflightControl =
+  | 'preflightMEBCheck'
+  | 'preflightMEKO2AED'
+  | 'safetyBriefingCompleted'
+  | 'seatBeltsSecured';
+
+type PreflightTimeControl =
+  | 'preflightMEBCheckTime'
+  | 'preflightMEKO2AEDTime'
+  | 'safetyBriefingCompletedTime'
+  | 'seatBeltsSecuredTime';
 
 @Component({
   selector: 'app-home',
@@ -78,6 +88,9 @@ export class HomePage implements OnInit, OnDestroy {
     'Lisa Anderson, RN',
     'Christopher Lee, RN'
   ];
+
+  visibleFlightRns = 2;
+  readonly maxFlightRns = 5;
 
   wheelsSiteOptions: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
   transferOfCareSites: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
@@ -143,9 +156,7 @@ export class HomePage implements OnInit, OnDestroy {
   // Available slash commands
   slashCommands = [
     { command: '/PAX', description: 'Insert passenger reference (PAX#1-50)' },
-    { command: '/DRUG', description: 'Insert generic drug name' },
-    { command: '/WU', description: 'Insert Wheels Up with timestamp' },
-    { command: '/WD', description: 'Insert Wheels Down with timestamp' }
+    { command: '/DRUG', description: 'Insert generic drug name' }
   ];
   showCommandList: boolean[] = [];
   filteredCommands: typeof this.slashCommands = [];
@@ -214,15 +225,22 @@ export class HomePage implements OnInit, OnDestroy {
       site: ['', Validators.required],
       iceFlightRN: ['', Validators.required],
       secondICEFlightRN: [''],
+      thirdICEFlightRN: [''],
+      fourthICEFlightRN: [''],
+      fifthICEFlightRN: [''],
       tailNumber: ['', Validators.required],
       missionNumber: ['', Validators.required],
       siteStops: [''],
       foicTitle: [''],
       asoLead: [''],
       preflightMEBCheck: [false],
+      preflightMEBCheckTime: [''],
       preflightMEKO2AED: [false],
+      preflightMEKO2AEDTime: [''],
       safetyBriefingCompleted: [false],
+      safetyBriefingCompletedTime: [''],
       seatBeltsSecured: [false],
+      seatBeltsSecuredTime: [''],
       narcRecordStatus: [''],
       medicationRecordStatus: [''],
 
@@ -237,8 +255,9 @@ export class HomePage implements OnInit, OnDestroy {
       wheelsDownSite: [''],
       wheelsDownTimeL: ['', [this.timeHHMMValidator]],
       wheelsDownTime: ['', [this.timeHHMMValidator]],
-      doorsCloseTime: ['', [this.timeHHMMValidator]],
-      doorsOpenTime: ['', [this.timeHHMMValidator]],
+      wheelsUpEvents: this.fb.array([]),
+      wheelsDownEvents: this.fb.array([]),
+      doorEvents: this.fb.array([]),
 
       reportStatus: ['Open'],
 
@@ -246,6 +265,8 @@ export class HomePage implements OnInit, OnDestroy {
       blockTimeZ2: ['', [this.timeHHMMValidator]], // RON
       endTimeZ2: ['', [this.timeHHMMValidator]], // RON
       ronUsed: [false],
+      ronStartDate: [''],
+      ronEndDate: [''],
 
       // Narrative
       notes: this.fb.array([])
@@ -253,6 +274,7 @@ export class HomePage implements OnInit, OnDestroy {
       // Transfer of Care
       transferOfCareSite: [''],
       receivedCare: [false],
+      transferOfCareComment: [''],
 
 
       // Cleared Medical with FOIC
@@ -295,6 +317,7 @@ export class HomePage implements OnInit, OnDestroy {
         ...report,
         delayReasons: normalizedDelay
       });
+      this.syncVisibleFlightRns(report);
       this.reportService.setNarcRecordStatus(report.narcRecordStatus || '');
       this.reportService.setMedicationRecordStatus(report.medicationRecordStatus || '');
       // Clear notes array and rebuild
@@ -313,9 +336,48 @@ export class HomePage implements OnInit, OnDestroy {
           reasons: [entry.reasons || []]
         }));
       });
+      while (this.doorEvents.length !== 0) {
+        this.doorEvents.removeAt(0);
+      }
+      const doorEvents = this.normalizeDoorEvents(report);
+      doorEvents.forEach((event: DoorEvent) => {
+        this.doorEvents.push(this.buildDoorEventGroup(event));
+      });
+      while (this.wheelsUpEvents.length !== 0) {
+        this.wheelsUpEvents.removeAt(0);
+      }
+      this.normalizeWheelsEvents(report.wheelsUpEvents, report.wheelsUpSite, report.wheelsUpTimeL, report.wheelsUpTime)
+        .forEach(event => this.wheelsUpEvents.push(this.buildWheelsEventGroup(event)));
+      while (this.wheelsDownEvents.length !== 0) {
+        this.wheelsDownEvents.removeAt(0);
+      }
+      this.normalizeWheelsEvents(report.wheelsDownEvents, report.wheelsDownSite, report.wheelsDownTimeL, report.wheelsDownTime)
+        .forEach(event => this.wheelsDownEvents.push(this.buildWheelsEventGroup(event)));
     } else {
       this.addNote();
     }
+  }
+
+  addFlightRn() {
+    if (this.visibleFlightRns < this.maxFlightRns) {
+      this.visibleFlightRns += 1;
+    }
+  }
+
+  private syncVisibleFlightRns(report: Partial<NursingReport>) {
+    if (report.fifthICEFlightRN) {
+      this.visibleFlightRns = 5;
+      return;
+    }
+    if (report.fourthICEFlightRN) {
+      this.visibleFlightRns = 4;
+      return;
+    }
+    if (report.thirdICEFlightRN) {
+      this.visibleFlightRns = 3;
+      return;
+    }
+    this.visibleFlightRns = 2;
   }
 
   get notes() {
@@ -324,6 +386,18 @@ export class HomePage implements OnInit, OnDestroy {
 
   get delayEntries() {
     return this.reportForm.get('delayEntries') as FormArray;
+  }
+
+  get doorEvents() {
+    return this.reportForm.get('doorEvents') as FormArray;
+  }
+
+  get wheelsUpEvents() {
+    return this.reportForm.get('wheelsUpEvents') as FormArray;
+  }
+
+  get wheelsDownEvents() {
+    return this.reportForm.get('wheelsDownEvents') as FormArray;
   }
 
 
@@ -348,6 +422,45 @@ export class HomePage implements OnInit, OnDestroy {
     this.reportForm.get('delayTimeL')?.setValue('');
   }
 
+  addDoorEvent(type: 'Close' | 'Open') {
+    const timestamp = new Date().toISOString();
+    this.doorEvents.push(this.buildDoorEventGroup({
+      type,
+      timestamp
+    }));
+    this.addDoorEventNarrative(type, timestamp);
+  }
+
+  addWheelsUpEvent() {
+    const event = this.buildWheelsEventFromControls('wheelsUpSite', 'wheelsUpTimeL', 'wheelsUpTime');
+    if (!event) return;
+    this.wheelsUpEvents.push(this.buildWheelsEventGroup(event));
+    this.reportForm.get('wheelsUpSite')?.setValue('');
+    this.reportForm.get('wheelsUpTimeL')?.setValue('');
+    this.reportForm.get('wheelsUpTime')?.setValue('');
+  }
+
+  addWheelsDownEvent() {
+    const event = this.buildWheelsEventFromControls('wheelsDownSite', 'wheelsDownTimeL', 'wheelsDownTime');
+    if (!event) return;
+    this.wheelsDownEvents.push(this.buildWheelsEventGroup(event));
+    this.reportForm.get('wheelsDownSite')?.setValue('');
+    this.reportForm.get('wheelsDownTimeL')?.setValue('');
+    this.reportForm.get('wheelsDownTime')?.setValue('');
+  }
+
+  removeDoorEvent(index: number) {
+    this.doorEvents.removeAt(index);
+  }
+
+  removeWheelsUpEvent(index: number) {
+    this.wheelsUpEvents.removeAt(index);
+  }
+
+  removeWheelsDownEvent(index: number) {
+    this.wheelsDownEvents.removeAt(index);
+  }
+
   removeDelayEntry(index: number) {
     this.delayEntries.removeAt(index);
   }
@@ -361,6 +474,101 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
+  buildDoorEventGroup(event?: DoorEvent) {
+    return this.fb.group({
+      type: [event?.type || 'Close'],
+      timestamp: [event?.timestamp || new Date().toISOString()]
+    });
+  }
+
+  buildWheelsEventGroup(event?: WheelsEvent) {
+    return this.fb.group({
+      site: [event?.site || ''],
+      timeL: [event?.timeL || '', [this.timeHHMMValidator]],
+      timeZ: [event?.timeZ || '', [this.timeHHMMValidator]]
+    });
+  }
+
+  normalizeWheelsEvents(events: WheelsEvent[] | undefined, site?: string, timeL?: string, timeZ?: string): WheelsEvent[] {
+    if (Array.isArray(events) && events.length > 0) {
+      return events;
+    }
+    const trimmedSite = (site || '').toString().trim();
+    const trimmedTimeL = (timeL || '').toString().trim();
+    const trimmedTimeZ = (timeZ || '').toString().trim();
+    if (!trimmedSite && !trimmedTimeL && !trimmedTimeZ) {
+      return [];
+    }
+    return [{
+      site: trimmedSite,
+      timeL: trimmedTimeL,
+      timeZ: trimmedTimeZ
+    }];
+  }
+
+  buildWheelsEventFromControls(siteControl: string, timeLControl: string, timeZControl: string): WheelsEvent | null {
+    const site = (this.reportForm.get(siteControl)?.value || '').toString().trim();
+    let timeL = (this.reportForm.get(timeLControl)?.value || '').toString().trim();
+    let timeZ = (this.reportForm.get(timeZControl)?.value || '').toString().trim();
+    if (!timeL && !timeZ && !site) {
+      return null;
+    }
+    if (!timeL && !timeZ) {
+      timeL = this.getCurrentTimestamp();
+    }
+    timeL = this.normalizeTimeValue(timeL);
+    timeZ = timeZ ? this.normalizeTimeValue(timeZ) : '';
+    return {
+      site,
+      timeL,
+      timeZ
+    };
+  }
+
+  addDoorEventNarrative(type: 'Close' | 'Open', timestamp: string) {
+    const timeL = this.formatTimeFromIso(timestamp);
+    const note: NarrativeNote = {
+      timeL,
+      rn: '',
+      note: `Door ${type} @ ${timeL}`
+    };
+    this.notes.push(this.buildNoteGroup(note));
+  }
+
+  formatTimeFromIso(timestamp: string): string {
+    const date = new Date(timestamp);
+    if (Number.isNaN(date.getTime())) {
+      return this.getCurrentTimestamp();
+    }
+    return date.getHours().toString().padStart(2, '0') + date.getMinutes().toString().padStart(2, '0');
+  }
+
+  normalizeDoorEvents(report: Partial<NursingReport>): DoorEvent[] {
+    if (Array.isArray(report.doorEvents) && report.doorEvents.length > 0) {
+      return report.doorEvents.filter((event): event is DoorEvent => !!event?.timestamp);
+    }
+    const events: DoorEvent[] = [];
+    const closeEvent = this.buildDoorEventFromTime('Close', report.doorsCloseTime, report.date);
+    if (closeEvent) events.push(closeEvent);
+    const openEvent = this.buildDoorEventFromTime('Open', report.doorsOpenTime, report.date);
+    if (openEvent) events.push(openEvent);
+    return events;
+  }
+
+  buildDoorEventFromTime(type: 'Close' | 'Open', timeValue?: string, reportDate?: string): DoorEvent | null {
+    const trimmed = (timeValue || '').toString().trim();
+    if (!trimmed) return null;
+    const normalized = this.normalizeTimeValue(trimmed);
+    const baseDate = reportDate ? new Date(reportDate) : new Date();
+    const date = Number.isNaN(baseDate.getTime()) ? new Date() : new Date(baseDate);
+    if (/^\d{4}$/.test(normalized)) {
+      const hours = Number(normalized.slice(0, 2));
+      const minutes = Number(normalized.slice(2));
+      date.setHours(hours, minutes, 0, 0);
+    }
+    return { type, timestamp: date.toISOString() };
+  }
+
   timeHHMMValidator(control: AbstractControl): ValidationErrors | null {
     const value = (control.value || '').toString().trim();
     if (!value) return null;
@@ -371,6 +579,22 @@ export class HomePage implements OnInit, OnDestroy {
   stampTime(controlName: ReportTimeControl) {
     const control = this.reportForm.get(controlName);
     if (!control) return;
+    control.setValue(this.getCurrentTimestamp());
+  }
+
+  stampTimeOnFocus(controlName: ReportTimeControl) {
+    const control = this.reportForm.get(controlName);
+    if (!control) return;
+    const currentValue = (control.value || '').toString().trim();
+    if (currentValue) return;
+    control.setValue(this.getCurrentTimestamp());
+  }
+
+  stampNoteTimeOnFocus(index: number) {
+    const control = this.notes.at(index)?.get('timeL');
+    if (!control) return;
+    const currentValue = (control.value || '').toString().trim();
+    if (currentValue) return;
     control.setValue(this.getCurrentTimestamp());
   }
 
@@ -515,16 +739,6 @@ export class HomePage implements OnInit, OnDestroy {
           this.showSlashMenu[noteIndex] = this.filteredDrugs.length > 0;
           this.showCommandList[noteIndex] = false;
         }
-        // Check if typing /W, /WU, or /WD - show command list filtered to wheels commands
-        else if (upperTextAfterSlash.startsWith('/W')) {
-          const filter = textAfterSlash.substring(1).toUpperCase();
-          this.filteredCommands = this.slashCommands.filter(cmd =>
-            cmd.command.toUpperCase().startsWith('/' + filter)
-          );
-          this.showCommandList[noteIndex] = this.filteredCommands.length > 0;
-          this.showSlashMenu[noteIndex] = false;
-          this.activeMenuType = null;
-        }
         // Check if just typed / to show command list
         else if (textAfterSlash === '/') {
           this.filteredCommands = this.slashCommands;
@@ -584,22 +798,6 @@ export class HomePage implements OnInit, OnDestroy {
         const newValue = value.substring(0, lastSlashIndex) + '/DRUG';
         noteControl.setValue(newValue);
       }
-    } else if (command === '/WU') {
-      // Insert "Wheels Up" with current timestamp
-      const timestamp = this.getCurrentTimestamp();
-      if (lastSlashIndex !== -1) {
-        const newValue = value.substring(0, lastSlashIndex) + `Wheels Up @ ${timestamp} `;
-        noteControl.setValue(newValue);
-      }
-      this.closeSlashMenus(noteIndex);
-    } else if (command === '/WD') {
-      // Insert "Wheels Down" with current timestamp
-      const timestamp = this.getCurrentTimestamp();
-      if (lastSlashIndex !== -1) {
-        const newValue = value.substring(0, lastSlashIndex) + `Wheels Down @ ${timestamp} `;
-        noteControl.setValue(newValue);
-      }
-      this.closeSlashMenus(noteIndex);
     }
   }
 
@@ -668,6 +866,32 @@ export class HomePage implements OnInit, OnDestroy {
       control.setValue('');
     }
     this.reportService.setMedicationRecordStatus(control.value || '');
+  }
+
+  onPreflightCheckChange(
+    controlName: PreflightControl,
+    timeControlName: PreflightTimeControl,
+    label: string,
+    event: MatCheckboxChange
+  ) {
+    const timeControl = this.reportForm.get(timeControlName);
+    if (!timeControl) return;
+    if (event.checked) {
+      const timestamp = this.getCurrentTimestamp();
+      timeControl.setValue(timestamp);
+      this.addPreflightNarrative(label, timestamp);
+    } else {
+      timeControl.setValue('');
+    }
+  }
+
+  addPreflightNarrative(label: string, timestamp: string) {
+    const note: NarrativeNote = {
+      timeL: timestamp,
+      rn: '',
+      note: `${label} @ ${timestamp}`
+    };
+    this.notes.push(this.buildNoteGroup(note));
   }
 
   async onSubmit() {

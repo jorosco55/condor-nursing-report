@@ -119,7 +119,6 @@ export class MedsPage implements OnInit {
       temp: [data?.temp || ''],
       o2Sat: [data?.o2Sat || ''],
       ratePercent: [data?.ratePercent || ''],
-      bs: [data?.bs || ''],
       annotatedOnMtf: [data?.annotatedOnMtf || '']
     });
 
@@ -170,8 +169,7 @@ export class MedsPage implements OnInit {
         resp: '',
         temp: '',
         o2Sat: '',
-        ratePercent: '',
-        bs: ''
+        ratePercent: ''
       },
       { emitEvent: false }
     );

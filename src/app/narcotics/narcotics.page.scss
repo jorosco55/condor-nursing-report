@@ -1,5 +1,6 @@
-.narcotics-row {
-  margin-bottom: 12px;
+.narcotics-list {
+  display: grid;
+  gap: 12px;
 }
 
 .section-block {
@@ -32,6 +33,25 @@
   margin-top: 12px;
 }
 
+.narcotic-card {
+  border: 1px solid #e0e4ea;
+  border-radius: 10px;
+  padding: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(26, 26, 26, 0.06);
+}
+
+.narcotic-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+
+  h4 {
+    margin: 0;
+  }
+}
+
 .narcotics-actions {
   display: flex;
   justify-content: flex-start;
@@ -40,6 +60,53 @@
   button mat-icon {
     margin-right: 6px;
   }
+}
+
+.signature-field {
+  display: grid;
+  gap: 8px;
+}
+
+.signature-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+.signature-canvas-wrap {
+  position: relative;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  background: #fafbfc;
+  padding: 8px;
+  min-height: 140px;
+  display: flex;
+  align-items: stretch;
+}
+
+.signature-canvas {
+  width: 100%;
+  height: 140px;
+  display: block;
+}
+
+.signature-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: #8a8a8a;
+  pointer-events: none;
+  text-align: center;
+  padding: 8px;
+}
+
+.signature-canvas-wrap.has-signature .signature-hint {
+  display: none;
 }
 
 .time-picker-input {

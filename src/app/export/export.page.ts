@@ -170,7 +170,6 @@ export class ExportPage implements AfterViewInit {
       if (entry?.temp) parts.push(`Temp ${entry.temp}`);
       if (entry?.o2Sat) parts.push(`O2 Sat ${entry.o2Sat}%`);
       if (entry?.ratePercent) parts.push(`Rate% ${entry.ratePercent}%`);
-      if (entry?.bs) parts.push(`BS ${entry.bs}`);
       return parts.length > 0 ? parts.join(', ') : 'N/A';
     };
 
@@ -200,6 +199,85 @@ export class ExportPage implements AfterViewInit {
         .join('\n')
       : delayReasons;
 
+    const flightInfoRows: Array<[any, any]> = [
+      [{ text: 'Date:', bold: true }, new Date(report.date).toLocaleDateString()],
+      [{ text: 'Site:', bold: true }, report.site],
+      [{ text: 'ICE Flight RN:', bold: true }, report.iceFlightRN],
+      [{ text: '2nd ICE Flight RN:', bold: true }, report.secondICEFlightRN || 'N/A']
+    ];
+
+    if (report.thirdICEFlightRN) {
+      flightInfoRows.push([{ text: '3rd ICE Flight RN:', bold: true }, report.thirdICEFlightRN]);
+    }
+
+    if (report.fourthICEFlightRN) {
+      flightInfoRows.push([{ text: '4th ICE Flight RN:', bold: true }, report.fourthICEFlightRN]);
+    }
+
+    if (report.fifthICEFlightRN) {
+      flightInfoRows.push([{ text: '5th ICE Flight RN:', bold: true }, report.fifthICEFlightRN]);
+    }
+
+    flightInfoRows.push(
+      [{ text: 'Tail #:', bold: true }, report.tailNumber],
+      [{ text: 'Mission #:', bold: true }, report.missionNumber]
+    );
+
+    const doorEvents = Array.isArray(report.doorEvents)
+      ? report.doorEvents
+          .map(event => {
+            const label = event.type === 'Open' ? 'Door Open' : 'Door Close';
+            const timestamp = event.timestamp ? new Date(event.timestamp).toLocaleString() : 'N/A';
+            return `${label} @ ${timestamp}`;
+          })
+          .filter(item => item.trim().length > 0)
+      : [];
+    if (doorEvents.length === 0) {
+      if (report.doorsCloseTime) {
+        doorEvents.push(`Door Close @ ${report.doorsCloseTime}`);
+      }
+      if (report.doorsOpenTime) {
+        doorEvents.push(`Door Open @ ${report.doorsOpenTime}`);
+      }
+    }
+
+    const wheelsUpEvents = Array.isArray(report.wheelsUpEvents)
+      ? report.wheelsUpEvents.map(event => {
+          const site = event.site || 'N/A';
+          const timeL = event.timeL || '----';
+          const timeZ = event.timeZ || '----';
+          return `Wheels Up - ${site} (L ${timeL} / Z ${timeZ})`;
+        })
+      : [];
+    if (wheelsUpEvents.length === 0) {
+      const legacySite = report.wheelsUpSite || 'N/A';
+      const legacyTimeL = report.wheelsUpTimeL || '----';
+      const legacyTimeZ = report.wheelsUpTime || '----';
+      if (legacySite !== 'N/A' || legacyTimeL !== '----' || legacyTimeZ !== '----') {
+        wheelsUpEvents.push(`Wheels Up - ${legacySite} (L ${legacyTimeL} / Z ${legacyTimeZ})`);
+      }
+    }
+
+    const wheelsDownEvents = Array.isArray(report.wheelsDownEvents)
+      ? report.wheelsDownEvents.map(event => {
+          const site = event.site || 'N/A';
+          const timeL = event.timeL || '----';
+          const timeZ = event.timeZ || '----';
+          return `Wheels Down - ${site} (L ${timeL} / Z ${timeZ})`;
+        })
+      : [];
+    if (wheelsDownEvents.length === 0) {
+      const legacySite = report.wheelsDownSite || 'N/A';
+      const legacyTimeL = report.wheelsDownTimeL || '----';
+      const legacyTimeZ = report.wheelsDownTime || '----';
+      if (legacySite !== 'N/A' || legacyTimeL !== '----' || legacyTimeZ !== '----') {
+        wheelsDownEvents.push(`Wheels Down - ${legacySite} (L ${legacyTimeL} / Z ${legacyTimeZ})`);
+      }
+    }
+
+    const ronStartDate = report.ronStartDate ? new Date(report.ronStartDate).toLocaleDateString() : '';
+    const ronEndDate = report.ronEndDate ? new Date(report.ronEndDate).toLocaleDateString() : '';
+
     const docDefinition: any = {
       content: [
         { text: 'VIGHTER - Nursing Report', style: 'header' },
@@ -209,14 +287,7 @@ export class ExportPage implements AfterViewInit {
         {
           table: {
             widths: ['*', '*'],
-            body: [
-              [{ text: 'Date:', bold: true }, new Date(report.date).toLocaleDateString()],
-              [{ text: 'Site:', bold: true }, report.site],
-              [{ text: 'ICE Flight RN:', bold: true }, report.iceFlightRN],
-              [{ text: '2nd ICE Flight RN:', bold: true }, report.secondICEFlightRN || 'N/A'],
-              [{ text: 'Tail #:', bold: true }, report.tailNumber],
-              [{ text: 'Mission #:', bold: true }, report.missionNumber]
-            ]
+            body: flightInfoRows
           }
         },
         { text: 'Flight Times', style: 'sectionHeader', margin: [0, 20, 0, 10] },
@@ -224,14 +295,11 @@ export class ExportPage implements AfterViewInit {
           table: {
             widths: ['*', '*'],
               body: [
-                [{ text: 'Doors Close Time:', bold: true }, report.doorsCloseTime || 'N/A'],
-                [{ text: 'Doors Open Time:', bold: true }, report.doorsOpenTime || 'N/A'],
-                [{ text: 'Wheels Up Site:', bold: true }, report.wheelsUpSite || 'N/A'],
-                [{ text: 'Wheels Up Time (L):', bold: true }, report.wheelsUpTimeL || 'N/A'],
-                [{ text: 'Wheels Up Time (Z):', bold: true }, report.wheelsUpTime || 'N/A'],
-                [{ text: 'Wheels Down Site:', bold: true }, report.wheelsDownSite || 'N/A'],
-                [{ text: 'Wheels Down Time (L):', bold: true }, report.wheelsDownTimeL || 'N/A'],
-                [{ text: 'Wheels Down Time (Z):', bold: true }, report.wheelsDownTime || 'N/A']
+                [{ text: 'Door Events:', bold: true }, doorEvents.length > 0 ? { ul: doorEvents } : 'N/A'],
+                [{ text: 'RON Start Date:', bold: true }, ronStartDate || 'N/A'],
+                [{ text: 'RON End Date:', bold: true }, ronEndDate || 'N/A'],
+                [{ text: 'Wheels Up:', bold: true }, wheelsUpEvents.length > 0 ? { ul: wheelsUpEvents } : 'N/A'],
+                [{ text: 'Wheels Down:', bold: true }, wheelsDownEvents.length > 0 ? { ul: wheelsDownEvents } : 'N/A']
               ]
             }
           },
@@ -241,7 +309,8 @@ export class ExportPage implements AfterViewInit {
             widths: ['*', '*'],
             body: [
               [{ text: 'Transfer of care to ICE LEAD (Site):', bold: true }, report.transferOfCareSite || 'N/A'],
-              [{ text: 'Received care:', bold: true }, yesNo(report.receivedCare)]
+              [{ text: 'Received care:', bold: true }, yesNo(report.receivedCare)],
+              [{ text: 'Comment:', bold: true }, report.transferOfCareComment || 'N/A']
             ]
           }
         },
@@ -304,7 +373,7 @@ export class ExportPage implements AfterViewInit {
             widths: ['*', '*'],
               body: [
                 [{ text: 'PAX wrapped:', bold: true }, yesNo(report.specialCircumstancePaxWrapped)],
-                [{ text: 'Medical complaint assessment completed:', bold: true }, yesNo(report.specialCircumstanceMedicalComplaintAssessed)],
+                [{ text: 'EMS Contacted:', bold: true }, yesNo(report.specialCircumstanceMedicalComplaintAssessed)],
                 [{ text: 'Vighter Medical Control contacted:', bold: true }, yesNo(report.specialCircumstanceMedicalControlContacted)],
                 [{ text: 'Site supervisor advised:', bold: true }, yesNo(report.specialCircumstanceSiteSupervisorAdvised)],
                 [{ text: 'Medical emergency on-board EMS contacted:', bold: true }, yesNo(report.specialCircumstanceMedicalEmergencyOnboardEms)],

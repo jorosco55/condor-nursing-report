@@ -4,15 +4,22 @@ export interface NursingReport {
   site: string;
   iceFlightRN: string;
   secondICEFlightRN: string;
+  thirdICEFlightRN?: string;
+  fourthICEFlightRN?: string;
+  fifthICEFlightRN?: string;
   tailNumber: string;
   missionNumber: string;
   siteStops: string;
   foicTitle: string;
   asoLead: string;
   preflightMEBCheck: boolean;
+  preflightMEBCheckTime?: string;
   preflightMEKO2AED: boolean;
+  preflightMEKO2AEDTime?: string;
   safetyBriefingCompleted: boolean;
+  safetyBriefingCompletedTime?: string;
   seatBeltsSecured: boolean;
+  seatBeltsSecuredTime?: string;
   narcRecordStatus: string;
   medicationRecordStatus: string;
   
@@ -27,8 +34,11 @@ export interface NursingReport {
   wheelsDownSite: string;
   wheelsDownTimeL: string;
   wheelsDownTime: string;
-  doorsCloseTime: string;
-  doorsOpenTime: string;
+  wheelsUpEvents?: WheelsEvent[];
+  wheelsDownEvents?: WheelsEvent[];
+  doorsCloseTime?: string;
+  doorsOpenTime?: string;
+  doorEvents?: DoorEvent[];
 
   // Record Status
   reportStatus: 'Open' | 'Closed';
@@ -37,6 +47,8 @@ export interface NursingReport {
   blockTimeZ2: string; // RON
   endTimeZ2: string; // RON
   ronUsed: boolean;
+  ronStartDate?: string;
+  ronEndDate?: string;
 
   // Narrative
   notes: NarrativeNote[];
@@ -47,6 +59,7 @@ export interface NursingReport {
   // Transfer of Care
   transferOfCareSite: string;
   receivedCare: boolean;
+  transferOfCareComment?: string;
 
   // PAX Medicated
   paxMedicated: PaxMedicationEntry[];
@@ -89,6 +102,17 @@ export interface DelayEntry {
   reasons: string[];
 }
 
+export interface WheelsEvent {
+  site: string;
+  timeL: string;
+  timeZ: string;
+}
+
+export interface DoorEvent {
+  type: 'Close' | 'Open';
+  timestamp: string;
+}
+
 export interface NarrativeNote {
   timeL: string;
   rn: string;    // Selected RN for this note
@@ -110,7 +134,6 @@ export interface PaxMedicationEntry {
   temp: string;
   o2Sat: string;
   ratePercent: string;
-  bs: string;
   annotatedOnMtf: string;
 }
 
