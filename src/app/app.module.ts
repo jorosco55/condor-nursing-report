@@ -5,6 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { TuiRoot } from '@taiga-ui/core';
+import { provideEventPlugins } from '@taiga-ui/event-plugins';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -21,9 +23,13 @@ import { AppRoutingModule } from './app-routing.module';
     }),
     AppRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    TuiRoot
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    provideEventPlugins(),
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+  ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

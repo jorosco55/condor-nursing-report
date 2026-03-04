@@ -66,7 +66,7 @@
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 6px 16px rgba(26, 26, 26, 0.08);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .section-block::before {
@@ -258,7 +258,35 @@
   margin-bottom: 10px;
 }
 
-mat-divider {
+.note-row .time-field tui-textfield {
+  min-width: 120px;
+}
+
+.note-row .time-field input[tuiTextfield] {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+
+.note-row tui-textfield .t-clear {
+  display: none !important;
+}
+
+.note-row .time-field .t-clear {
+  display: none !important;
+}
+
+.note-row ion-col:last-child {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid #e1e4ea;
   margin: 20px 0;
 }
 
@@ -288,43 +316,52 @@ h3 {
   pointer-events: none;
 }
 
-.time-suffix {
+.time-field {
+  display: grid;
+  gap: 4px;
+}
+
+
+
+.time-inline {
+  position: absolute;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 6px;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.time-field tui-textfield {
+  --t-end: 6.25rem;
+}
+
+.time-inline button {
+  font-size: 0.7rem;
+  line-height: 1;
+  min-height: 24px;
+  padding: 0 6px;
+  opacity: 1;
+  filter: none;
+  -webkit-font-smoothing: auto;
+}
+
+.time-error {
+  font-size: 0.75rem;
+  color: #b00020;
+  margin-top: 4px;
+}
+
+.checkbox-inline {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-right: -4px;
-}
-
-.time-picker-button {
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
-  padding: 0;
-}
-
-.time-now-button {
-  min-height: 24px;
-  height: 24px;
-  padding: 0 6px;
-  font-size: 0.75rem;
-  line-height: 24px;
-  text-transform: none;
-  min-width: 0;
+  gap: 8px;
+  font-weight: 500;
 }
 
 
-.time-hint {
-  font-size: 0.7rem;
-  letter-spacing: 0.03em;
-  color: #6b6b6b;
-}
-
-
-mat-form-field {
-  .mat-mdc-form-field-subscript-wrapper {
-    min-height: 16px;
-  }
-}
 
 textarea {
   resize: vertical;
@@ -474,11 +511,6 @@ textarea {
 }
 
 // Touch-friendly input fields
-mat-form-field {
-  .mat-form-field-wrapper {
-    touch-action: manipulation;
-  }
-}
 
 // Touch-friendly buttons
 button {
@@ -490,16 +522,6 @@ button {
 }
 
 // Material checkbox touch improvements
-mat-checkbox {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-
-  .mat-checkbox-layout {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-  }
-}
 
 // Textarea touch improvements
 textarea {

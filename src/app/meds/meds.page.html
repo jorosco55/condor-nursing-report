@@ -19,62 +19,65 @@
                 <div class="card-title">Med Info</div>
                   <ion-row>
                     <ion-col size="12" size-sm="6" size-md="2">
-                      <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>A-Number</mat-label>
-                        <input matInput formControlName="aNumber">
-                      </mat-form-field>
+                      <tui-textfield class="full-width">
+                        <input tuiTextfield formControlName="aNumber">
+                        <label>A-Number</label>
+                      </tui-textfield>
                     </ion-col>
                     <ion-col size="12" size-sm="6" size-md="3">
-                      <mat-form-field appearance="outline" class="full-width" [class.field-alert]="medsRequired && !hasAnyMedsSelection()">
-                        <mat-label>Medication</mat-label>
-                        <mat-select formControlName="medication">
-                          <mat-option value="">-- Select --</mat-option>
-                          <mat-option *ngFor="let medication of medicationOptions" [value]="medication">{{ medication }}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
+                      <tui-textfield class="full-width select-field" [class.field-alert]="medsRequired && !hasAnyMedsSelection()">
+                        <input tuiSelect formControlName="medication">
+                        <label>Medication</label>
+                        <ng-template tuiDataList>
+                          <tui-data-list-wrapper [items]="medicationOptions"></tui-data-list-wrapper>
+                        </ng-template>
+                      </tui-textfield>
                     </ion-col>
                     <ion-col size="12" size-sm="6" size-md="2">
-                      <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Dose</mat-label>
-                        <mat-select formControlName="dose">
-                          <mat-option value="">-- Select --</mat-option>
-                          <mat-option *ngFor="let dose of doseOptions" [value]="dose">{{ dose }}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
+                      <tui-textfield class="full-width select-field">
+                        <input tuiSelect formControlName="dose">
+                        <label>Dose</label>
+                        <ng-template tuiDataList>
+                          <tui-data-list-wrapper [items]="doseOptions"></tui-data-list-wrapper>
+                        </ng-template>
+                      </tui-textfield>
                     </ion-col>
                     <ion-col size="12" size-sm="6" size-md="2">
-                      <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Dose Units</mat-label>
-                        <mat-select formControlName="doseUnit">
-                          <mat-option value="">-- Select --</mat-option>
-                          <mat-option *ngFor="let unit of doseUnits" [value]="unit">{{ unit }}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
+                      <tui-textfield class="full-width select-field">
+                        <input tuiSelect formControlName="doseUnit">
+                        <label>Dose Units</label>
+                        <ng-template tuiDataList>
+                          <tui-data-list-wrapper [items]="doseUnits"></tui-data-list-wrapper>
+                        </ng-template>
+                      </tui-textfield>
                     </ion-col>
                     <ion-col size="12" size-sm="6" size-md="2">
-                      <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Route</mat-label>
-                        <mat-select formControlName="route">
-                          <mat-option value="">-- Select --</mat-option>
-                          <mat-option *ngFor="let route of routeOptions" [value]="route">{{ route }}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
+                      <tui-textfield class="full-width select-field">
+                        <input tuiSelect formControlName="route">
+                        <label>Route</label>
+                        <ng-template tuiDataList>
+                          <tui-data-list-wrapper [items]="routeOptions"></tui-data-list-wrapper>
+                        </ng-template>
+                      </tui-textfield>
                     </ion-col>
                     <ion-col size="12" size-sm="6" size-md="1" class="ion-align-self-center">
-                      <mat-checkbox formControlName="prnGiven">PRN</mat-checkbox>
+                      <label class="checkbox-inline">
+                        <input tuiCheckbox type="checkbox" formControlName="prnGiven">
+                        <span>PRN</span>
+                      </label>
                     </ion-col>
                   </ion-row>
 
                   <ion-row>
                     <ion-col size="12" size-sm="10" size-md="11">
-                      <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Annotated on MTF</mat-label>
-                        <input matInput formControlName="annotatedOnMtf">
-                      </mat-form-field>
+                      <tui-textfield class="full-width">
+                        <input tuiTextfield formControlName="annotatedOnMtf">
+                        <label>Annotated on MTF</label>
+                      </tui-textfield>
                     </ion-col>
                     <ion-col size="12" size-sm="2" size-md="1" class="ion-align-self-center">
-                      <button mat-icon-button color="warn" (click)="removePaxMedicated(i)" type="button">
-                        <mat-icon>delete</mat-icon>
+                      <button tuiButton appearance="secondary" size="s" (click)="removePaxMedicated(i)" type="button">
+                        Remove
                       </button>
                     </ion-col>
                   </ion-row>
@@ -84,7 +87,10 @@
                       <div class="vitals-section">
                         <div class="vitals-title">
                           <span>Vitals</span>
-                          <mat-checkbox formControlName="vitalsNa">N/A</mat-checkbox>
+                          <label class="checkbox-inline">
+                            <input tuiCheckbox type="checkbox" formControlName="vitalsNa">
+                            <span>N/A</span>
+                          </label>
                         </div>
                         <div class="vitals-hint" *ngIf="paxEntry.get('vitalsNa')?.value">
                           Vitals hidden (N/A)
@@ -105,46 +111,46 @@
                           <div class="vitals-item">
                             <ion-icon name="heart-outline"></ion-icon>
                             <label>HR</label>
-                            <mat-form-field appearance="outline">
-                              <mat-label>bpm</mat-label>
-                              <input matInput formControlName="hr">
-                            </mat-form-field>
+                            <tui-textfield>
+                              <input tuiTextfield formControlName="hr" placeholder="bpm">
+                              <label>bpm</label>
+                            </tui-textfield>
                           </div>
 
                           <div class="vitals-item">
                             <ion-icon name="pulse-outline"></ion-icon>
                             <label>Resp</label>
-                            <mat-form-field appearance="outline">
-                              <mat-label>rpm</mat-label>
-                              <input matInput formControlName="resp">
-                            </mat-form-field>
+                            <tui-textfield>
+                              <input tuiTextfield formControlName="resp" placeholder="rpm">
+                              <label>rpm</label>
+                            </tui-textfield>
                           </div>
 
                           <div class="vitals-item">
                             <ion-icon name="thermometer-outline"></ion-icon>
                             <label>Temp</label>
-                            <mat-form-field appearance="outline">
-                              <mat-label>F</mat-label>
-                              <input matInput formControlName="temp">
-                            </mat-form-field>
+                            <tui-textfield>
+                              <input tuiTextfield formControlName="temp" placeholder="F">
+                              <label>F</label>
+                            </tui-textfield>
                           </div>
 
                           <div class="vitals-item">
                             <ion-icon name="water-outline"></ion-icon>
                             <label>O2 Sat</label>
-                            <mat-form-field appearance="outline">
-                              <mat-label>%</mat-label>
-                              <input matInput formControlName="o2Sat">
-                            </mat-form-field>
+                            <tui-textfield>
+                              <input tuiTextfield formControlName="o2Sat" placeholder="%">
+                              <label>%</label>
+                            </tui-textfield>
                           </div>
 
                           <div class="vitals-item">
                             <ion-icon name="speedometer-outline"></ion-icon>
                             <label>Rate%</label>
-                            <mat-form-field appearance="outline">
-                              <mat-label>%</mat-label>
-                              <input matInput formControlName="ratePercent">
-                            </mat-form-field>
+                            <tui-textfield>
+                              <input tuiTextfield formControlName="ratePercent" placeholder="%">
+                              <label>%</label>
+                            </tui-textfield>
                           </div>
 
                         </div>
@@ -154,17 +160,17 @@
                 </div>
               </ion-col>
             </ion-row>
-            <mat-divider class="card-divider" *ngIf="i < paxMedicated.length - 1"></mat-divider>
+            <hr class="card-divider" *ngIf="i < paxMedicated.length - 1">
           </ng-container>
         </div>
-        <button mat-stroked-button color="primary" type="button" (click)="addPaxMedicated()">
-          <mat-icon>add</mat-icon> Add PAX
+        <button tuiButton appearance="primary" size="m" type="button" (click)="addPaxMedicated()">
+          Add PAX
         </button>
       </div>
 
       <div class="ion-margin-top ion-padding">
-        <button mat-raised-button color="primary" class="full-width" type="button" (click)="saveMeds()">
-          <mat-icon>save</mat-icon> Save Medication
+        <button tuiButton appearance="primary" size="l" class="full-width" type="button" (click)="saveMeds()">
+          Save Medication
         </button>
       </div>
     </form>

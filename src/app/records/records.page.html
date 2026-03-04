@@ -8,28 +8,27 @@
   <div class="container">
     <div class="records-header">
       <h2>Records</h2>
-      <button mat-raised-button color="primary" type="button" (click)="startNewRecord()">New Record</button>
+      <button tuiButton appearance="primary" size="m" type="button" (click)="startNewRecord()">New Record</button>
     </div>
 
     <div class="records-filters">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Search</mat-label>
-        <input matInput [(ngModel)]="searchTerm" placeholder="Mission # or Site">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="status-filter">
-        <mat-label>Status</mat-label>
-        <mat-select [(ngModel)]="statusFilter">
-          <mat-option value="All">All</mat-option>
-          <mat-option value="Open">Open</mat-option>
-          <mat-option value="Closed">Closed</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <tui-textfield class="full-width">
+        <input tuiTextfield [(ngModel)]="searchTerm" placeholder="Mission # or Site">
+        <label>Search</label>
+      </tui-textfield>
+      <tui-textfield class="status-filter select-field">
+        <input tuiSelect [(ngModel)]="statusFilter">
+        <label>Status</label>
+        <ng-template tuiDataList>
+          <tui-data-list-wrapper [items]="['All','Open','Closed']"></tui-data-list-wrapper>
+        </ng-template>
+      </tui-textfield>
     </div>
 
     <div class="empty-state" *ngIf="filteredRecords.length === 0">
       <div class="empty-title">No records yet</div>
       <div class="empty-subtitle">Create your first report to get started.</div>
-      <button mat-stroked-button color="primary" type="button" (click)="startNewRecord()">Create Record</button>
+      <button tuiButton appearance="secondary" size="m" type="button" (click)="startNewRecord()">Create Record</button>
     </div>
 
     <ion-list *ngIf="filteredRecords.length > 0">
@@ -56,9 +55,9 @@
           </div>
         </ion-label>
         <div class="record-actions">
-          <ion-button size="small" fill="clear" (click)="toggleDetails(record)">
-            <mat-icon>{{ expandedRecordId === record.id ? 'expand_less' : 'expand_more' }}</mat-icon>
-          </ion-button>
+            <ion-button size="small" fill="clear" (click)="toggleDetails(record)">
+              <ion-icon [name]="expandedRecordId === record.id ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+            </ion-button>
           <ion-button size="small" fill="clear" (click)="duplicateRecord(record)">Duplicate</ion-button>
           <ion-button size="small" fill="clear" (click)="toggleStatus(record)">
             {{ record.reportStatus === 'Closed' ? 'Reopen' : 'Close' }}

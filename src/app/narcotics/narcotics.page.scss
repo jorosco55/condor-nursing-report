@@ -56,10 +56,6 @@
   display: flex;
   justify-content: flex-start;
   margin-bottom: 12px;
-
-  button mat-icon {
-    margin-right: 6px;
-  }
 }
 
 .signature-field {
@@ -117,46 +113,43 @@
   pointer-events: none;
 }
 
-.time-suffix {
-  display: inline-flex;
-  align-items: center;
+.time-field {
+  display: grid;
+  gap: 4px;
+}
+
+.time-inline {
+  position: absolute;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
   gap: 6px;
-  margin-right: -4px;
+  pointer-events: auto;
+  z-index: 2;
 }
 
-.time-picker-button {
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
-  padding: 0;
+.time-field tui-textfield {
+  --t-end: 6.25rem;
 }
 
-.time-now-button {
-  min-height: 24px;
-  height: 24px;
-  padding: 0 6px;
-  font-size: 0.75rem;
-  line-height: 24px;
-  text-transform: none;
-  min-width: 0;
-}
-
-.time-hint {
+.time-inline button {
   font-size: 0.7rem;
-  letter-spacing: 0.03em;
-  color: #6b6b6b;
+  line-height: 1;
+  min-height: 24px;
+  padding: 0 6px;
+  opacity: 1;
+  filter: none;
+  -webkit-font-smoothing: auto;
 }
 
-mat-form-field {
-  .mat-mdc-form-field-subscript-wrapper {
-    min-height: 16px;
-  }
-}
-
-:host ::ng-deep .field-alert .mdc-notched-outline {
-  border-color: #b00020;
-}
-
-:host ::ng-deep .field-alert .mdc-floating-label {
+.time-error {
+  font-size: 0.75rem;
   color: #b00020;
+  margin-top: 4px;
+}
+
+.field-alert {
+  box-shadow: 0 0 0 1px #b00020 inset;
+  border-radius: 12px;
 }

@@ -12,7 +12,6 @@
 
 <ion-content class="ion-padding" [scrollY]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <div class="container" #scrollContainer>
-    <!-- Header Branding -->
     <div class="report-header ion-margin-bottom">
       <div class="logo-section">
         <h1 class="vighter-text">VIGHTER</h1>
@@ -27,259 +26,222 @@
       <h2 class="ion-text-center">Nursing Report</h2>
 
       <ion-grid>
-        <!-- Flight Info -->
         <ion-row>
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Flight Info</div>
 
-              <!-- Row 1: Date, Site -->
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Date</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="date">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
+                  <tui-textfield class="full-width" tuiTextfieldCleaner="false">
+                    <input tuiTextfield type="date" formControlName="date">
+                    <label>Date</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Site</mat-label>
-                    <mat-select formControlName="site">
-                      <mat-option value="">-- Select Site --</mat-option>
-                      <mat-option *ngFor="let site of transferOfCareSites" [value]="site">{{ site }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <select tuiSelect formControlName="site" [items]="transferOfCareSites" placeholder="-- Select Site --"></select>
+                    <label>Site</label>
+                  </tui-textfield>
                 </ion-col>
               </ion-row>
 
-              <!-- Row 2: Crew -->
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>ICE Flight RN</mat-label>
-                    <mat-select formControlName="iceFlightRN">
-                      <mat-option value="">-- Select RN --</mat-option>
-                      <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <select tuiSelect formControlName="iceFlightRN" [items]="rnList" placeholder="-- Select RN --"></select>
+                    <label>ICE Flight RN</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>2nd ICE Flight RN</mat-label>
-                    <mat-select formControlName="secondICEFlightRN">
-                      <mat-option value="">-- Select RN --</mat-option>
-                      <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <select tuiSelect formControlName="secondICEFlightRN" [items]="rnList" placeholder="-- Select RN --"></select>
+                    <label>2nd ICE Flight RN</label>
+                  </tui-textfield>
                 </ion-col>
               </ion-row>
 
               <ion-row *ngIf="visibleFlightRns >= 3">
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>3rd ICE Flight RN</mat-label>
-                    <mat-select formControlName="thirdICEFlightRN">
-                      <mat-option value="">-- Select RN --</mat-option>
-                      <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <input tuiSelect formControlName="thirdICEFlightRN" placeholder="-- Select RN --">
+                    <label>3rd ICE Flight RN</label>
+                    <ng-template tuiDataList>
+                      <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
+                    </ng-template>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6" *ngIf="visibleFlightRns >= 4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>4th ICE Flight RN</mat-label>
-                    <mat-select formControlName="fourthICEFlightRN">
-                      <mat-option value="">-- Select RN --</mat-option>
-                      <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <input tuiSelect formControlName="fourthICEFlightRN" placeholder="-- Select RN --">
+                    <label>4th ICE Flight RN</label>
+                    <ng-template tuiDataList>
+                      <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
+                    </ng-template>
+                  </tui-textfield>
                 </ion-col>
               </ion-row>
 
               <ion-row *ngIf="visibleFlightRns >= 5">
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>5th ICE Flight RN</mat-label>
-                    <mat-select formControlName="fifthICEFlightRN">
-                      <mat-option value="">-- Select RN --</mat-option>
-                      <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <input tuiSelect formControlName="fifthICEFlightRN" placeholder="-- Select RN --">
+                    <label>5th ICE Flight RN</label>
+                    <ng-template tuiDataList>
+                      <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
+                    </ng-template>
+                  </tui-textfield>
                 </ion-col>
               </ion-row>
 
               <div class="rn-actions" *ngIf="visibleFlightRns < maxFlightRns">
-                <button mat-stroked-button color="primary" type="button" (click)="addFlightRn()">
-                  <mat-icon>add</mat-icon>
+                <button tuiButton appearance="secondary" size="s" type="button" (click)="addFlightRn()">
                   Add RN
                 </button>
               </div>
 
-              <!-- Row 3: Tail, Mission -->
               <ion-row>
                 <ion-col size="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Tail #</mat-label>
-                    <input matInput formControlName="tailNumber">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="tailNumber">
+                    <label>Tail #</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Mission #</mat-label>
-                    <input matInput formControlName="missionNumber">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="missionNumber">
+                    <label>Mission #</label>
+                  </tui-textfield>
                 </ion-col>
               </ion-row>
 
-              <!-- Row 4: FOIC, Lead, Site Stops -->
               <ion-row>
                 <ion-col size="12" size-sm="4" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>FOIC (Title)</mat-label>
-                    <input matInput formControlName="foicTitle">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="foicTitle">
+                    <label>FOIC (Title)</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="4" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>ASO Lead</mat-label>
-                    <input matInput formControlName="asoLead">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="asoLead">
+                    <label>ASO Lead</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="4" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Site stops</mat-label>
-                    <input matInput formControlName="siteStops">
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <select tuiSelect formControlName="siteStops" [items]="siteStopsOptions" placeholder="-- Select Site --"></select>
+                    <label>Site stops</label>
+                  </tui-textfield>
                 </ion-col>
               </ion-row>
-
-
             </div>
           </ion-col>
         </ion-row>
 
-        <mat-divider class="ion-margin-vertical"></mat-divider>
+        <hr class="section-divider ion-margin-vertical">
 
         <ion-row>
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Pre-Flight Check</div>
               <div class="checkbox-row">
-                <div class="checkbox-item">
-                  <mat-checkbox
-                    formControlName="preflightMEBCheck"
-                    (change)="onPreflightCheckChange('preflightMEBCheck', 'preflightMEBCheckTime', 'Preflight MEB Check', $event)">
-                    Preflight MEB Check
-                  </mat-checkbox>
-                  <div class="checkbox-subscript" *ngIf="reportForm.get('preflightMEBCheckTime')?.value">
+                <label class="checkbox-item">
+                  <input tuiCheckbox type="checkbox" formControlName="preflightMEBCheck">
+                  <span>Preflight MEB Check</span>
+                  <span class="checkbox-subscript" *ngIf="reportForm.get('preflightMEBCheckTime')?.value">
                     {{ reportForm.get('preflightMEBCheckTime')?.value }}
-                  </div>
-                </div>
-                <div class="checkbox-item">
-                  <mat-checkbox
-                    formControlName="preflightMEKO2AED"
-                    (change)="onPreflightCheckChange('preflightMEKO2AED', 'preflightMEKO2AEDTime', 'Preflight MEK, O2 Tanks, AED', $event)">
-                    Preflight MEK, O2 Tanks, AED
-                  </mat-checkbox>
-                  <div class="checkbox-subscript" *ngIf="reportForm.get('preflightMEKO2AEDTime')?.value">
+                  </span>
+                </label>
+                <label class="checkbox-item">
+                  <input tuiCheckbox type="checkbox" formControlName="preflightMEKO2AED">
+                  <span>Preflight MEK, O2 Tanks, AED</span>
+                  <span class="checkbox-subscript" *ngIf="reportForm.get('preflightMEKO2AEDTime')?.value">
                     {{ reportForm.get('preflightMEKO2AEDTime')?.value }}
-                  </div>
-                </div>
-                <div class="checkbox-item">
-                  <mat-checkbox
-                    formControlName="safetyBriefingCompleted"
-                    (change)="onPreflightCheckChange('safetyBriefingCompleted', 'safetyBriefingCompletedTime', 'Safety Briefing Completed', $event)">
-                    Safety Briefing Completed
-                  </mat-checkbox>
-                  <div class="checkbox-subscript" *ngIf="reportForm.get('safetyBriefingCompletedTime')?.value">
+                  </span>
+                </label>
+                <label class="checkbox-item">
+                  <input tuiCheckbox type="checkbox" formControlName="safetyBriefingCompleted">
+                  <span>Safety Briefing Completed</span>
+                  <span class="checkbox-subscript" *ngIf="reportForm.get('safetyBriefingCompletedTime')?.value">
                     {{ reportForm.get('safetyBriefingCompletedTime')?.value }}
-                  </div>
-                </div>
-                <div class="checkbox-item">
-                  <mat-checkbox
-                    formControlName="seatBeltsSecured"
-                    (change)="onPreflightCheckChange('seatBeltsSecured', 'seatBeltsSecuredTime', 'Seat Belts Secured Per ASO', $event)">
-                    Seat Belts Secured Per ASO
-                  </mat-checkbox>
-                  <div class="checkbox-subscript" *ngIf="reportForm.get('seatBeltsSecuredTime')?.value">
+                  </span>
+                </label>
+                <label class="checkbox-item">
+                  <input tuiCheckbox type="checkbox" formControlName="seatBeltsSecured">
+                  <span>Seat Belts Secured Per ASO</span>
+                  <span class="checkbox-subscript" *ngIf="reportForm.get('seatBeltsSecuredTime')?.value">
                     {{ reportForm.get('seatBeltsSecuredTime')?.value }}
-                  </div>
-                </div>
+                  </span>
+                </label>
               </div>
             </div>
           </ion-col>
         </ion-row>
 
-        <mat-divider class="ion-margin-vertical"></mat-divider>
+        <hr class="section-divider ion-margin-vertical">
 
-        <!-- Row 5: Flight Times -->
         <ion-row>
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Flight Times (Z)</div>
               <ion-row>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Showtime</mat-label>
-                    <input matInput formControlName="showtimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('showtimeZ1')" (blur)="handleTimeBlur('showtimeZ1')">
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="showtimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('showtimeZ1')" (blur)="handleTimeBlur('showtimeZ1')">
+                    <label>Showtime</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('showtimeZ1')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(showtimeZ1Picker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                     <input #showtimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'showtimeZ1')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('showtimeZ1')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(showtimeZ1Picker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
-                    </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('showtimeZ1')?.hasError('invalidTime') && (reportForm.get('showtimeZ1')?.touched || reportForm.get('showtimeZ1')?.dirty)">
+                    <div class="time-error" *ngIf="reportForm.get('showtimeZ1')?.hasError('invalidTime') && (reportForm.get('showtimeZ1')?.touched || reportForm.get('showtimeZ1')?.dirty)">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Block time</mat-label>
-                    <input matInput formControlName="blockTimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('blockTimeZ1')" (blur)="handleTimeBlur('blockTimeZ1')">
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="blockTimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('blockTimeZ1')" (blur)="handleTimeBlur('blockTimeZ1')">
+                    <label>Block time</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('blockTimeZ1')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(blockTimeZ1Picker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                     <input #blockTimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'blockTimeZ1')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('blockTimeZ1')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(blockTimeZ1Picker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
-                    </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('blockTimeZ1')?.hasError('invalidTime') && (reportForm.get('blockTimeZ1')?.touched || reportForm.get('blockTimeZ1')?.dirty)">
+                    <div class="time-error" *ngIf="reportForm.get('blockTimeZ1')?.hasError('invalidTime') && (reportForm.get('blockTimeZ1')?.touched || reportForm.get('blockTimeZ1')?.dirty)">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>End time</mat-label>
-                    <input matInput formControlName="endTimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('endTimeZ1')" (blur)="handleTimeBlur('endTimeZ1')">
-                    <input #endTimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'endTimeZ1')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('endTimeZ1')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(endTimeZ1Picker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="endTimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('endTimeZ1')" (blur)="handleTimeBlur('endTimeZ1')">
+                    <label>End time</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('endTimeZ1')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(endTimeZ1Picker)" aria-label="Open time picker">Pick</button>
                     </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('endTimeZ1')?.hasError('invalidTime') && (reportForm.get('endTimeZ1')?.touched || reportForm.get('endTimeZ1')?.dirty)">
+                  </tui-textfield>
+                    <input #endTimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'endTimeZ1')">
+                    <div class="time-error" *ngIf="reportForm.get('endTimeZ1')?.hasError('invalidTime') && (reportForm.get('endTimeZ1')?.touched || reportForm.get('endTimeZ1')?.dirty)">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
               </ion-row>
 
               <h4 class="section-subtitle">Door Events</h4>
               <div class="door-actions">
-                <button mat-stroked-button color="primary" type="button" (click)="addDoorEvent('Close')">
-                  <mat-icon>add</mat-icon>
+                <button tuiButton appearance="secondary" size="s" type="button" (click)="addDoorEvent('Close')">
                   Add Door Close
                 </button>
-                <button mat-stroked-button color="primary" type="button" (click)="addDoorEvent('Open')">
-                  <mat-icon>add</mat-icon>
+                <button tuiButton appearance="secondary" size="s" type="button" (click)="addDoorEvent('Open')">
                   Add Door Open
                 </button>
               </div>
@@ -289,62 +251,59 @@
                     <div class="door-event-type">Door {{ entry.get('type')?.value }}</div>
                     <div class="door-event-time">{{ entry.get('timestamp')?.value | date:'short' }}</div>
                   </div>
-                  <button mat-icon-button color="warn" type="button" (click)="removeDoorEvent(i)" aria-label="Remove door event">
-                    <mat-icon>delete</mat-icon>
+                  <button tuiButton appearance="secondary" size="s" type="button" (click)="removeDoorEvent(i)" aria-label="Remove door event">
+                    Remove
                   </button>
                 </div>
               </div>
 
               <h4 class="section-subtitle">Wheels Up</h4>
               <div class="pill-actions">
-                <button mat-stroked-button class="pill-button" color="primary" type="button" (click)="addWheelsUpEvent()">
-                  <mat-icon>add</mat-icon>
+                <button tuiButton appearance="secondary" size="s" type="button" (click)="addWheelsUpEvent()">
                   Add Wheels Up
                 </button>
               </div>
               <ion-row>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Time (L)</mat-label>
-                    <input matInput formControlName="wheelsUpTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsUpTimeL')" (blur)="handleTimeBlur('wheelsUpTimeL')">
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="wheelsUpTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsUpTimeL')" (blur)="handleTimeBlur('wheelsUpTimeL')">
+                    <label>Time (L)</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('wheelsUpTimeL')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsUpTimeLPicker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                     <input #wheelsUpTimeLPicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsUpTimeL')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('wheelsUpTimeL')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(wheelsUpTimeLPicker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
-                    </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('wheelsUpTimeL')?.hasError('invalidTime') && reportForm.get('wheelsUpTimeL')?.touched">
+                    <div class="time-error" *ngIf="reportForm.get('wheelsUpTimeL')?.hasError('invalidTime') && reportForm.get('wheelsUpTimeL')?.touched">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Site</mat-label>
-                    <mat-select formControlName="wheelsUpSite">
-                      <mat-option value="">-- Select Site --</mat-option>
-                      <mat-option *ngFor="let site of wheelsSiteOptions" [value]="site">{{ site }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <input tuiSelect formControlName="wheelsUpSite" placeholder="-- Select Site --">
+                    <label>Site</label>
+                    <ng-template tuiDataList>
+                      <tui-data-list-wrapper [items]="wheelsSiteOptions"></tui-data-list-wrapper>
+                    </ng-template>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Time</mat-label>
-                    <input matInput formControlName="wheelsUpTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsUpTime')" (blur)="handleTimeBlur('wheelsUpTime')">
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="wheelsUpTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsUpTime')" (blur)="handleTimeBlur('wheelsUpTime')">
+                    <label>Time</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('wheelsUpTime')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsUpTimePicker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                     <input #wheelsUpTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsUpTime')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('wheelsUpTime')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(wheelsUpTimePicker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
-                    </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('wheelsUpTime')?.hasError('invalidTime') && reportForm.get('wheelsUpTime')?.touched">
+                    <div class="time-error" *ngIf="reportForm.get('wheelsUpTime')?.hasError('invalidTime') && reportForm.get('wheelsUpTime')?.touched">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
               </ion-row>
               <div class="wheels-events" *ngIf="wheelsUpEvents.length > 0" formArrayName="wheelsUpEvents">
@@ -354,62 +313,59 @@
                     <div class="wheels-event-meta">Site: {{ entry.get('site')?.value || 'N/A' }}</div>
                     <div class="wheels-event-time">L: {{ entry.get('timeL')?.value || '----' }} | Z: {{ entry.get('timeZ')?.value || '----' }}</div>
                   </div>
-                  <button mat-icon-button color="warn" type="button" (click)="removeWheelsUpEvent(i)" aria-label="Remove wheels up event">
-                    <mat-icon>delete</mat-icon>
+                  <button tuiButton appearance="secondary" size="s" type="button" (click)="removeWheelsUpEvent(i)" aria-label="Remove wheels up event">
+                    Remove
                   </button>
                 </div>
               </div>
 
               <h4 class="section-subtitle">Wheels Down</h4>
               <div class="pill-actions">
-                <button mat-stroked-button class="pill-button" color="primary" type="button" (click)="addWheelsDownEvent()">
-                  <mat-icon>add</mat-icon>
+                <button tuiButton appearance="secondary" size="s" type="button" (click)="addWheelsDownEvent()">
                   Add Wheels Down
                 </button>
               </div>
               <ion-row>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Time (L)</mat-label>
-                    <input matInput formControlName="wheelsDownTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsDownTimeL')" (blur)="handleTimeBlur('wheelsDownTimeL')">
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="wheelsDownTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsDownTimeL')" (blur)="handleTimeBlur('wheelsDownTimeL')">
+                    <label>Time (L)</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('wheelsDownTimeL')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsDownTimeLPicker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                     <input #wheelsDownTimeLPicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsDownTimeL')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('wheelsDownTimeL')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(wheelsDownTimeLPicker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
-                    </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('wheelsDownTimeL')?.hasError('invalidTime') && reportForm.get('wheelsDownTimeL')?.touched">
+                    <div class="time-error" *ngIf="reportForm.get('wheelsDownTimeL')?.hasError('invalidTime') && reportForm.get('wheelsDownTimeL')?.touched">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Site</mat-label>
-                    <mat-select formControlName="wheelsDownSite">
-                      <mat-option value="">-- Select Site --</mat-option>
-                      <mat-option *ngFor="let site of wheelsSiteOptions" [value]="site">{{ site }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <input tuiSelect formControlName="wheelsDownSite" placeholder="-- Select Site --">
+                    <label>Site</label>
+                    <ng-template tuiDataList>
+                      <tui-data-list-wrapper [items]="wheelsSiteOptions"></tui-data-list-wrapper>
+                    </ng-template>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Time</mat-label>
-                    <input matInput formControlName="wheelsDownTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsDownTime')" (blur)="handleTimeBlur('wheelsDownTime')">
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="wheelsDownTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsDownTime')" (blur)="handleTimeBlur('wheelsDownTime')">
+                    <label>Time</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('wheelsDownTime')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsDownTimePicker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                     <input #wheelsDownTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsDownTime')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('wheelsDownTime')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(wheelsDownTimePicker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
-                    </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('wheelsDownTime')?.hasError('invalidTime') && reportForm.get('wheelsDownTime')?.touched">
+                    <div class="time-error" *ngIf="reportForm.get('wheelsDownTime')?.hasError('invalidTime') && reportForm.get('wheelsDownTime')?.touched">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
               </ion-row>
               <div class="wheels-events" *ngIf="wheelsDownEvents.length > 0" formArrayName="wheelsDownEvents">
@@ -419,104 +375,97 @@
                     <div class="wheels-event-meta">Site: {{ entry.get('site')?.value || 'N/A' }}</div>
                     <div class="wheels-event-time">L: {{ entry.get('timeL')?.value || '----' }} | Z: {{ entry.get('timeZ')?.value || '----' }}</div>
                   </div>
-                  <button mat-icon-button color="warn" type="button" (click)="removeWheelsDownEvent(i)" aria-label="Remove wheels down event">
-                    <mat-icon>delete</mat-icon>
+                  <button tuiButton appearance="secondary" size="s" type="button" (click)="removeWheelsDownEvent(i)" aria-label="Remove wheels down event">
+                    Remove
                   </button>
                 </div>
               </div>
 
-              <mat-checkbox formControlName="ronUsed" class="ion-margin-top">Use if RON</mat-checkbox>
+              <label class="checkbox-inline ion-margin-top">
+                <input tuiCheckbox type="checkbox" formControlName="ronUsed">
+                <span>Use if RON</span>
+              </label>
               <ion-row *ngIf="reportForm.get('ronUsed')?.value">
                 <ion-col size="12" size-sm="4" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>RON Start Date</mat-label>
-                    <input matInput [matDatepicker]="ronStartDatePicker" formControlName="ronStartDate">
-                    <mat-datepicker-toggle matSuffix [for]="ronStartDatePicker"></mat-datepicker-toggle>
-                    <mat-datepicker #ronStartDatePicker></mat-datepicker>
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield type="date" formControlName="ronStartDate">
+                    <label>RON Start Date</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="4" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>RON End Date</mat-label>
-                    <input matInput [matDatepicker]="ronEndDatePicker" formControlName="ronEndDate">
-                    <mat-datepicker-toggle matSuffix [for]="ronEndDatePicker"></mat-datepicker-toggle>
-                    <mat-datepicker #ronEndDatePicker></mat-datepicker>
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield type="date" formControlName="ronEndDate">
+                    <label>RON End Date</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Showtime</mat-label>
-                    <input matInput formControlName="showtimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('showtimeZ2')" (blur)="handleTimeBlur('showtimeZ2')">
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="showtimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('showtimeZ2')" (blur)="handleTimeBlur('showtimeZ2')">
+                    <label>Showtime</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('showtimeZ2')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(showtimeZ2Picker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                     <input #showtimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'showtimeZ2')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('showtimeZ2')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(showtimeZ2Picker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
-                    </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('showtimeZ2')?.hasError('invalidTime') && reportForm.get('showtimeZ2')?.touched">
+                    <div class="time-error" *ngIf="reportForm.get('showtimeZ2')?.hasError('invalidTime') && reportForm.get('showtimeZ2')?.touched">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Block time</mat-label>
-                    <input matInput formControlName="blockTimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('blockTimeZ2')" (blur)="handleTimeBlur('blockTimeZ2')">
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="blockTimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('blockTimeZ2')" (blur)="handleTimeBlur('blockTimeZ2')">
+                    <label>Block time</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('blockTimeZ2')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(blockTimeZ2Picker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                     <input #blockTimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'blockTimeZ2')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('blockTimeZ2')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(blockTimeZ2Picker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
-                    </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('blockTimeZ2')?.hasError('invalidTime') && reportForm.get('blockTimeZ2')?.touched">
+                    <div class="time-error" *ngIf="reportForm.get('blockTimeZ2')?.hasError('invalidTime') && reportForm.get('blockTimeZ2')?.touched">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
                 <ion-col size="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>End time</mat-label>
-                    <input matInput formControlName="endTimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('endTimeZ2')" (blur)="handleTimeBlur('endTimeZ2')">
-                    <input #endTimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'endTimeZ2')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('endTimeZ2')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(endTimeZ2Picker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="endTimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('endTimeZ2')" (blur)="handleTimeBlur('endTimeZ2')">
+                    <label>End time</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('endTimeZ2')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(endTimeZ2Picker)" aria-label="Open time picker">Pick</button>
                     </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('endTimeZ2')?.hasError('invalidTime') && reportForm.get('endTimeZ2')?.touched">
+                  </tui-textfield>
+                    <input #endTimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'endTimeZ2')">
+                    <div class="time-error" *ngIf="reportForm.get('endTimeZ2')?.hasError('invalidTime') && reportForm.get('endTimeZ2')?.touched">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
               </ion-row>
             </div>
           </ion-col>
         </ion-row>
 
-        <mat-divider class="ion-margin-vertical"></mat-divider>
+        <hr class="section-divider ion-margin-vertical">
 
-        <!-- Row 6: Narcotics & Medication Reports -->
         <ion-row>
           <ion-col size="12" size-sm="6" size-md="6">
             <div class="section-block section-tight">
               <div class="section-title">Narcotics Report</div>
               <div class="checkbox-row">
-                <mat-checkbox
-                  [checked]="reportForm.get('narcRecordStatus')?.value === 'N/A'"
-                  (change)="onNarcRecordChange($event.checked, 'N/A')">
-                  N/A
-                </mat-checkbox>
-                <mat-checkbox
-                  [checked]="reportForm.get('narcRecordStatus')?.value === 'Administered'"
-                  (change)="onNarcRecordChange($event.checked, 'Administered')">
-                  Administered
-                </mat-checkbox>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" [(ngModel)]="narcRecordNaChecked" (ngModelChange)="onNarcRecordChange($event, 'N/A')" [ngModelOptions]="{standalone: true}">
+                  <span>N/A</span>
+                </label>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" [(ngModel)]="narcRecordAdminChecked" (ngModelChange)="onNarcRecordChange($event, 'Administered')" [ngModelOptions]="{standalone: true}">
+                  <span>Administered</span>
+                </label>
               </div>
             </div>
           </ion-col>
@@ -524,166 +473,167 @@
             <div class="section-block section-tight">
               <div class="section-title">Medication Report</div>
               <div class="checkbox-row">
-                <mat-checkbox
-                  [checked]="reportForm.get('medicationRecordStatus')?.value === 'N/A'"
-                  (change)="onMedicationRecordChange($event.checked, 'N/A')">
-                  N/A
-                </mat-checkbox>
-                <mat-checkbox
-                  [checked]="reportForm.get('medicationRecordStatus')?.value === 'Administered'"
-                  (change)="onMedicationRecordChange($event.checked, 'Administered')">
-                  Administered
-                </mat-checkbox>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" [(ngModel)]="medRecordNaChecked" (ngModelChange)="onMedicationRecordChange($event, 'N/A')" [ngModelOptions]="{standalone: true}">
+                  <span>N/A</span>
+                </label>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" [(ngModel)]="medRecordAdminChecked" (ngModelChange)="onMedicationRecordChange($event, 'Administered')" [ngModelOptions]="{standalone: true}">
+                  <span>Administered</span>
+                </label>
               </div>
             </div>
           </ion-col>
         </ion-row>
 
-        <mat-divider class="ion-margin-vertical"></mat-divider>
+        <hr class="section-divider ion-margin-vertical">
 
-        <!-- Row 7: Transfer of Care -->
         <ion-row>
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Transfer of Care</div>
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Transfer of care to ICE LEAD (Site)</mat-label>
-                    <mat-select formControlName="transferOfCareSite">
-                      <mat-option value="">-- Select Site --</mat-option>
-                      <mat-option *ngFor="let site of transferOfCareSites" [value]="site">{{ site }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <select tuiSelect formControlName="transferOfCareSite" [items]="transferOfCareSites" placeholder="-- Select Site --"></select>
+                    <label>Transfer of care to ICE LEAD (Site)</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6" class="ion-align-self-center">
-                  <mat-checkbox formControlName="receivedCare">Received care</mat-checkbox>
+                  <label class="checkbox-inline">
+                    <input tuiCheckbox type="checkbox" formControlName="receivedCare">
+                    <span>Received care</span>
+                  </label>
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col size="12">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Comment</mat-label>
-                    <textarea matInput formControlName="transferOfCareComment" rows="2"></textarea>
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <textarea tuiTextarea formControlName="transferOfCareComment" rows="2"></textarea>
+                    <label>Comment</label>
+                  </tui-textfield>
                 </ion-col>
               </ion-row>
             </div>
           </ion-col>
         </ion-row>
 
-        <mat-divider class="ion-margin-vertical"></mat-divider>
+        <hr class="section-divider ion-margin-vertical">
 
-        <!-- Row 8: Cleared Medical with FOIC -->
         <ion-row>
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Cleared Medical with FOIC</div>
-              <mat-checkbox formControlName="clearedMedicalWithFoic">Cleared Medical with FOIC</mat-checkbox>
+              <label class="checkbox-inline">
+                <input tuiCheckbox type="checkbox" formControlName="clearedMedicalWithFoic">
+                <span>Cleared Medical with FOIC</span>
+              </label>
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label># PAX Total</mat-label>
-                    <input matInput type="number" formControlName="paxTotal">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield type="number" formControlName="paxTotal">
+                    <label># PAX Total</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label># PAX Females</mat-label>
-                    <input matInput type="number" formControlName="paxFemales">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield type="number" formControlName="paxFemales">
+                    <label># PAX Females</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Pre-flight not pregnant (count)</mat-label>
-                    <input matInput type="number" formControlName="paxFemaleNotPregnantConfirmed">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield type="number" formControlName="paxFemaleNotPregnantConfirmed">
+                    <label>Pre-flight not pregnant (count)</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label># PAX Male</mat-label>
-                    <input matInput type="number" formControlName="paxMale">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield type="number" formControlName="paxMale">
+                    <label># PAX Male</label>
+                  </tui-textfield>
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label># PAX Minors</mat-label>
-                    <input matInput type="number" formControlName="paxMinors">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield type="number" formControlName="paxMinors">
+                    <label># PAX Minors</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label># PAX with Medications</mat-label>
-                    <input matInput type="number" formControlName="paxWithMedications">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield type="number" formControlName="paxWithMedications">
+                    <label># PAX with Medications</label>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label># PAX needing <72-hour RN assessment</mat-label>
-                    <input matInput type="number" formControlName="paxNeeding72HrAssessment">
-                  </mat-form-field>
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield type="number" formControlName="paxNeeding72HrAssessment">
+                    <label># PAX needing &lt;72-hour RN assessment</label>
+                  </tui-textfield>
                 </ion-col>
               </ion-row>
             </div>
           </ion-col>
         </ion-row>
 
-        <mat-divider class="ion-margin-vertical"></mat-divider>
+        <hr class="section-divider ion-margin-vertical">
 
-        <!-- Row 10: Operational -->
         <ion-row>
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Operational</div>
               <div class="checkbox-row">
-                <mat-checkbox formControlName="allPaxSafelyOnboarded">All PAX safely on-boarded</mat-checkbox>
-                <mat-checkbox formControlName="allPaxGivenFoodWaterLavBreaks">All PAX given food, water and lavatory breaks</mat-checkbox>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" formControlName="allPaxSafelyOnboarded">
+                  <span>All PAX safely on-boarded</span>
+                </label>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" formControlName="allPaxGivenFoodWaterLavBreaks">
+                  <span>All PAX given food, water and lavatory breaks</span>
+                </label>
               </div>
             </div>
           </ion-col>
         </ion-row>
 
-        <mat-divider class="ion-margin-vertical"></mat-divider>
+        <hr class="section-divider ion-margin-vertical">
 
-        <!-- Row 11: Delay -->
         <ion-row>
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Delay</div>
               <ion-row>
                 <ion-col size="12" size-sm="8" size-md="8">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Delay reason</mat-label>
-                    <mat-select formControlName="delayReasons">
-                      <mat-option value="">-- Select --</mat-option>
-                      <mat-option *ngFor="let delay of delayOptions" [value]="delay">{{ delay }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <tui-textfield class="full-width select-field">
+                    <input tuiSelect formControlName="delayReasons" placeholder="-- Select --">
+                    <label>Delay reason</label>
+                    <ng-template tuiDataList>
+                      <tui-data-list-wrapper [items]="delayOptions"></tui-data-list-wrapper>
+                    </ng-template>
+                  </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="4" size-md="4">
-                  <mat-form-field appearance="outline" class="full-width time-field">
-                    <mat-label>Time (L)</mat-label>
-                    <input matInput formControlName="delayTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('delayTimeL')" (blur)="handleTimeBlur('delayTimeL')">
-                    <input #delayTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'delayTimeL')">
-                    <span matSuffix class="time-suffix">
-                      <button mat-button class="time-now-button" type="button" (click)="stampTime('delayTimeL')">Now</button>
-                      <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(delayTimePicker)" aria-label="Open time picker">
-                        <mat-icon>schedule</mat-icon>
-                      </button>
+                  <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="delayTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('delayTimeL')" (blur)="handleTimeBlur('delayTimeL')">
+                    <label>Time (L)</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('delayTimeL')">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(delayTimePicker)" aria-label="Open time picker">Pick</button>
                     </span>
-                    <mat-hint class="time-hint">HHMM</mat-hint>
-                    <mat-error *ngIf="reportForm.get('delayTimeL')?.hasError('invalidTime') && reportForm.get('delayTimeL')?.touched">
+                  </tui-textfield>
+                    <input #delayTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'delayTimeL')">
+                    <div class="time-error" *ngIf="reportForm.get('delayTimeL')?.hasError('invalidTime') && reportForm.get('delayTimeL')?.touched">
                       Use HHMM (0000-2359).
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                 </ion-col>
               </ion-row>
               <div class="delay-actions">
-                <button mat-stroked-button color="primary" type="button" (click)="addDelayEntry()">
-                  <mat-icon>add</mat-icon>
-                  add
+                <button tuiButton appearance="secondary" size="s" type="button" (click)="addDelayEntry()">
+                  Add
                 </button>
               </div>
               <div class="delay-list" *ngIf="delayEntries.length > 0">
@@ -692,8 +642,8 @@
                     <div class="delay-entry-time">{{ entry.get('timeL')?.value }}</div>
                     <div class="delay-entry-reasons">{{ (entry.get('reasons')?.value || []).join(', ') }}</div>
                   </div>
-                  <button mat-icon-button color="warn" type="button" (click)="removeDelayEntry(i)" aria-label="Remove delay entry">
-                    <mat-icon>delete</mat-icon>
+                  <button tuiButton appearance="secondary" size="s" type="button" (click)="removeDelayEntry(i)" aria-label="Remove delay entry">
+                    Remove
                   </button>
                 </div>
               </div>
@@ -701,28 +651,44 @@
           </ion-col>
         </ion-row>
 
-        <mat-divider class="ion-margin-vertical"></mat-divider>
+        <hr class="section-divider ion-margin-vertical">
 
-        <!-- Row 12: Special Circumstances -->
         <ion-row>
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Special Circumstances</div>
               <div class="checkbox-row">
-                <mat-checkbox formControlName="specialCircumstancePaxWrapped">PAX wrapped</mat-checkbox>
-                <mat-checkbox formControlName="specialCircumstanceMedicalComplaintAssessed">EMS Contacted</mat-checkbox>
-                <mat-checkbox formControlName="specialCircumstanceMedicalControlContacted">Vighter Medical Control contacted</mat-checkbox>
-                <mat-checkbox formControlName="specialCircumstanceSiteSupervisorAdvised">Site supervisor advised</mat-checkbox>
-                <mat-checkbox formControlName="specialCircumstanceMedicalEmergencyOnboardEms">Medical emergency on-board EMS contacted</mat-checkbox>
-                <mat-checkbox formControlName="specialCircumstanceViolentIncident">Violent Incident</mat-checkbox>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstancePaxWrapped">
+                  <span>PAX wrapped</span>
+                </label>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalComplaintAssessed">
+                  <span>EMS Contacted</span>
+                </label>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalControlContacted">
+                  <span>Vighter Medical Control contacted</span>
+                </label>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceSiteSupervisorAdvised">
+                  <span>Site supervisor advised</span>
+                </label>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalEmergencyOnboardEms">
+                  <span>Medical emergency on-board EMS contacted</span>
+                </label>
+                <label class="checkbox-inline">
+                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceViolentIncident">
+                  <span>Violent Incident</span>
+                </label>
               </div>
             </div>
           </ion-col>
         </ion-row>
 
-        <mat-divider class="ion-margin-vertical"></mat-divider>
+        <hr class="section-divider ion-margin-vertical">
 
-        <!-- Narrative Section -->
         <div class="section-block section-tight">
           <div class="section-title">Narrative Log</div>
           <p class="slash-hint">
@@ -732,47 +698,45 @@
           </p>
           <div formArrayName="notes">
             <ion-row *ngFor="let note of notes.controls; let i = index" [formGroupName]="i" class="note-row">
-              <ion-col size="2">
-                <mat-form-field appearance="outline" class="full-width time-field">
-                  <mat-label>Time (L)</mat-label>
-                  <input matInput formControlName="timeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampNoteTimeOnFocus(i)" (blur)="handleNoteTimeBlur(i)">
+              <ion-col size="3">
+                <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="timeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampNoteTimeOnFocus(i)" (blur)="handleNoteTimeBlur(i)">
+                    <label>Time (L)</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampNoteTime(i)">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(noteTimePicker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                   <input #noteTimePicker type="time" class="time-picker-input" (change)="applyNoteTimePicker($event, i)">
-                  <span matSuffix class="time-suffix">
-                    <button mat-button class="time-now-button" type="button" (click)="stampNoteTime(i)">Now</button>
-                    <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(noteTimePicker)" aria-label="Open time picker">
-                      <mat-icon>schedule</mat-icon>
-                    </button>
-                  </span>
-                  <mat-hint class="time-hint">HHMM</mat-hint>
-                  <mat-error *ngIf="notes.at(i).get('timeL')?.hasError('invalidTime') && notes.at(i).get('timeL')?.touched">
+                  <div class="time-error" *ngIf="notes.at(i).get('timeL')?.hasError('invalidTime') && notes.at(i).get('timeL')?.touched">
                     Use HHMM (0000-2359).
-                  </mat-error>
-                </mat-form-field>
+                  </div>
+                </div>
               </ion-col>
               <ion-col size="2">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>RN</mat-label>
-                  <mat-select formControlName="rn">
-                    <mat-option value="">-- Select RN --</mat-option>
-                    <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <tui-textfield class="full-width select-field">
+                  <input tuiSelect formControlName="rn" placeholder="-- Select RN --">
+                  <label>RN</label>
+                  <ng-template tuiDataList>
+                    <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
+                  </ng-template>
+                </tui-textfield>
               </ion-col>
-              <ion-col size="7">
+              <ion-col size="6">
                 <div class="note-input-container">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Notes (type / for commands)</mat-label>
+                  <tui-textfield class="full-width">
                     <textarea
-                      matInput
+                      tuiTextarea
                       formControlName="note"
                       rows="2"
                       #noteTextarea
                       (input)="onNoteInput($event, i)"
                       (focus)="onNoteFocus(i)"
                       (blur)="onNoteBlur(i)"></textarea>
-                  </mat-form-field>
+                    <label>Notes (type / for commands)</label>
+                  </tui-textfield>
 
-                  <!-- Slash Command Menu -->
                   <div class="slash-menu" *ngIf="showCommandList[i]" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
                     <div class="slash-menu-header">Commands</div>
                     <div
@@ -785,7 +749,6 @@
                     </div>
                   </div>
 
-                  <!-- PAX Selection Menu -->
                   <div class="slash-menu pax-menu" *ngIf="showSlashMenu[i] && activeMenuType === 'pax'" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
                     <div class="slash-menu-header">Select PAX</div>
                     <div class="pax-menu-scroll">
@@ -799,7 +762,6 @@
                     </div>
                   </div>
 
-                  <!-- Drug Selection Menu -->
                   <div class="slash-menu drug-menu" *ngIf="showSlashMenu[i] && activeMenuType === 'drug'" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
                     <div class="slash-menu-header">Select Drug</div>
                     <div class="drug-menu-scroll">
@@ -815,21 +777,20 @@
                 </div>
               </ion-col>
               <ion-col size="1" class="ion-align-self-center">
-                <button mat-icon-button color="warn" (click)="removeNote(i)" type="button">
-                  <mat-icon>delete</mat-icon>
+                <button tuiButton appearance="secondary" size="s" (click)="removeNote(i)" type="button">
+                  Remove
                 </button>
               </ion-col>
             </ion-row>
           </div>
-          <button mat-stroked-button color="primary" type="button" (click)="addNote()">
-            <mat-icon>add</mat-icon> Add Note
+          <button tuiButton appearance="secondary" size="s" type="button" (click)="addNote()">
+            Add Note
           </button>
         </div>
-
       </ion-grid>
 
       <div class="ion-margin-top ion-padding">
-        <button mat-raised-button color="primary" class="full-width" type="submit">
+        <button tuiButton appearance="primary" size="l" class="full-width" type="submit">
           Save Draft
         </button>
       </div>

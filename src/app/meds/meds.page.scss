@@ -62,7 +62,9 @@
   margin-bottom: 0;
 }
 
-mat-divider.card-divider {
+hr.card-divider {
+  border: none;
+  border-top: 1px solid #e1e4ea;
   margin: 16px 0;
 }
 
@@ -125,18 +127,10 @@ mat-divider.card-divider {
   text-align: center;
 }
 
-.vitals-item mat-form-field {
+.vitals-item tui-textfield {
   width: 100%;
   max-width: 140px;
   order: 3;
-}
-
-:host ::ng-deep .vitals-item .mat-mdc-input-element {
-  text-align: center;
-}
-
-:host ::ng-deep .vitals-item .mat-mdc-form-field-flex {
-  justify-content: center;
 }
 
 .bp-inputs {
@@ -191,10 +185,14 @@ mat-divider.card-divider {
   color: #9aa0a6;
 }
 
-:host ::ng-deep .field-alert .mdc-notched-outline {
-  border-color: #b00020;
+.checkbox-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
 }
 
-:host ::ng-deep .field-alert .mdc-floating-label {
-  color: #b00020;
+.field-alert {
+  box-shadow: 0 0 0 1px #b00020 inset;
+  border-radius: 12px;
 }

@@ -18,13 +18,13 @@
         <canvas #canvas1 class="signature-pad"></canvas>
       </div>
       <div class="ion-margin-top ion-text-center">
-        <button mat-stroked-button color="warn" (click)="clearSignature(1)">
-          <mat-icon>clear</mat-icon> Clear
+        <button tuiButton appearance="secondary" size="m" type="button" (click)="clearSignature(1)">
+          Clear
         </button>
       </div>
     </div>
 
-    <mat-divider class="ion-margin-vertical"></mat-divider>
+    <hr class="section-divider ion-margin-vertical">
 
     <div class="signature-section">
       <h3>2nd ICE Flight RN Signature</h3>
@@ -32,21 +32,21 @@
         <canvas #canvas2 class="signature-pad"></canvas>
       </div>
       <div class="ion-margin-top ion-text-center">
-        <button mat-stroked-button color="warn" (click)="clearSignature(2)">
-          <mat-icon>clear</mat-icon> Clear
+        <button tuiButton appearance="secondary" size="m" type="button" (click)="clearSignature(2)">
+          Clear
         </button>
       </div>
     </div>
 
     <div class="ion-margin-top ion-text-center ion-padding-top">
-      <button mat-raised-button color="primary" (click)="saveSignatures()" class="full-width">
-        <mat-icon>save</mat-icon> Save Signatures to Report
+      <button tuiButton appearance="primary" size="l" (click)="saveSignatures()" class="full-width" type="button">
+        Save Signatures to Report
       </button>
     </div>
 
     <div class="ion-margin-top ion-padding-vertical">
-      <button mat-raised-button color="accent" class="full-width" (click)="generatePDF()">
-        <mat-icon>picture_as_pdf</mat-icon> Generate PDF Report
+      <button tuiButton appearance="secondary" size="l" class="full-width" (click)="generatePDF()" type="button">
+        Generate PDF Report
       </button>
     </div>
   </div>

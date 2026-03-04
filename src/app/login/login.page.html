@@ -14,31 +14,26 @@
 
     <!-- Login Form -->
     <div class="login-form">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Username</mat-label>
-        <input matInput
-               [(ngModel)]="username"
-               placeholder="Enter your username"
-               autocomplete="username">
-        <mat-icon matPrefix>person</mat-icon>
-      </mat-form-field>
+      <tui-textfield class="full-width">
+        <input
+          tuiTextfield
+          [(ngModel)]="username"
+          placeholder="Enter your username"
+          autocomplete="username">
+        <label>Username</label>
+      </tui-textfield>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Password</mat-label>
-        <input matInput
-               [(ngModel)]="password"
-               [type]="hidePassword ? 'password' : 'text'"
-               placeholder="Enter your password"
-               autocomplete="current-password"
-               (keyup.enter)="onLogin()">
-        <mat-icon matPrefix>lock</mat-icon>
-        <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
-          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-      </mat-form-field>
+      <tui-textfield class="full-width">
+        <input
+          tuiInputPassword
+          [(ngModel)]="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          (keyup.enter)="onLogin()">
+        <label>Password</label>
+      </tui-textfield>
 
-      <button mat-raised-button color="primary" class="login-button" (click)="onLogin()">
-        <mat-icon>login</mat-icon>
+      <button tuiButton appearance="primary" size="l" class="login-button" type="button" (click)="onLogin()">
         Sign In
       </button>
     </div>

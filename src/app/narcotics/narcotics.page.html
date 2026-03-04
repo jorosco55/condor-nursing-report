@@ -15,77 +15,76 @@
           <div *ngFor="let entry of entries.controls; let i = index" [formGroupName]="i" class="narcotic-card">
             <div class="narcotic-card-header">
               <h4>Narcotic {{ i + 1 }}</h4>
-              <button *ngIf="i > 0" mat-stroked-button color="warn" type="button" (click)="removeEntry(i)">
+              <button *ngIf="i > 0" tuiButton appearance="secondary" size="s" type="button" (click)="removeEntry(i)">
                 Remove
               </button>
             </div>
 
             <ion-row>
               <ion-col size="12" size-sm="6" size-md="3">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>A-Number</mat-label>
-                  <input matInput formControlName="aNumber">
-                </mat-form-field>
+                <tui-textfield class="full-width">
+                  <input tuiTextfield formControlName="aNumber">
+                  <label>A-Number</label>
+                </tui-textfield>
               </ion-col>
 
               <ion-col size="12" size-sm="6" size-md="4">
-                <mat-form-field appearance="outline" class="full-width" [class.field-alert]="narcoticsRequired && !hasAnyNarcoticSelection()">
-                  <mat-label>Narcotic</mat-label>
-                  <mat-select formControlName="narcoticName">
-                    <mat-option value="">-- Select --</mat-option>
-                    <mat-option *ngFor="let narcotic of narcoticOptions" [value]="narcotic">{{ narcotic }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <tui-textfield class="full-width select-field" [class.field-alert]="narcoticsRequired && !hasAnyNarcoticSelection()">
+                  <input tuiSelect formControlName="narcoticName">
+                  <label>Narcotic</label>
+                  <ng-template tuiDataList>
+                    <tui-data-list-wrapper [items]="narcoticOptions"></tui-data-list-wrapper>
+                  </ng-template>
+                </tui-textfield>
               </ion-col>
 
               <ion-col size="12" size-sm="6" size-md="2">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Dose</mat-label>
-                  <mat-select formControlName="dose">
-                    <mat-option value="">-- Select --</mat-option>
-                    <mat-option *ngFor="let dose of doseOptions" [value]="dose">{{ dose }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <tui-textfield class="full-width select-field">
+                  <input tuiSelect formControlName="dose">
+                  <label>Dose</label>
+                  <ng-template tuiDataList>
+                    <tui-data-list-wrapper [items]="doseOptions"></tui-data-list-wrapper>
+                  </ng-template>
+                </tui-textfield>
               </ion-col>
 
               <ion-col size="12" size-sm="6" size-md="3">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Dosage Unit</mat-label>
-                  <mat-select formControlName="dosageUnit">
-                    <mat-option value="">-- Select --</mat-option>
-                    <mat-option *ngFor="let unit of dosageUnits" [value]="unit">{{ unit }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <tui-textfield class="full-width select-field">
+                  <input tuiSelect formControlName="dosageUnit">
+                  <label>Dosage Unit</label>
+                  <ng-template tuiDataList>
+                    <tui-data-list-wrapper [items]="dosageUnits"></tui-data-list-wrapper>
+                  </ng-template>
+                </tui-textfield>
               </ion-col>
             </ion-row>
 
             <ion-row>
               <ion-col size="12" size-sm="6" size-md="4">
-                <mat-form-field appearance="outline" class="full-width time-field">
-                  <mat-label>Time</mat-label>
-                  <input matInput formControlName="timeZ" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampEntryTimeOnFocus(i)" (blur)="handleEntryTimeBlur(i)">
+                <div class="time-field">
+                  <tui-textfield class="full-width">
+                    <input tuiTextfield formControlName="timeZ" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampEntryTimeOnFocus(i)" (blur)="handleEntryTimeBlur(i)">
+                    <label>Time</label>
+                    <span class="time-inline">
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampEntryTime(i)">Now</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(narcTimePicker)" aria-label="Open time picker">Pick</button>
+                    </span>
+                  </tui-textfield>
                   <input #narcTimePicker type="time" class="time-picker-input" (change)="applyEntryTimePicker($event, i)">
-                  <span matSuffix class="time-suffix">
-                    <button mat-button class="time-now-button" type="button" (click)="stampEntryTime(i)">Now</button>
-                    <button mat-icon-button class="time-picker-button" type="button" (click)="openTimePicker(narcTimePicker)" aria-label="Open time picker">
-                      <mat-icon>schedule</mat-icon>
-                    </button>
-                  </span>
-                  <mat-hint class="time-hint">HHMM</mat-hint>
-                  <mat-error *ngIf="entries.at(i).get('timeZ')?.hasError('invalidTime') && entries.at(i).get('timeZ')?.touched">
+                  <div class="time-error" *ngIf="entries.at(i).get('timeZ')?.hasError('invalidTime') && entries.at(i).get('timeZ')?.touched">
                     Use HHMM (0000-2359).
-                  </mat-error>
-                </mat-form-field>
+                  </div>
+                </div>
               </ion-col>
 
               <ion-col size="12" size-sm="6" size-md="4">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>RN</mat-label>
-                  <mat-select formControlName="rnName">
-                    <mat-option value="">-- Select RN --</mat-option>
-                    <mat-option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <tui-textfield class="full-width select-field">
+                  <input tuiSelect formControlName="rnName">
+                  <label>RN</label>
+                  <ng-template tuiDataList>
+                    <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
+                  </ng-template>
+                </tui-textfield>
               </ion-col>
             </ion-row>
 
@@ -94,7 +93,7 @@
                 <div class="signature-field">
                   <div class="signature-header">
                     <span>RN Signature</span>
-                    <button mat-stroked-button type="button" (click)="clearSignature(i)">Clear</button>
+                    <button tuiButton appearance="secondary" size="s" type="button" (click)="clearSignature(i)">Clear</button>
                   </div>
                   <div class="signature-canvas-wrap" [class.has-signature]="entry.get('rnSignature')?.value">
                     <canvas #rnSignatureCanvas class="signature-canvas"></canvas>
@@ -106,16 +105,15 @@
           </div>
         </div>
         <div class="narcotics-actions">
-          <button mat-stroked-button color="primary" type="button" (click)="addEntry()">
-            <mat-icon>add</mat-icon>
+          <button tuiButton appearance="primary" size="m" type="button" (click)="addEntry()">
             Add Narco
           </button>
         </div>
       </div>
 
       <div class="ion-margin-top ion-padding">
-        <button mat-raised-button color="primary" class="full-width" type="button" (click)="saveNarcotics()">
-          <mat-icon>save</mat-icon> Save Narcotics
+        <button tuiButton appearance="primary" size="l" class="full-width" type="button" (click)="saveNarcotics()">
+          Save Narcotics
         </button>
       </div>
     </form>

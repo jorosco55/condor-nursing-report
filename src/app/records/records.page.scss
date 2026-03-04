@@ -47,6 +47,10 @@ ion-item::part(native) {
   margin-bottom: 16px;
 }
 
+.records-filters tui-textfield {
+  width: 100%;
+}
+
 .status-filter {
   min-width: 160px;
 }

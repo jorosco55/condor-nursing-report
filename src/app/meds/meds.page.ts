@@ -2,13 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
+import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
+import { TuiCheckbox, TuiDataListWrapperComponent, TuiSelectDirective } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { PaxMedicationEntry, NursingReport } from '../models/report.model';
 
@@ -22,13 +17,13 @@ import { PaxMedicationEntry, NursingReport } from '../models/report.model';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDividerModule
+    TuiTextfieldComponent,
+    TuiTextfieldDirective,
+    TuiSelectDirective,
+    TuiDataListDirective,
+    TuiDataListWrapperComponent,
+    TuiCheckbox,
+    TuiButton
   ]
 })
 export class MedsPage implements OnInit {

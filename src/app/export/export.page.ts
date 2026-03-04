@@ -2,9 +2,7 @@ import { Component, ViewChild, ElementRef, AfterViewInit, inject } from '@angula
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
+import { TuiButton } from '@taiga-ui/core';
 import SignaturePad from 'signature_pad';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -19,9 +17,7 @@ import { ReportService } from '../services/report.service';
     CommonModule,
     FormsModule,
     IonicModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDividerModule
+    TuiButton
   ]
 })
 export class ExportPage implements AfterViewInit {

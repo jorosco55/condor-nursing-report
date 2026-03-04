@@ -2,18 +2,8 @@ import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, View
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IonicModule, ToastController, IonContent, GestureController } from '@ionic/angular';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatSelectModule } from '@angular/material/select';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatMenuModule } from '@angular/material/menu';
+import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
+import { TuiCheckbox, TuiDataListWrapperComponent, TuiNativeSelect, TuiSelectDirective, TuiTextarea } from '@taiga-ui/kit';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { Capacitor } from '@capacitor/core';
 import { ReportService } from '../services/report.service';
@@ -54,22 +44,24 @@ type PreflightTimeControl =
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDividerModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatAutocompleteModule,
-    MatMenuModule
+    TuiTextfieldComponent,
+    TuiTextfieldDirective,
+    TuiSelectDirective,
+    TuiDataListDirective,
+    TuiDataListWrapperComponent,
+    TuiNativeSelect,
+    TuiTextarea,
+    TuiCheckbox,
+    TuiButton
   ]
 })
 export class HomePage implements OnInit, OnDestroy {
   reportForm!: FormGroup;
+
+  narcRecordNaChecked = false;
+  narcRecordAdminChecked = false;
+  medRecordNaChecked = false;
+  medRecordAdminChecked = false;
 
   // Keyboard state
   isKeyboardVisible = false;
@@ -94,6 +86,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   wheelsSiteOptions: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
   transferOfCareSites: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
+  siteStopsOptions: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
   delayOptions: string[] = [
     'Flight Crew',
     'Mechanical',
@@ -178,6 +171,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initForm();
+    this.bindPreflightChecks();
     this.loadLatestDraft();
     this.setupKeyboardListeners();
     this.enableTouchScrolling();
@@ -221,7 +215,7 @@ export class HomePage implements OnInit, OnDestroy {
   initForm() {
     this.reportForm = this.fb.group({
       id: [null],
-      date: [new Date().toISOString(), Validators.required],
+      date: [this.formatDateInput(new Date()), Validators.required],
       site: ['', Validators.required],
       iceFlightRN: ['', Validators.required],
       secondICEFlightRN: [''],
@@ -315,11 +309,15 @@ export class HomePage implements OnInit, OnDestroy {
         : (report.delayReasons || '');
       this.reportForm.patchValue({
         ...report,
+        date: this.formatDateInput(report.date),
+        ronStartDate: this.formatDateInput(report.ronStartDate),
+        ronEndDate: this.formatDateInput(report.ronEndDate),
         delayReasons: normalizedDelay
-      });
+      }, { emitEvent: false });
       this.syncVisibleFlightRns(report);
       this.reportService.setNarcRecordStatus(report.narcRecordStatus || '');
       this.reportService.setMedicationRecordStatus(report.medicationRecordStatus || '');
+      this.syncStatusCheckboxes(report.narcRecordStatus || '', report.medicationRecordStatus || '');
       // Clear notes array and rebuild
       while (this.notes.length !== 0) {
         this.notes.removeAt(0);
@@ -356,6 +354,28 @@ export class HomePage implements OnInit, OnDestroy {
     } else {
       this.addNote();
     }
+  }
+
+  private bindPreflightChecks() {
+    this.reportForm.get('preflightMEBCheck')?.valueChanges.subscribe(value =>
+      this.onPreflightCheckChange('preflightMEBCheck', 'preflightMEBCheckTime', 'Preflight MEB Check', !!value)
+    );
+    this.reportForm.get('preflightMEKO2AED')?.valueChanges.subscribe(value =>
+      this.onPreflightCheckChange('preflightMEKO2AED', 'preflightMEKO2AEDTime', 'Preflight MEK, O2 Tanks, AED', !!value)
+    );
+    this.reportForm.get('safetyBriefingCompleted')?.valueChanges.subscribe(value =>
+      this.onPreflightCheckChange('safetyBriefingCompleted', 'safetyBriefingCompletedTime', 'Safety Briefing Completed', !!value)
+    );
+    this.reportForm.get('seatBeltsSecured')?.valueChanges.subscribe(value =>
+      this.onPreflightCheckChange('seatBeltsSecured', 'seatBeltsSecuredTime', 'Seat Belts Secured Per ASO', !!value)
+    );
+  }
+
+  private syncStatusCheckboxes(narcStatus: string, medStatus: string) {
+    this.narcRecordNaChecked = narcStatus === 'N/A';
+    this.narcRecordAdminChecked = narcStatus === 'Administered';
+    this.medRecordNaChecked = medStatus === 'N/A';
+    this.medRecordAdminChecked = medStatus === 'Administered';
   }
 
   addFlightRn() {
@@ -854,6 +874,8 @@ export class HomePage implements OnInit, OnDestroy {
     } else if (control.value === status) {
       control.setValue('');
     }
+    this.narcRecordNaChecked = control.value === 'N/A';
+    this.narcRecordAdminChecked = control.value === 'Administered';
     this.reportService.setNarcRecordStatus(control.value || '');
   }
 
@@ -865,6 +887,8 @@ export class HomePage implements OnInit, OnDestroy {
     } else if (control.value === status) {
       control.setValue('');
     }
+    this.medRecordNaChecked = control.value === 'N/A';
+    this.medRecordAdminChecked = control.value === 'Administered';
     this.reportService.setMedicationRecordStatus(control.value || '');
   }
 
@@ -872,17 +896,27 @@ export class HomePage implements OnInit, OnDestroy {
     controlName: PreflightControl,
     timeControlName: PreflightTimeControl,
     label: string,
-    event: MatCheckboxChange
+    checked: boolean
   ) {
     const timeControl = this.reportForm.get(timeControlName);
     if (!timeControl) return;
-    if (event.checked) {
+    if (checked) {
       const timestamp = this.getCurrentTimestamp();
       timeControl.setValue(timestamp);
       this.addPreflightNarrative(label, timestamp);
     } else {
       timeControl.setValue('');
     }
+  }
+
+  private formatDateInput(value: string | Date | null | undefined): string {
+    if (!value) return '';
+    const date = typeof value === 'string' ? new Date(value) : value;
+    if (Number.isNaN(date.getTime())) return '';
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   addPreflightNarrative(label: string, timestamp: string) {

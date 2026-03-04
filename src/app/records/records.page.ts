@@ -3,11 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
+import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
+import { TuiDataListWrapperComponent, TuiSelectDirective } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { NursingReport } from '../models/report.model';
 
@@ -20,11 +17,12 @@ import { NursingReport } from '../models/report.model';
     CommonModule,
     FormsModule,
     IonicModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatIconModule
+    TuiTextfieldComponent,
+    TuiTextfieldDirective,
+    TuiSelectDirective,
+    TuiDataListDirective,
+    TuiDataListWrapperComponent,
+    TuiButton
   ]
 })
 export class RecordsPage implements OnInit {
