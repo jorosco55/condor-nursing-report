@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
-import { IonicModule, ToastController, IonContent, GestureController } from '@ionic/angular';
+import { IonicModule, ToastController, IonContent } from '@ionic/angular';
 import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
 import { TuiCheckbox, TuiDataListWrapperComponent, TuiNativeSelect, TuiSelectDirective, TuiTextarea } from '@taiga-ui/kit';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
@@ -97,77 +97,16 @@ export class HomePage implements OnInit, OnDestroy {
     'Vighter Flight delay'
   ];
 
-  // PAX tags array (PAX#1 to PAX#50) for slash command
-  paxTags: string[] = Array.from({ length: 50 }, (_, i) => `PAX#${i + 1}`);
-
-  // Generic drug list for /DRUG command
-  genericDrugs: string[] = [
-    'Acetaminophen',
-    'Albuterol',
-    'Amiodarone',
-    'Aspirin',
-    'Atropine',
-    'Dextrose 50%',
-    'Diphenhydramine',
-    'Epinephrine',
-    'Fentanyl',
-    'Furosemide',
-    'Glucagon',
-    'Heparin',
-    'Hydrocortisone',
-    'Ibuprofen',
-    'Ketamine',
-    'Lidocaine',
-    'Lorazepam',
-    'Magnesium Sulfate',
-    'Methylprednisolone',
-    'Midazolam',
-    'Morphine',
-    'Naloxone',
-    'Nitroglycerin',
-    'Norepinephrine',
-    'Ondansetron',
-    'Oxygen',
-    'Potassium Chloride',
-    'Prednisone',
-    'Propofol',
-    'Rocuronium',
-    'Sodium Bicarbonate',
-    'Succinylcholine',
-    'Vasopressin'
-  ];
-
-  // Slash command state
-  showSlashMenu: boolean[] = [];
-  slashCommandFilter: string = '';
-  filteredPaxTags: string[] = [];
-  filteredDrugs: string[] = [];
-  activeNoteIndex: number | null = null;
-  slashCommandPosition: { top: number; left: number } = { top: 0, left: 0 };
-  activeMenuType: 'pax' | 'drug' | null = null;
-
-  // Available slash commands
-  slashCommands = [
-    { command: '/PAX', description: 'Insert passenger reference (PAX#1-50)' },
-    { command: '/DRUG', description: 'Insert generic drug name' }
-  ];
-  showCommandList: boolean[] = [];
-  filteredCommands: typeof this.slashCommands = [];
-
-  @ViewChildren('noteTextarea') noteTextareas!: QueryList<ElementRef>;
   @ViewChild(IonContent, { static: false }) content!: IonContent;
-  @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
 
   // Touch interaction state
   private touchStartY: number = 0;
   private touchStartTime: number = 0;
-  private isTouchScrolling: boolean = false;
   private scrollVelocity: number = 0;
 
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
   private toastCtrl = inject(ToastController);
-  private gestureCtrl = inject(GestureController);
 
   ngOnInit() {
     this.initForm();
@@ -697,128 +636,6 @@ export class HomePage implements OnInit, OnDestroy {
 
   removeNote(index: number) {
     this.notes.removeAt(index);
-    // Also remove the corresponding slash menu state
-    this.showSlashMenu.splice(index, 1);
-    this.showCommandList.splice(index, 1);
-  }
-
-  // Slash command handling
-  onNoteInput(event: Event, noteIndex: number) {
-    const textarea = event.target as HTMLTextAreaElement;
-    const value = textarea.value;
-    const cursorPosition = textarea.selectionStart;
-
-    // Find the last "/" before cursor
-    const textBeforeCursor = value.substring(0, cursorPosition);
-    const lastSlashIndex = textBeforeCursor.lastIndexOf('/');
-
-    if (lastSlashIndex !== -1) {
-      const textAfterSlash = textBeforeCursor.substring(lastSlashIndex);
-      const upperTextAfterSlash = textAfterSlash.toUpperCase();
-
-      // Check if we're typing a command (no space after the slash yet, unless filtering)
-      if (!textAfterSlash.includes(' ') || upperTextAfterSlash.startsWith('/PAX#') || upperTextAfterSlash.startsWith('/DRUG ')) {
-        this.activeNoteIndex = noteIndex;
-
-        // Check if typing /PAX# for direct PAX selection with filter
-        if (upperTextAfterSlash.startsWith('/PAX#')) {
-          const paxFilter = textAfterSlash.substring(1); // Remove the leading /
-          this.filteredPaxTags = this.paxTags.filter(pax =>
-            pax.toUpperCase().startsWith(paxFilter.toUpperCase())
-          );
-          this.activeMenuType = 'pax';
-          this.showSlashMenu[noteIndex] = this.filteredPaxTags.length > 0;
-          this.showCommandList[noteIndex] = false;
-        }
-        // Check if typing /P, /PA, or /PAX to show PAX list (shortcut: just /P shows PAX)
-        else if (upperTextAfterSlash.startsWith('/P') && '/PAX'.startsWith(upperTextAfterSlash)) {
-          this.filteredPaxTags = this.paxTags;
-          this.activeMenuType = 'pax';
-          this.showSlashMenu[noteIndex] = true;
-          this.showCommandList[noteIndex] = false;
-        }
-        // Check if typing /D, /DR, /DRU, or /DRUG to show drug list (shortcut: just /D shows drugs)
-        else if (upperTextAfterSlash.startsWith('/D') && '/DRUG'.startsWith(upperTextAfterSlash)) {
-          this.filteredDrugs = this.genericDrugs;
-          this.activeMenuType = 'drug';
-          this.showSlashMenu[noteIndex] = true;
-          this.showCommandList[noteIndex] = false;
-        }
-        // Check if typing /DRUG with filter text after
-        else if (upperTextAfterSlash.startsWith('/DRUG')) {
-          // Filter drugs if user types more after /DRUG
-          if (textAfterSlash.length > 5) {
-            const drugFilter = textAfterSlash.substring(5).trim(); // Get text after "/DRUG"
-            this.filteredDrugs = this.genericDrugs.filter(drug =>
-              drug.toUpperCase().includes(drugFilter.toUpperCase())
-            );
-          } else {
-            this.filteredDrugs = this.genericDrugs;
-          }
-          this.activeMenuType = 'drug';
-          this.showSlashMenu[noteIndex] = this.filteredDrugs.length > 0;
-          this.showCommandList[noteIndex] = false;
-        }
-        // Check if just typed / to show command list
-        else if (textAfterSlash === '/') {
-          this.filteredCommands = this.slashCommands;
-          this.showCommandList[noteIndex] = true;
-          this.showSlashMenu[noteIndex] = false;
-          this.activeMenuType = null;
-        }
-        // Filter commands based on what's typed after /
-        else {
-          const filter = textAfterSlash.substring(1).toUpperCase();
-          this.filteredCommands = this.slashCommands.filter(cmd =>
-            cmd.command.toUpperCase().includes(filter)
-          );
-          this.showCommandList[noteIndex] = this.filteredCommands.length > 0;
-          this.showSlashMenu[noteIndex] = false;
-          this.activeMenuType = null;
-        }
-      } else {
-        this.closeSlashMenus(noteIndex);
-      }
-    } else {
-      this.closeSlashMenus(noteIndex);
-    }
-  }
-
-  closeSlashMenus(noteIndex: number) {
-    this.showSlashMenu[noteIndex] = false;
-    this.showCommandList[noteIndex] = false;
-  }
-
-  selectCommand(command: string, noteIndex: number) {
-    const noteControl = this.notes.at(noteIndex).get('note');
-    if (!noteControl) return;
-
-    const value = noteControl.value || '';
-    const lastSlashIndex = value.lastIndexOf('/');
-
-    if (command === '/PAX') {
-      this.filteredPaxTags = this.paxTags;
-      this.activeMenuType = 'pax';
-      this.showSlashMenu[noteIndex] = true;
-      this.showCommandList[noteIndex] = false;
-
-      // Update the textarea to show /PAX
-      if (lastSlashIndex !== -1) {
-        const newValue = value.substring(0, lastSlashIndex) + '/PAX';
-        noteControl.setValue(newValue);
-      }
-    } else if (command === '/DRUG') {
-      this.filteredDrugs = this.genericDrugs;
-      this.activeMenuType = 'drug';
-      this.showSlashMenu[noteIndex] = true;
-      this.showCommandList[noteIndex] = false;
-
-      // Update the textarea to show /DRUG
-      if (lastSlashIndex !== -1) {
-        const newValue = value.substring(0, lastSlashIndex) + '/DRUG';
-        noteControl.setValue(newValue);
-      }
-    }
   }
 
   // Helper to get current timestamp in HHMM format
@@ -827,44 +644,6 @@ export class HomePage implements OnInit, OnDestroy {
     return now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0');
   }
 
-  selectDrug(drug: string, noteIndex: number) {
-    const noteControl = this.notes.at(noteIndex).get('note');
-    if (noteControl) {
-      const value = noteControl.value || '';
-      // Find and replace the /DRUG... command with the selected drug
-      const lastSlashIndex = value.lastIndexOf('/');
-      if (lastSlashIndex !== -1) {
-        const newValue = value.substring(0, lastSlashIndex) + drug + ' ';
-        noteControl.setValue(newValue);
-      }
-    }
-    this.closeSlashMenus(noteIndex);
-  }
-
-  selectPaxTag(paxTag: string, noteIndex: number) {
-    const noteControl = this.notes.at(noteIndex).get('note');
-    if (noteControl) {
-      const value = noteControl.value || '';
-      // Find and replace the /PAX... command with the selected PAX tag
-      const lastSlashIndex = value.lastIndexOf('/');
-      if (lastSlashIndex !== -1) {
-        const newValue = value.substring(0, lastSlashIndex) + paxTag + ' ';
-        noteControl.setValue(newValue);
-      }
-    }
-    this.closeSlashMenus(noteIndex);
-  }
-
-  onNoteFocus(noteIndex: number) {
-    this.activeNoteIndex = noteIndex;
-  }
-
-  onNoteBlur(noteIndex: number) {
-    // Delay closing to allow click on menu items
-    setTimeout(() => {
-      this.closeSlashMenus(noteIndex);
-    }, 200);
-  }
 
   onNarcRecordChange(checked: boolean, status: 'N/A' | 'Administered') {
     const control = this.reportForm.get('narcRecordStatus');
@@ -980,44 +759,6 @@ export class HomePage implements OnInit, OnDestroy {
     this.touchStartTime = currentTime;
   }
 
-  // Touch event handlers for dropdown menus
-  onMenuTouchStart(event: TouchEvent) {
-    this.isTouchScrolling = false;
-    this.touchStartY = event.touches[0].clientY;
-    this.touchStartTime = Date.now();
-  }
-
-  onMenuTouchEnd(event: TouchEvent) {
-    const touchEndY = event.changedTouches[0].clientY;
-    const touchDuration = Date.now() - this.touchStartTime;
-    const touchDistance = Math.abs(touchEndY - this.touchStartY);
-
-    // Determine if this was a scroll gesture (moved more than 10px) or a tap
-    if (touchDistance > 10 || touchDuration > 300) {
-      this.isTouchScrolling = true;
-    }
-  }
-
-  onTouchSelectCommand(event: TouchEvent, command: string, noteIndex: number) {
-    event.preventDefault();
-    if (!this.isTouchScrolling) {
-      this.selectCommand(command, noteIndex);
-    }
-  }
-
-  onTouchSelectPaxTag(event: TouchEvent, paxTag: string, noteIndex: number) {
-    event.preventDefault();
-    if (!this.isTouchScrolling) {
-      this.selectPaxTag(paxTag, noteIndex);
-    }
-  }
-
-  onTouchSelectDrug(event: TouchEvent, drug: string, noteIndex: number) {
-    event.preventDefault();
-    if (!this.isTouchScrolling) {
-      this.selectDrug(drug, noteIndex);
-    }
-  }
 
   // Scroll to a specific element (useful for keyboard interactions)
   async scrollToElement(element: HTMLElement) {

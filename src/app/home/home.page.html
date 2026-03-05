@@ -691,11 +691,6 @@
 
         <div class="section-block section-tight">
           <div class="section-title">Narrative Log</div>
-          <p class="slash-hint">
-            Type <strong>/</strong> in notes for quick commands:
-            <span class="cmd-tag">/PAX</span>
-            <span class="cmd-tag">/DRUG</span>
-          </p>
           <div formArrayName="notes">
             <ion-row *ngFor="let note of notes.controls; let i = index" [formGroupName]="i" class="note-row">
               <ion-col size="3">
@@ -729,51 +724,9 @@
                     <textarea
                       tuiTextarea
                       formControlName="note"
-                      rows="2"
-                      #noteTextarea
-                      (input)="onNoteInput($event, i)"
-                      (focus)="onNoteFocus(i)"
-                      (blur)="onNoteBlur(i)"></textarea>
-                    <label>Notes (type / for commands)</label>
+                      rows="2"></textarea>
+                    <label>Notes</label>
                   </tui-textfield>
-
-                  <div class="slash-menu" *ngIf="showCommandList[i]" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
-                    <div class="slash-menu-header">Commands</div>
-                    <div
-                      class="slash-menu-item"
-                      *ngFor="let cmd of filteredCommands"
-                      (mousedown)="selectCommand(cmd.command, i)"
-                      (touchend)="onTouchSelectCommand($event, cmd.command, i)">
-                      <span class="command-name">{{ cmd.command }}</span>
-                      <span class="command-desc">{{ cmd.description }}</span>
-                    </div>
-                  </div>
-
-                  <div class="slash-menu pax-menu" *ngIf="showSlashMenu[i] && activeMenuType === 'pax'" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
-                    <div class="slash-menu-header">Select PAX</div>
-                    <div class="pax-menu-scroll">
-                      <div
-                        class="slash-menu-item"
-                        *ngFor="let pax of filteredPaxTags"
-                        (mousedown)="selectPaxTag(pax, i)"
-                        (touchend)="onTouchSelectPaxTag($event, pax, i)">
-                        {{ pax }}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="slash-menu drug-menu" *ngIf="showSlashMenu[i] && activeMenuType === 'drug'" (touchstart)="onMenuTouchStart($event)" (touchend)="onMenuTouchEnd($event)">
-                    <div class="slash-menu-header">Select Drug</div>
-                    <div class="drug-menu-scroll">
-                      <div
-                        class="slash-menu-item"
-                        *ngFor="let drug of filteredDrugs"
-                        (mousedown)="selectDrug(drug, i)"
-                        (touchend)="onTouchSelectDrug($event, drug, i)">
-                        {{ drug }}
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </ion-col>
               <ion-col size="1" class="ion-align-self-center">
