@@ -28,7 +28,7 @@
       <ion-grid>
         <ion-row>
           <ion-col size="12">
-            <div class="section-block section-tight">
+            <div class="section-block">
               <div class="section-title">Flight Info</div>
 
               <ion-row>
@@ -192,8 +192,9 @@
                     <input tuiTextfield formControlName="showtimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('showtimeZ1')" (blur)="handleTimeBlur('showtimeZ1')">
                     <label>Showtime</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('showtimeZ1')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(showtimeZ1Picker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(showtimeZ1Picker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #showtimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'showtimeZ1')">
@@ -208,8 +209,9 @@
                     <input tuiTextfield formControlName="blockTimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('blockTimeZ1')" (blur)="handleTimeBlur('blockTimeZ1')">
                     <label>Block time</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('blockTimeZ1')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(blockTimeZ1Picker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(blockTimeZ1Picker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #blockTimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'blockTimeZ1')">
@@ -224,8 +226,9 @@
                     <input tuiTextfield formControlName="endTimeZ1" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('endTimeZ1')" (blur)="handleTimeBlur('endTimeZ1')">
                     <label>End time</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('endTimeZ1')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(endTimeZ1Picker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(endTimeZ1Picker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #endTimeZ1Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'endTimeZ1')">
@@ -270,8 +273,9 @@
                     <input tuiTextfield formControlName="wheelsUpTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsUpTimeL')" (blur)="handleTimeBlur('wheelsUpTimeL')">
                     <label>Time (L)</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('wheelsUpTimeL')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsUpTimeLPicker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsUpTimeLPicker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #wheelsUpTimeLPicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsUpTimeL')">
@@ -295,8 +299,9 @@
                     <input tuiTextfield formControlName="wheelsUpTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsUpTime')" (blur)="handleTimeBlur('wheelsUpTime')">
                     <label>Time</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('wheelsUpTime')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsUpTimePicker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsUpTimePicker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #wheelsUpTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsUpTime')">
@@ -332,8 +337,9 @@
                     <input tuiTextfield formControlName="wheelsDownTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsDownTimeL')" (blur)="handleTimeBlur('wheelsDownTimeL')">
                     <label>Time (L)</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('wheelsDownTimeL')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsDownTimeLPicker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsDownTimeLPicker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #wheelsDownTimeLPicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsDownTimeL')">
@@ -357,8 +363,9 @@
                     <input tuiTextfield formControlName="wheelsDownTime" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('wheelsDownTime')" (blur)="handleTimeBlur('wheelsDownTime')">
                     <label>Time</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('wheelsDownTime')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsDownTimePicker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(wheelsDownTimePicker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #wheelsDownTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'wheelsDownTime')">
@@ -404,8 +411,9 @@
                     <input tuiTextfield formControlName="showtimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('showtimeZ2')" (blur)="handleTimeBlur('showtimeZ2')">
                     <label>Showtime</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('showtimeZ2')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(showtimeZ2Picker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(showtimeZ2Picker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #showtimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'showtimeZ2')">
@@ -420,8 +428,9 @@
                     <input tuiTextfield formControlName="blockTimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('blockTimeZ2')" (blur)="handleTimeBlur('blockTimeZ2')">
                     <label>Block time</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('blockTimeZ2')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(blockTimeZ2Picker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(blockTimeZ2Picker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #blockTimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'blockTimeZ2')">
@@ -436,8 +445,9 @@
                     <input tuiTextfield formControlName="endTimeZ2" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('endTimeZ2')" (blur)="handleTimeBlur('endTimeZ2')">
                     <label>End time</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('endTimeZ2')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(endTimeZ2Picker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(endTimeZ2Picker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #endTimeZ2Picker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'endTimeZ2')">
@@ -530,48 +540,118 @@
               </label>
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <tui-textfield class="full-width">
-                    <input tuiTextfield type="number" formControlName="paxTotal">
-                    <label># PAX Total</label>
-                  </tui-textfield>
+                  <div class="number-stepper">
+                    <tui-textfield class="full-width">
+                      <input tuiTextfield type="number" formControlName="paxTotal">
+                      <label># PAX Total</label>
+                      <span class="stepper-inline">
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxTotal', 1)" aria-label="Increase PAX total">
+                          <ion-icon name="add" aria-hidden="true"></ion-icon>
+                        </button>
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxTotal', -1)" aria-label="Decrease PAX total">
+                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
+                        </button>
+                      </span>
+                    </tui-textfield>
+                  </div>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <tui-textfield class="full-width">
-                    <input tuiTextfield type="number" formControlName="paxFemales">
-                    <label># PAX Females</label>
-                  </tui-textfield>
+                  <div class="number-stepper">
+                    <tui-textfield class="full-width">
+                      <input tuiTextfield type="number" formControlName="paxFemales">
+                      <label># PAX Females</label>
+                      <span class="stepper-inline">
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxFemales', 1)" aria-label="Increase PAX females">
+                          <ion-icon name="add" aria-hidden="true"></ion-icon>
+                        </button>
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxFemales', -1)" aria-label="Decrease PAX females">
+                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
+                        </button>
+                      </span>
+                    </tui-textfield>
+                  </div>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <tui-textfield class="full-width">
-                    <input tuiTextfield type="number" formControlName="paxFemaleNotPregnantConfirmed">
-                    <label>Pre-flight not pregnant (count)</label>
-                  </tui-textfield>
+                  <div class="number-stepper number-stepper--standard">
+                    <tui-textfield class="full-width">
+                      <input tuiTextfield type="number" formControlName="paxFemaleNotPregnantConfirmed">
+                      <label>Pre-flight not pregnant</label>
+                      <span class="stepper-inline">
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxFemaleNotPregnantConfirmed', 1)" aria-label="Increase pre-flight not pregnant count">
+                          <ion-icon name="add" aria-hidden="true"></ion-icon>
+                        </button>
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxFemaleNotPregnantConfirmed', -1)" aria-label="Decrease pre-flight not pregnant count">
+                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
+                        </button>
+                      </span>
+                    </tui-textfield>
+                  </div>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <tui-textfield class="full-width">
-                    <input tuiTextfield type="number" formControlName="paxMale">
-                    <label># PAX Male</label>
-                  </tui-textfield>
+                  <div class="number-stepper">
+                    <tui-textfield class="full-width">
+                      <input tuiTextfield type="number" formControlName="paxMale">
+                      <label># PAX Male</label>
+                      <span class="stepper-inline">
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxMale', 1)" aria-label="Increase PAX male">
+                          <ion-icon name="add" aria-hidden="true"></ion-icon>
+                        </button>
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxMale', -1)" aria-label="Decrease PAX male">
+                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
+                        </button>
+                      </span>
+                    </tui-textfield>
+                  </div>
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <tui-textfield class="full-width">
-                    <input tuiTextfield type="number" formControlName="paxMinors">
-                    <label># PAX Minors</label>
-                  </tui-textfield>
+                  <div class="number-stepper">
+                    <tui-textfield class="full-width">
+                      <input tuiTextfield type="number" formControlName="paxMinors">
+                      <label># PAX Minors</label>
+                      <span class="stepper-inline">
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxMinors', 1)" aria-label="Increase PAX minors">
+                          <ion-icon name="add" aria-hidden="true"></ion-icon>
+                        </button>
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxMinors', -1)" aria-label="Decrease PAX minors">
+                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
+                        </button>
+                      </span>
+                    </tui-textfield>
+                  </div>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="3">
-                  <tui-textfield class="full-width">
-                    <input tuiTextfield type="number" formControlName="paxWithMedications">
-                    <label># PAX with Medications</label>
-                  </tui-textfield>
+                  <div class="number-stepper">
+                    <tui-textfield class="full-width">
+                      <input tuiTextfield type="number" formControlName="paxWithMedications">
+                      <label># PAX with Medications</label>
+                      <span class="stepper-inline">
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxWithMedications', 1)" aria-label="Increase PAX with medications">
+                          <ion-icon name="add" aria-hidden="true"></ion-icon>
+                        </button>
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxWithMedications', -1)" aria-label="Decrease PAX with medications">
+                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
+                        </button>
+                      </span>
+                    </tui-textfield>
+                  </div>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <tui-textfield class="full-width">
-                    <input tuiTextfield type="number" formControlName="paxNeeding72HrAssessment">
-                    <label># PAX needing &lt;72-hour RN assessment</label>
-                  </tui-textfield>
+                  <div class="number-stepper">
+                    <tui-textfield class="full-width">
+                      <input tuiTextfield type="number" formControlName="paxNeeding72HrAssessment">
+                      <label># PAX needing &lt;72-hour RN assessment</label>
+                      <span class="stepper-inline">
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxNeeding72HrAssessment', 1)" aria-label="Increase PAX needing 72-hour RN assessment">
+                          <ion-icon name="add" aria-hidden="true"></ion-icon>
+                        </button>
+                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxNeeding72HrAssessment', -1)" aria-label="Decrease PAX needing 72-hour RN assessment">
+                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
+                        </button>
+                      </span>
+                    </tui-textfield>
+                  </div>
                 </ion-col>
               </ion-row>
             </div>
@@ -607,11 +687,8 @@
               <ion-row>
                 <ion-col size="12" size-sm="8" size-md="8">
                   <tui-textfield class="full-width select-field">
-                    <input tuiSelect formControlName="delayReasons" placeholder="-- Select --">
+                    <select tuiSelect formControlName="delayReasons" [items]="delayOptions" placeholder="-- Select --"></select>
                     <label>Delay reason</label>
-                    <ng-template tuiDataList>
-                      <tui-data-list-wrapper [items]="delayOptions"></tui-data-list-wrapper>
-                    </ng-template>
                   </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="4" size-md="4">
@@ -620,8 +697,9 @@
                     <input tuiTextfield formControlName="delayTimeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampTimeOnFocus('delayTimeL')" (blur)="handleTimeBlur('delayTimeL')">
                     <label>Time (L)</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampTime('delayTimeL')">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(delayTimePicker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(delayTimePicker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                     <input #delayTimePicker type="time" class="time-picker-input" (change)="applyTimePicker($event, 'delayTimeL')">
@@ -699,8 +777,9 @@
                     <input tuiTextfield formControlName="timeL" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampNoteTimeOnFocus(i)" (blur)="handleNoteTimeBlur(i)">
                     <label>Time (L)</label>
                     <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampNoteTime(i)">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(noteTimePicker)" aria-label="Open time picker">Pick</button>
+                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(noteTimePicker)" aria-label="Open time picker">
+                        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                      </button>
                     </span>
                   </tui-textfield>
                   <input #noteTimePicker type="time" class="time-picker-input" (change)="applyNoteTimePicker($event, i)">
@@ -711,11 +790,8 @@
               </ion-col>
               <ion-col size="2">
                 <tui-textfield class="full-width select-field">
-                  <input tuiSelect formControlName="rn" placeholder="-- Select RN --">
+                  <select tuiSelect formControlName="rn" [items]="rnList" placeholder="-- Select RN --"></select>
                   <label>RN</label>
-                  <ng-template tuiDataList>
-                    <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
-                  </ng-template>
                 </tui-textfield>
               </ion-col>
               <ion-col size="6">

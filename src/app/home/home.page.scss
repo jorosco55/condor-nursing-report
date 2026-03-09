@@ -238,6 +238,7 @@
   flex-wrap: wrap;
   gap: 12px 20px;
   align-items: center;
+  padding: 0 5px;
 }
 
 .checkbox-item {
@@ -252,6 +253,49 @@
   font-size: 0.72rem;
   color: #6b6b6b;
   letter-spacing: 0.02em;
+}
+
+.number-stepper {
+  position: relative;
+  --t-height: 41px;
+}
+
+.number-stepper tui-textfield {
+  --t-end: 3.25rem;
+}
+
+.number-stepper tui-textfield .t-wrapper {
+  min-height: 41px;
+}
+
+.number-stepper--standard {
+  --t-height: 40px;
+}
+
+.number-stepper--standard tui-textfield .t-wrapper {
+  min-height: 40px;
+}
+
+.stepper-inline {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.stepper-button {
+  min-height: 18px;
+  min-width: 26px;
+  padding: 0 4px;
+}
+
+.stepper-button ion-icon {
+  font-size: 12px;
 }
 
 .note-row {
@@ -371,6 +415,10 @@ textarea {
 .note-input-container {
   position: relative;
   width: 100%;
+}
+
+.note-input-container textarea[tuiTextarea] {
+  margin-top: 6px;
 }
 
 // Touch-friendly input fields

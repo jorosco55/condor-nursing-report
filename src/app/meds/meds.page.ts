@@ -2,8 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
-import { TuiCheckbox, TuiDataListWrapperComponent, TuiSelectDirective } from '@taiga-ui/kit';
+import { TuiButton, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
+import { TuiCheckbox, TuiNativeSelect } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { PaxMedicationEntry, NursingReport } from '../models/report.model';
 
@@ -19,9 +19,7 @@ import { PaxMedicationEntry, NursingReport } from '../models/report.model';
     IonicModule,
     TuiTextfieldComponent,
     TuiTextfieldDirective,
-    TuiSelectDirective,
-    TuiDataListDirective,
-    TuiDataListWrapperComponent,
+    TuiNativeSelect,
     TuiCheckbox,
     TuiButton
   ]

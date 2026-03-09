@@ -30,31 +30,22 @@
 
               <ion-col size="12" size-sm="6" size-md="4">
                 <tui-textfield class="full-width select-field" [class.field-alert]="narcoticsRequired && !hasAnyNarcoticSelection()">
-                  <input tuiSelect formControlName="narcoticName">
+                  <select tuiSelect formControlName="narcoticName" [items]="narcoticOptions" placeholder="-- Select --"></select>
                   <label>Narcotic</label>
-                  <ng-template tuiDataList>
-                    <tui-data-list-wrapper [items]="narcoticOptions"></tui-data-list-wrapper>
-                  </ng-template>
                 </tui-textfield>
               </ion-col>
 
               <ion-col size="12" size-sm="6" size-md="2">
                 <tui-textfield class="full-width select-field">
-                  <input tuiSelect formControlName="dose">
+                  <select tuiSelect formControlName="dose" [items]="doseOptions" placeholder="-- Select --"></select>
                   <label>Dose</label>
-                  <ng-template tuiDataList>
-                    <tui-data-list-wrapper [items]="doseOptions"></tui-data-list-wrapper>
-                  </ng-template>
                 </tui-textfield>
               </ion-col>
 
               <ion-col size="12" size-sm="6" size-md="3">
                 <tui-textfield class="full-width select-field">
-                  <input tuiSelect formControlName="dosageUnit">
+                  <select tuiSelect formControlName="dosageUnit" [items]="dosageUnits" placeholder="-- Select --"></select>
                   <label>Dosage Unit</label>
-                  <ng-template tuiDataList>
-                    <tui-data-list-wrapper [items]="dosageUnits"></tui-data-list-wrapper>
-                  </ng-template>
                 </tui-textfield>
               </ion-col>
             </ion-row>
@@ -79,11 +70,8 @@
 
               <ion-col size="12" size-sm="6" size-md="4">
                 <tui-textfield class="full-width select-field">
-                  <input tuiSelect formControlName="rnName">
+                  <select tuiSelect formControlName="rnName" [items]="rnList" placeholder="-- Select RN --"></select>
                   <label>RN</label>
-                  <ng-template tuiDataList>
-                    <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
-                  </ng-template>
                 </tui-textfield>
               </ion-col>
             </ion-row>

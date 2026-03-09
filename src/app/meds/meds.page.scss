@@ -56,6 +56,81 @@
 
 .med-card ion-row {
   margin-bottom: 10px;
+  align-items: center;
+}
+
+.med-card tui-textfield {
+  --t-height: var(--tui-height-l);
+}
+
+.med-card tui-textfield .t-wrapper {
+  min-height: 40px;
+  height: 40px;
+}
+
+.med-card tui-textfield .t-content {
+  min-height: 40px;
+  align-items: center;
+}
+
+.med-card tui-textfield .t-field {
+  min-height: 40px;
+  height: 40px;
+  align-items: center;
+}
+
+.med-card tui-textfield .t-wrapper,
+.med-card tui-textfield .t-content,
+.med-card tui-textfield .t-field {
+  box-sizing: border-box;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.med-card tui-textfield .t-value {
+  padding-top: 0;
+  padding-bottom: 0;
+  align-self: center;
+}
+
+:host ::ng-deep .med-card tui-textfield {
+  height: var(--tui-height-l);
+  --t-height: var(--tui-height-l);
+}
+
+:host ::ng-deep .med-card tui-textfield .t-wrapper,
+:host ::ng-deep .med-card tui-textfield .t-content,
+:host ::ng-deep .med-card tui-textfield .t-field,
+:host ::ng-deep .med-card tui-textfield .t-value {
+  height: var(--tui-height-l);
+  min-height: var(--tui-height-l);
+  padding-top: 0;
+  padding-bottom: 0;
+  align-items: center;
+}
+
+:host ::ng-deep .med-card tui-textfield .t-clear {
+  right: 21px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
+
+:host ::ng-deep .med-card tui-textfield .t-clear,
+:host ::ng-deep .med-card tui-textfield .t-icon {
+  position: absolute;
+}
+
+:host ::ng-deep .med-card tui-textfield input[tuiTextfield] {
+  line-height: 1.2;
+}
+
+.med-card tui-textfield .t-label {
+  line-height: 1;
+}
+
+.med-card tui-textfield input[tuiTextfield] {
+  line-height: 1.2;
 }
 
 .med-card ion-row:last-child {
@@ -111,7 +186,7 @@ hr.card-divider {
 .vitals-item ion-icon {
   font-size: 20px;
   color: var(--ion-color-primary);
-  order: 2;
+  order: 1;
   display: block;
   width: 100%;
   text-align: center;
@@ -121,7 +196,7 @@ hr.card-divider {
   font-size: 0.85rem;
   font-weight: 600;
   color: #4a4a4a;
-  order: 1;
+  order: 2;
   display: block;
   width: 100%;
   text-align: center;
@@ -131,6 +206,36 @@ hr.card-divider {
   width: 100%;
   max-width: 140px;
   order: 3;
+}
+
+.vitals-item tui-textfield input[tuiTextfield] {
+  text-align: center;
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+}
+
+.vitals-item tui-textfield {
+  --t-start: 0.25rem;
+  --t-end: 0.25rem;
+}
+
+.vitals-item tui-textfield .t-clear {
+  margin-right: 0;
+}
+
+.vitals-unit-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  order: 3;
+}
+
+.vitals-unit {
+  font-size: 0.75rem;
+  color: #7a7a7a;
+  letter-spacing: 0.02em;
 }
 
 .bp-inputs {
@@ -147,6 +252,7 @@ hr.card-divider {
   color: #666;
   line-height: 1;
   margin: 0 4px;
+  align-self: center;
 }
 
 .bp-combined-field {
@@ -164,6 +270,15 @@ hr.card-divider {
   background: #ffffff;
 }
 
+.bp-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
 .bp-combined-field:focus-within {
   border-color: var(--ion-color-primary);
   box-shadow: 0 0 0 1px rgba(67, 82, 210, 0.15);
@@ -179,6 +294,12 @@ hr.card-divider {
   text-align: center;
   font-size: 0.95rem;
   color: #2d2d2d;
+}
+
+.bp-label {
+  font-size: 0.7rem;
+  color: #7a7a7a;
+  letter-spacing: 0.02em;
 }
 
 .bp-combined-field input::placeholder {

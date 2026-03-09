@@ -34,6 +34,15 @@ type PreflightTimeControl =
   | 'safetyBriefingCompletedTime'
   | 'seatBeltsSecuredTime';
 
+type PaxCountControl =
+  | 'paxTotal'
+  | 'paxFemales'
+  | 'paxFemaleNotPregnantConfirmed'
+  | 'paxMale'
+  | 'paxMinors'
+  | 'paxWithMedications'
+  | 'paxNeeding72HrAssessment';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -68,18 +77,7 @@ export class HomePage implements OnInit, OnDestroy {
   keyboardHeight = 0;
 
   // RN dropdown list with dummy data
-  rnList: string[] = [
-    'Sarah Johnson, RN',
-    'Michael Chen, RN',
-    'Emily Rodriguez, RN',
-    'James Williams, RN',
-    'Maria Garcia, RN',
-    'David Brown, RN',
-    'Jennifer Martinez, RN',
-    'Robert Taylor, RN',
-    'Lisa Anderson, RN',
-    'Christopher Lee, RN'
-  ];
+  rnList: string[] = [];
 
   visibleFlightRns = 2;
   readonly maxFlightRns = 5;
@@ -94,7 +92,12 @@ export class HomePage implements OnInit, OnDestroy {
     'Weather delay',
     'GEO delay',
     'PAX Emergency delay',
-    'Vighter Flight delay'
+    'Vighter Flight delay',
+    'Fueling delay',
+    'Gate hold',
+    'Air traffic control hold',
+    'Crew change',
+    'Medical review'
   ];
 
   @ViewChild(IonContent, { static: false }) content!: IonContent;
@@ -109,6 +112,7 @@ export class HomePage implements OnInit, OnDestroy {
   private toastCtrl = inject(ToastController);
 
   ngOnInit() {
+    this.rnList = this.reportService.rnList;
     this.initForm();
     this.bindPreflightChecks();
     this.loadLatestDraft();
@@ -357,6 +361,15 @@ export class HomePage implements OnInit, OnDestroy {
 
   get wheelsDownEvents() {
     return this.reportForm.get('wheelsDownEvents') as FormArray;
+  }
+
+  updatePaxCount(controlName: PaxCountControl, delta: number) {
+    const control = this.reportForm.get(controlName);
+    if (!control) return;
+    const current = Number(control.value ?? 0);
+    const normalized = Number.isFinite(current) ? current : 0;
+    const nextValue = Math.max(0, normalized + delta);
+    control.setValue(nextValue);
   }
 
 

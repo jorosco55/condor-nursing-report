@@ -18,62 +18,52 @@
                 <div class="med-card">
                 <div class="card-title">Med Info</div>
                   <ion-row>
-                    <ion-col size="12" size-sm="6" size-md="2">
+                    <ion-col size="12" size-sm="6" size-md="3">
                       <tui-textfield class="full-width">
                         <input tuiTextfield formControlName="aNumber">
                         <label>A-Number</label>
                       </tui-textfield>
                     </ion-col>
-                    <ion-col size="12" size-sm="6" size-md="3">
+                    <ion-col size="12" size-sm="6" size-md="9">
                       <tui-textfield class="full-width select-field" [class.field-alert]="medsRequired && !hasAnyMedsSelection()">
-                        <input tuiSelect formControlName="medication">
+                        <select tuiSelect formControlName="medication" [items]="medicationOptions" placeholder="-- Select --"></select>
                         <label>Medication</label>
-                        <ng-template tuiDataList>
-                          <tui-data-list-wrapper [items]="medicationOptions"></tui-data-list-wrapper>
-                        </ng-template>
                       </tui-textfield>
                     </ion-col>
-                    <ion-col size="12" size-sm="6" size-md="2">
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="12" size-sm="6" size-md="4">
                       <tui-textfield class="full-width select-field">
-                        <input tuiSelect formControlName="dose">
+                        <select tuiSelect formControlName="dose" [items]="doseOptions" placeholder="-- Select --"></select>
                         <label>Dose</label>
-                        <ng-template tuiDataList>
-                          <tui-data-list-wrapper [items]="doseOptions"></tui-data-list-wrapper>
-                        </ng-template>
                       </tui-textfield>
                     </ion-col>
-                    <ion-col size="12" size-sm="6" size-md="2">
+                    <ion-col size="12" size-sm="6" size-md="4">
                       <tui-textfield class="full-width select-field">
-                        <input tuiSelect formControlName="doseUnit">
+                        <select tuiSelect formControlName="doseUnit" [items]="doseUnits" placeholder="-- Select --"></select>
                         <label>Dose Units</label>
-                        <ng-template tuiDataList>
-                          <tui-data-list-wrapper [items]="doseUnits"></tui-data-list-wrapper>
-                        </ng-template>
                       </tui-textfield>
                     </ion-col>
-                    <ion-col size="12" size-sm="6" size-md="2">
+                    <ion-col size="12" size-sm="6" size-md="4">
                       <tui-textfield class="full-width select-field">
-                        <input tuiSelect formControlName="route">
+                        <select tuiSelect formControlName="route" [items]="routeOptions" placeholder="-- Select --"></select>
                         <label>Route</label>
-                        <ng-template tuiDataList>
-                          <tui-data-list-wrapper [items]="routeOptions"></tui-data-list-wrapper>
-                        </ng-template>
                       </tui-textfield>
-                    </ion-col>
-                    <ion-col size="12" size-sm="6" size-md="1" class="ion-align-self-center">
-                      <label class="checkbox-inline">
-                        <input tuiCheckbox type="checkbox" formControlName="prnGiven">
-                        <span>PRN</span>
-                      </label>
                     </ion-col>
                   </ion-row>
 
                   <ion-row>
-                    <ion-col size="12" size-sm="10" size-md="11">
+                    <ion-col size="12" size-sm="8" size-md="9">
                       <tui-textfield class="full-width">
                         <input tuiTextfield formControlName="annotatedOnMtf">
                         <label>Annotated on MTF</label>
                       </tui-textfield>
+                    </ion-col>
+                    <ion-col size="12" size-sm="2" size-md="2" class="ion-align-self-center">
+                      <label class="checkbox-inline">
+                        <input tuiCheckbox type="checkbox" formControlName="prnGiven">
+                        <span>PRN</span>
+                      </label>
                     </ion-col>
                     <ion-col size="12" size-sm="2" size-md="1" class="ion-align-self-center">
                       <button tuiButton appearance="secondary" size="s" (click)="removePaxMedicated(i)" type="button">
@@ -98,59 +88,75 @@
                         <div class="vitals-grid" *ngIf="!paxEntry.get('vitalsNa')?.value">
                         <div class="vitals-item">
                           <ion-icon name="swap-vertical-outline"></ion-icon>
-                          <label>BP (mmHg)</label>
-                          <div class="bp-inputs">
-                            <div class="bp-combined-field">
-                              <input type="text" inputmode="numeric" placeholder="Sys" aria-label="Systolic" formControlName="bpSystolic">
+                            <label>BP (mmHg)</label>
+                            <div class="bp-inputs">
+                              <div class="bp-combined-field">
+                              <div class="bp-input">
+                                <input type="text" inputmode="numeric" placeholder="Sys" aria-label="Systolic" formControlName="bpSystolic">
+                                <span class="bp-label">Sys</span>
+                              </div>
                               <span class="bp-divider">/</span>
-                              <input type="text" inputmode="numeric" placeholder="Dia" aria-label="Diastolic" formControlName="bpDiastolic">
+                              <div class="bp-input">
+                                <input type="text" inputmode="numeric" placeholder="Dia" aria-label="Diastolic" formControlName="bpDiastolic">
+                                <span class="bp-label">Dia</span>
+                              </div>
+                              </div>
                             </div>
-                          </div>
                         </div>
 
                           <div class="vitals-item">
                             <ion-icon name="heart-outline"></ion-icon>
                             <label>HR</label>
-                            <tui-textfield>
-                              <input tuiTextfield formControlName="hr" placeholder="bpm">
-                              <label>bpm</label>
-                            </tui-textfield>
+                            <div class="vitals-unit-field">
+                              <tui-textfield>
+                                <input tuiTextfield formControlName="hr">
+                              </tui-textfield>
+                              <span class="vitals-unit">bpm</span>
+                            </div>
                           </div>
 
                           <div class="vitals-item">
                             <ion-icon name="pulse-outline"></ion-icon>
                             <label>Resp</label>
-                            <tui-textfield>
-                              <input tuiTextfield formControlName="resp" placeholder="rpm">
-                              <label>rpm</label>
-                            </tui-textfield>
+                            <div class="vitals-unit-field">
+                              <tui-textfield>
+                                <input tuiTextfield formControlName="resp">
+                              </tui-textfield>
+                              <span class="vitals-unit">rpm</span>
+                            </div>
                           </div>
 
                           <div class="vitals-item">
                             <ion-icon name="thermometer-outline"></ion-icon>
                             <label>Temp</label>
-                            <tui-textfield>
-                              <input tuiTextfield formControlName="temp" placeholder="F">
-                              <label>F</label>
-                            </tui-textfield>
+                            <div class="vitals-unit-field">
+                              <tui-textfield>
+                                <input tuiTextfield formControlName="temp">
+                              </tui-textfield>
+                              <span class="vitals-unit">F</span>
+                            </div>
                           </div>
 
                           <div class="vitals-item">
                             <ion-icon name="water-outline"></ion-icon>
                             <label>O2 Sat</label>
-                            <tui-textfield>
-                              <input tuiTextfield formControlName="o2Sat" placeholder="%">
-                              <label>%</label>
-                            </tui-textfield>
+                            <div class="vitals-unit-field">
+                              <tui-textfield>
+                                <input tuiTextfield formControlName="o2Sat">
+                              </tui-textfield>
+                              <span class="vitals-unit">%</span>
+                            </div>
                           </div>
 
                           <div class="vitals-item">
                             <ion-icon name="speedometer-outline"></ion-icon>
                             <label>Rate%</label>
-                            <tui-textfield>
-                              <input tuiTextfield formControlName="ratePercent" placeholder="%">
-                              <label>%</label>
-                            </tui-textfield>
+                            <div class="vitals-unit-field">
+                              <tui-textfield>
+                                <input tuiTextfield formControlName="ratePercent">
+                              </tui-textfield>
+                              <span class="vitals-unit">%</span>
+                            </div>
                           </div>
 
                         </div>

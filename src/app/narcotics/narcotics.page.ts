@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit, AfterViewInit, ViewChildren, QueryList, E
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
-import { TuiDataListWrapperComponent, TuiSelectDirective } from '@taiga-ui/kit';
+import { TuiButton, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
+import { TuiNativeSelect } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { NarcoticEntry, NursingReport } from '../models/report.model';
 import { Subject } from 'rxjs';
@@ -22,9 +22,7 @@ import SignaturePad from 'signature_pad';
     IonicModule,
     TuiTextfieldComponent,
     TuiTextfieldDirective,
-    TuiSelectDirective,
-    TuiDataListDirective,
-    TuiDataListWrapperComponent,
+    TuiNativeSelect,
     TuiButton
   ]
 })
@@ -54,24 +52,17 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
     'Lorazepam',
     'Hydromorphone',
     'Oxycodone',
-    'Diazepam'
+    'Diazepam',
+    'Dilaudid',
+    'Hydrocodone',
+    'Codeine',
+    'Tramadol'
   ];
 
   dosageUnits: string[] = ['mg', 'mcg', 'g', 'mL', 'units', 'oz'];
   doseOptions: string[] = ['0.5', '1', '2', '5', '10', '20', '50', '100'];
 
-  rnList: string[] = [
-    'Sarah Johnson, RN',
-    'Michael Chen, RN',
-    'Emily Rodriguez, RN',
-    'James Williams, RN',
-    'Maria Garcia, RN',
-    'David Brown, RN',
-    'Jennifer Martinez, RN',
-    'Robert Taylor, RN',
-    'Lisa Anderson, RN',
-    'Christopher Lee, RN'
-  ];
+  rnList: string[] = [];
 
   private minEntries = 1;
 
@@ -80,6 +71,7 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
   private toastCtrl = inject(ToastController);
 
   ngOnInit() {
+    this.rnList = this.reportService.rnList;
     this.initForm();
     this.loadLatestReport();
 

@@ -19,6 +19,19 @@ export class ReportService {
   hasNarcoticSelection$ = this.hasNarcoticSelectionSubject.asObservable();
   hasMedsSelection$ = this.hasMedsSelectionSubject.asObservable();
 
+  readonly rnList: string[] = [
+    'Sarah Johnson, RN',
+    'Michael Chen, RN',
+    'Emily Rodriguez, RN',
+    'James Williams, RN',
+    'Maria Garcia, RN',
+    'David Brown, RN',
+    'Jennifer Martinez, RN',
+    'Robert Taylor, RN',
+    'Lisa Anderson, RN',
+    'Christopher Lee, RN'
+  ];
+
   constructor() { }
 
   setNarcRecordStatus(status: string) {
