@@ -40,7 +40,10 @@
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6">
                   <tui-textfield class="full-width select-field">
-                    <select tuiSelect formControlName="site" [items]="transferOfCareSites" placeholder="-- Select Site --"></select>
+                    <select tuiSelect formControlName="site">
+                      <option value="" disabled selected>-- Select Site --</option>
+                      <option *ngFor="let item of transferOfCareSites" [value]="item">{{ item }}</option>
+                    </select>
                     <label>Site</label>
                   </tui-textfield>
                 </ion-col>
@@ -49,13 +52,19 @@
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="6">
                   <tui-textfield class="full-width select-field">
-                    <select tuiSelect formControlName="iceFlightRN" [items]="rnList" placeholder="-- Select RN --"></select>
+                    <select tuiSelect formControlName="iceFlightRN">
+                      <option value="" disabled selected>-- Select RN --</option>
+                      <option *ngFor="let item of rnList" [value]="item">{{ item }}</option>
+                    </select>
                     <label>ICE Flight RN</label>
                   </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6">
                   <tui-textfield class="full-width select-field">
-                    <select tuiSelect formControlName="secondICEFlightRN" [items]="rnList" placeholder="-- Select RN --"></select>
+                    <select tuiSelect formControlName="secondICEFlightRN">
+                      <option value="" disabled selected>-- Select RN --</option>
+                      <option *ngFor="let item of rnList" [value]="item">{{ item }}</option>
+                    </select>
                     <label>2nd ICE Flight RN</label>
                   </tui-textfield>
                 </ion-col>
@@ -64,20 +73,20 @@
               <ion-row *ngIf="visibleFlightRns >= 3">
                 <ion-col size="12" size-sm="6" size-md="6">
                   <tui-textfield class="full-width select-field">
-                    <input tuiSelect formControlName="thirdICEFlightRN" placeholder="-- Select RN --">
+                    <select tuiSelect formControlName="thirdICEFlightRN">
+                      <option value="" disabled selected>-- Select RN --</option>
+                      <option *ngFor="let item of rnList" [value]="item">{{ item }}</option>
+                    </select>
                     <label>3rd ICE Flight RN</label>
-                    <ng-template tuiDataList>
-                      <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
-                    </ng-template>
                   </tui-textfield>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6" *ngIf="visibleFlightRns >= 4">
                   <tui-textfield class="full-width select-field">
-                    <input tuiSelect formControlName="fourthICEFlightRN" placeholder="-- Select RN --">
+                    <select tuiSelect formControlName="fourthICEFlightRN">
+                      <option value="" disabled selected>-- Select RN --</option>
+                      <option *ngFor="let item of rnList" [value]="item">{{ item }}</option>
+                    </select>
                     <label>4th ICE Flight RN</label>
-                    <ng-template tuiDataList>
-                      <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
-                    </ng-template>
                   </tui-textfield>
                 </ion-col>
               </ion-row>
@@ -85,11 +94,11 @@
               <ion-row *ngIf="visibleFlightRns >= 5">
                 <ion-col size="12" size-sm="6" size-md="6">
                   <tui-textfield class="full-width select-field">
-                    <input tuiSelect formControlName="fifthICEFlightRN" placeholder="-- Select RN --">
+                    <select tuiSelect formControlName="fifthICEFlightRN">
+                      <option value="" disabled selected>-- Select RN --</option>
+                      <option *ngFor="let item of rnList" [value]="item">{{ item }}</option>
+                    </select>
                     <label>5th ICE Flight RN</label>
-                    <ng-template tuiDataList>
-                      <tui-data-list-wrapper [items]="rnList"></tui-data-list-wrapper>
-                    </ng-template>
                   </tui-textfield>
                 </ion-col>
               </ion-row>
@@ -130,7 +139,10 @@
                 </ion-col>
                 <ion-col size="12" size-sm="4" size-md="4">
                   <tui-textfield class="full-width select-field">
-                    <select tuiSelect formControlName="siteStops" [items]="siteStopsOptions" placeholder="-- Select Site --"></select>
+                    <select tuiSelect formControlName="siteStops">
+                      <option value="" disabled selected>-- Select Site --</option>
+                      <option *ngFor="let item of siteStopsOptions" [value]="item">{{ item }}</option>
+                    </select>
                     <label>Site stops</label>
                   </tui-textfield>
                 </ion-col>
@@ -286,11 +298,11 @@
                 </ion-col>
                 <ion-col size="4">
                   <tui-textfield class="full-width select-field">
-                    <input tuiSelect formControlName="wheelsUpSite" placeholder="-- Select Site --">
+                    <select tuiSelect formControlName="wheelsUpSite">
+                      <option value="" disabled selected>-- Select Site --</option>
+                      <option *ngFor="let item of wheelsSiteOptions" [value]="item">{{ item }}</option>
+                    </select>
                     <label>Site</label>
-                    <ng-template tuiDataList>
-                      <tui-data-list-wrapper [items]="wheelsSiteOptions"></tui-data-list-wrapper>
-                    </ng-template>
                   </tui-textfield>
                 </ion-col>
                 <ion-col size="4">
@@ -350,11 +362,11 @@
                 </ion-col>
                 <ion-col size="4">
                   <tui-textfield class="full-width select-field">
-                    <input tuiSelect formControlName="wheelsDownSite" placeholder="-- Select Site --">
+                    <select tuiSelect formControlName="wheelsDownSite">
+                      <option value="" disabled selected>-- Select Site --</option>
+                      <option *ngFor="let item of wheelsSiteOptions" [value]="item">{{ item }}</option>
+                    </select>
                     <label>Site</label>
-                    <ng-template tuiDataList>
-                      <tui-data-list-wrapper [items]="wheelsSiteOptions"></tui-data-list-wrapper>
-                    </ng-template>
                   </tui-textfield>
                 </ion-col>
                 <ion-col size="4">
@@ -505,7 +517,10 @@
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="6">
                   <tui-textfield class="full-width select-field">
-                    <select tuiSelect formControlName="transferOfCareSite" [items]="transferOfCareSites" placeholder="-- Select Site --"></select>
+                    <select tuiSelect formControlName="transferOfCareSite">
+                      <option value="" disabled selected>-- Select Site --</option>
+                      <option *ngFor="let item of transferOfCareSites" [value]="item">{{ item }}</option>
+                    </select>
                     <label>Transfer of care to ICE LEAD (Site)</label>
                   </tui-textfield>
                 </ion-col>
@@ -687,7 +702,10 @@
               <ion-row>
                 <ion-col size="12" size-sm="8" size-md="8">
                   <tui-textfield class="full-width select-field">
-                    <select tuiSelect formControlName="delayReasons" [items]="delayOptions" placeholder="-- Select --"></select>
+                    <select tuiSelect formControlName="delayReasons">
+                      <option value="" disabled selected>-- Select --</option>
+                      <option *ngFor="let item of delayOptions" [value]="item">{{ item }}</option>
+                    </select>
                     <label>Delay reason</label>
                   </tui-textfield>
                 </ion-col>
@@ -790,7 +808,10 @@
               </ion-col>
               <ion-col size="2">
                 <tui-textfield class="full-width select-field">
-                  <select tuiSelect formControlName="rn" [items]="rnList" placeholder="-- Select RN --"></select>
+                  <select tuiSelect formControlName="rn">
+                    <option value="" disabled selected>-- Select RN --</option>
+                    <option *ngFor="let item of rnList" [value]="item">{{ item }}</option>
+                  </select>
                   <label>RN</label>
                 </tui-textfield>
               </ion-col>
