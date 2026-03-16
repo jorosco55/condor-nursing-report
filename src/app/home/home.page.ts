@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IonicModule, ToastController, IonContent } from '@ionic/angular';
-import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
-import { TuiCheckbox, TuiDataListWrapperComponent, TuiNativeSelect, TuiSelectDirective, TuiTextarea } from '@taiga-ui/kit';
+import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective, TuiCalendar } from '@taiga-ui/core';
+import { TuiCheckbox, TuiDataListWrapperComponent, TuiNativeSelect, TuiSelectDirective, TuiTextarea, TuiInputDate } from '@taiga-ui/kit';
+import { TuiDay } from '@taiga-ui/cdk';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { Capacitor } from '@capacitor/core';
 import { ReportService } from '../services/report.service';
@@ -61,7 +62,9 @@ type PaxCountControl =
     TuiNativeSelect,
     TuiTextarea,
     TuiCheckbox,
-    TuiButton
+    TuiButton,
+    TuiInputDate,
+    TuiCalendar
   ]
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -107,9 +110,16 @@ export class HomePage implements OnInit, OnDestroy {
   private touchStartTime: number = 0;
   private scrollVelocity: number = 0;
 
+  // Calendar state
+  hoveredItem: TuiDay | null = null;
+
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
   private toastCtrl = inject(ToastController);
+
+  onHoveredItemChange(day: TuiDay | null): void {
+    this.hoveredItem = day;
+  }
 
   ngOnInit() {
     this.rnList = this.reportService.rnList;
@@ -158,7 +168,7 @@ export class HomePage implements OnInit, OnDestroy {
   initForm() {
     this.reportForm = this.fb.group({
       id: [null],
-      date: [this.formatDateInput(new Date()), Validators.required],
+      date: [TuiDay.fromLocalNativeDate(new Date()), Validators.required],
       site: ['', Validators.required],
       iceFlightRN: ['', Validators.required],
       secondICEFlightRN: [''],
@@ -250,9 +260,10 @@ export class HomePage implements OnInit, OnDestroy {
       const normalizedDelay = Array.isArray((report as unknown as { delayReasons?: string[] }).delayReasons)
         ? ((report as unknown as { delayReasons?: string[] }).delayReasons || [])[0] || ''
         : (report.delayReasons || '');
+      const reportDate = report.date ? new Date(report.date) : new Date();
       this.reportForm.patchValue({
         ...report,
-        date: this.formatDateInput(report.date),
+        date: Number.isNaN(reportDate.getTime()) ? null : TuiDay.fromLocalNativeDate(reportDate),
         ronStartDate: this.formatDateInput(report.ronStartDate),
         ronEndDate: this.formatDateInput(report.ronEndDate),
         delayReasons: normalizedDelay
@@ -723,9 +734,15 @@ export class HomePage implements OnInit, OnDestroy {
   async onSubmit() {
     if (this.reportForm.valid) {
       const existingReport = await this.reportService.getLatestReport();
+      const dateValue = this.reportForm.value.date;
+      const serializedDate = dateValue && typeof dateValue.toLocalNativeDate === 'function' 
+        ? dateValue.toLocalNativeDate().toISOString() 
+        : dateValue;
+
       const reportPayload = {
         ...(existingReport || {}),
         ...this.reportForm.value,
+        date: serializedDate,
         narcotics: existingReport?.narcotics || [],
         paxMedicated: existingReport?.paxMedicated || []
       };
