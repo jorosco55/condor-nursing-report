@@ -16,10 +16,8 @@
 .container {
   max-width: 1000px;
   margin: 0 auto;
-  background: #f8f9fa;
+  // Background, border-radius, and shadow are managed in variables.scss
   padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 
   // Enable smooth touch interactions
   touch-action: manipulation;
@@ -61,12 +59,18 @@
 
 .section-block {
   position: relative;
-  padding: 14px 14px 16px;
-  border: 1px solid #dfe3e8;
-  border-radius: 10px;
+  padding: 20px 20px 22px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 8px;
   background: #ffffff;
-  box-shadow: 0 6px 16px rgba(26, 26, 26, 0.08);
+  box-shadow: 0 4px 16px rgba(124, 142, 155, 0.05);
   overflow: visible;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-block:hover {
+  box-shadow: 0 6px 20px rgba(124, 142, 155, 0.1);
+  border-color: rgba(226, 232, 240, 1);
 }
 
 .section-block::before {
@@ -74,9 +78,11 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: 4px;
+  height: 3px;
   width: 100%;
-  background: linear-gradient(90deg, rgba(67, 82, 210, 0.6), rgba(67, 82, 210, 0.2));
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background: linear-gradient(90deg, var(--ion-color-primary), var(--ion-color-secondary));
 }
 
 .section-compact {

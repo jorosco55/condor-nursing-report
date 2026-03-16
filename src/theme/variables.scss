@@ -1,2 +1,102 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+
+:root {
+  /** primary (Medical Blue) **/
+  --ion-color-primary: #476880;
+  --ion-color-primary-rgb: 71, 104, 128;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #3e5b70;
+  --ion-color-primary-tint: #59778c;
+
+  /** secondary (Soft Slate) **/
+  --ion-color-secondary: #7c8e9b;
+  --ion-color-secondary-rgb: 124, 142, 155;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #6d7d88;
+  --ion-color-secondary-tint: #8999a5;
+
+  /** tertiary (Soft Sand/Silver) **/
+  --ion-color-tertiary: #e2e8f0;
+  --ion-color-tertiary-rgb: 226, 232, 240;
+  --ion-color-tertiary-contrast: #1a202c;
+  --ion-color-tertiary-contrast-rgb: 26, 32, 44;
+  --ion-color-tertiary-shade: #cbd5e1;
+  --ion-color-tertiary-tint: #f1f5f9;
+
+  /** danger (Elegant Deep Red) **/
+  --ion-color-danger: #c53030;
+  --ion-color-danger-rgb: 197, 48, 48;
+
+  /** UI and global elements **/
+  --ion-font-family: 'Plus Jakarta Sans', sans-serif;
+  --header-font-family: 'Lora', serif;
+  
+  --ion-background-color: #fbfbfc;
+  --ion-background-color-rgb: 251, 251, 252;
+
+  --ion-text-color: #1a202c;
+  --ion-text-color-rgb: 26, 32, 44;
+}
+
+// Typography overrides
+* {
+  font-family: var(--ion-font-family);
+}
+
+h1, h2, h3, h4, h5, h6, .vighter-text, .section-title {
+  font-family: var(--header-font-family) !important;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+// Elegant button shape
+ion-button {
+  --border-radius: 6px !important;
+  --padding-start: 1.2rem;
+  --padding-end: 1.2rem;
+  --box-shadow: 0 4px 12px rgba(71, 104, 128, 0.15);
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.02em;
+  font-weight: 600;
+}
+
+// Refined, subtle glassmorphism cards
+ion-card, .container, .tui-island.tui-island_size_l {
+  --border-radius: 12px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 4px 24px -6px rgba(124, 142, 155, 0.12) !important;
+}
+
+// Inputs
+ion-input, ion-textarea, ion-select, tui-textfield {
+  --background: rgba(255, 255, 255, 0.95);
+  --border-radius: 6px;
+  --padding-start: 12px;
+}
+.tui-input, .tui-input__wrapper {
+  border-radius: 6px !important;
+}
+
+// Delicate, crisp transitions
+.enter-fluid {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Alert colors for the tab bar
+.tab-alert {
+  --color-selected: var(--ion-color-danger);
+  --color: #e5b3b3;
+  color: var(--ion-color-danger);
+}
