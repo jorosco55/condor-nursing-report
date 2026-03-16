@@ -14,11 +14,7 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-:root {
-  --ion-background-color: #eee9f8;
-  --ion-text-color: #212529;
-  --app-surface-tint: #eef2f7;
-}
+// Use variables.scss for theme variables.
 
 // ============================================
 // Touch Screen & Scroll Optimizations
@@ -213,9 +209,8 @@ tui-textfield label {
 }
 
 .container {
-  background: var(--app-surface-tint);
-  padding: 12px;
-  border-radius: 8px;
+  padding: 16px;
+  // Background, border-radius, and shadow are managed in variables.scss
 }
 
 // ============================================
