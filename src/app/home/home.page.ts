@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
-import { IonicModule, ToastController, IonContent } from '@ionic/angular';
-import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
-import { TuiCheckbox, TuiDataListWrapperComponent, TuiNativeSelect, TuiSelectDirective, TuiTextarea } from '@taiga-ui/kit';
+import { ToastController, IonContent, IonHeader, IonToolbar, IonButtons, IonTitle, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { timeOutline, add, remove } from 'ionicons/icons';
+import { TuiButton, TuiDataList, TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { TuiCheckbox, TuiDataListWrapper, TuiInputNumber, TuiNativeSelect, TuiSelect, TuiTextarea } from '@taiga-ui/kit';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { Capacitor } from '@capacitor/core';
 import { ReportService } from '../services/report.service';
@@ -52,16 +54,25 @@ type PaxCountControl =
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule,
-    TuiTextfieldComponent,
-    TuiTextfieldDirective,
-    TuiSelectDirective,
-    TuiDataListDirective,
-    TuiDataListWrapperComponent,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonTitle,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonIcon,
+    TuiTextfield,
+    TuiSelect,
+    TuiInputNumber,
+    TuiDataList,
+    TuiDataListWrapper,
     TuiNativeSelect,
     TuiTextarea,
     TuiCheckbox,
-    TuiButton
+    TuiButton,
+    TuiIcon
   ]
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -82,9 +93,9 @@ export class HomePage implements OnInit, OnDestroy {
   visibleFlightRns = 2;
   readonly maxFlightRns = 5;
 
-  wheelsSiteOptions: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
   transferOfCareSites: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
-  siteStopsOptions: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
+  wheelsSiteOptions: string[] = this.transferOfCareSites;
+  siteStopsOptions: string[] = this.transferOfCareSites;
   delayOptions: string[] = [
     'Flight Crew',
     'Mechanical',
@@ -110,6 +121,10 @@ export class HomePage implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
   private toastCtrl = inject(ToastController);
+
+  constructor() {
+    addIcons({ timeOutline, add, remove });
+  }
 
   ngOnInit() {
     this.rnList = this.reportService.rnList;

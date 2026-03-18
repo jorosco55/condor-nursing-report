@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { documentTextOutline, medkitOutline, bandageOutline, shareOutline } from 'ionicons/icons';
 import { combineLatest, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ReportService } from '../services/report.service';
@@ -10,7 +12,7 @@ import { ReportService } from '../services/report.service';
   templateUrl: './tabs.page.html',
   styleUrls: ['./tabs.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel]
 })
 export class TabsPage implements OnInit, OnDestroy {
   narcoticsAlert = false;
@@ -18,6 +20,10 @@ export class TabsPage implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   private reportService = inject(ReportService);
+
+  constructor() {
+    addIcons({ documentTextOutline, medkitOutline, bandageOutline, shareOutline });
+  }
 
   ngOnInit() {
     this.reportService.hydrateNarcoticsState();

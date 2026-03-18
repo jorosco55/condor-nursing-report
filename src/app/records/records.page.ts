@@ -2,9 +2,11 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
-import { TuiButton, TuiDataListDirective, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
-import { TuiDataListWrapperComponent, TuiSelectDirective } from '@taiga-ui/kit';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonBadge, IonButton, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { chevronUpOutline, chevronDownOutline } from 'ionicons/icons';
+import { TuiButton, TuiDataList, TuiTextfield } from '@taiga-ui/core';
+import { TuiDataListWrapper, TuiSelect } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { NursingReport } from '../models/report.model';
 
@@ -16,12 +18,20 @@ import { NursingReport } from '../models/report.model';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
-    TuiTextfieldComponent,
-    TuiTextfieldDirective,
-    TuiSelectDirective,
-    TuiDataListDirective,
-    TuiDataListWrapperComponent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonBadge,
+    IonButton,
+    IonIcon,
+    TuiTextfield,
+    TuiSelect,
+    TuiDataList,
+    TuiDataListWrapper,
     TuiButton
   ]
 })
@@ -33,6 +43,10 @@ export class RecordsPage implements OnInit {
 
   private reportService = inject(ReportService);
   private router = inject(Router);
+
+  constructor() {
+    addIcons({ chevronUpOutline, chevronDownOutline });
+  }
 
   private mockRecords: NursingReport[] = [
     { id: 9001, date: '2026-02-20T10:15:00.000Z', site: 'IWA', iceFlightRN: 'Sarah Johnson, RN', secondICEFlightRN: 'Michael Chen, RN', tailNumber: 'N712CV', missionNumber: 'M-1021', siteStops: 'IWA, ELP', foicTitle: 'FOIC', asoLead: 'ASO', preflightMEBCheck: true, preflightMEKO2AED: true, safetyBriefingCompleted: true, seatBeltsSecured: true, narcRecordStatus: '', medicationRecordStatus: '', showtimeZ1: '0910', blockTimeZ1: '0945', endTimeZ1: '1130', wheelsUpSite: 'IWA', wheelsUpTimeL: '0630', wheelsUpTime: '0930', wheelsDownSite: 'ELP', wheelsDownTimeL: '0900', wheelsDownTime: '1200', showtimeZ2: '', blockTimeZ2: '', endTimeZ2: '', ronUsed: false, notes: [], narcotics: [], transferOfCareSite: 'ELP', receivedCare: false, paxMedicated: [], clearedMedicalWithFoic: false, paxTotal: null, paxFemales: null, paxFemaleNotPregnantConfirmed: null, paxMale: null, paxMinors: null, paxWithMedications: null, paxNeeding72HrAssessment: null, allPaxSafelyOnboarded: false, allPaxGivenFoodWaterLavBreaks: false, delayReasons: '', specialCircumstancePaxWrapped: false, specialCircumstanceMedicalComplaintAssessed: false, specialCircumstanceMedicalControlContacted: false, specialCircumstanceSiteSupervisorAdvised: false, specialCircumstanceMedicalEmergencyOnboardEms: false, specialCircumstanceViolentIncident: false, reportStatus: 'Open', doorsCloseTime: '0915', doorsOpenTime: '1215' },

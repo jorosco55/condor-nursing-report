@@ -33,7 +33,7 @@
 
               <ion-row>
                 <ion-col size="12" size-sm="6" size-md="6">
-                  <tui-textfield class="full-width" tuiTextfieldCleaner="false">
+                  <tui-textfield class="full-width" [tuiTextfieldCleaner]="false">
                     <input tuiTextfield type="date" formControlName="date">
                     <label>Date</label>
                   </tui-textfield>
@@ -147,29 +147,37 @@
               <div class="section-title">Pre-Flight Check</div>
               <div class="checkbox-row">
                 <label class="checkbox-item">
-                  <input tuiCheckbox type="checkbox" formControlName="preflightMEBCheck">
-                  <span>Preflight MEB Check</span>
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="preflightMEBCheck" class="tui-checkbox-small">
+                    <span>Preflight MEB Check</span>
+                  </div>
                   <span class="checkbox-subscript" *ngIf="reportForm.get('preflightMEBCheckTime')?.value">
                     {{ reportForm.get('preflightMEBCheckTime')?.value }}
                   </span>
                 </label>
                 <label class="checkbox-item">
-                  <input tuiCheckbox type="checkbox" formControlName="preflightMEKO2AED">
-                  <span>Preflight MEK, O2 Tanks, AED</span>
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="preflightMEKO2AED" class="tui-checkbox-small">
+                    <span>Preflight MEK, O2 Tanks, AED</span>
+                  </div>
                   <span class="checkbox-subscript" *ngIf="reportForm.get('preflightMEKO2AEDTime')?.value">
                     {{ reportForm.get('preflightMEKO2AEDTime')?.value }}
                   </span>
                 </label>
                 <label class="checkbox-item">
-                  <input tuiCheckbox type="checkbox" formControlName="safetyBriefingCompleted">
-                  <span>Safety Briefing Completed</span>
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="safetyBriefingCompleted" class="tui-checkbox-small">
+                    <span>Safety Briefing Completed</span>
+                  </div>
                   <span class="checkbox-subscript" *ngIf="reportForm.get('safetyBriefingCompletedTime')?.value">
                     {{ reportForm.get('safetyBriefingCompletedTime')?.value }}
                   </span>
                 </label>
                 <label class="checkbox-item">
-                  <input tuiCheckbox type="checkbox" formControlName="seatBeltsSecured">
-                  <span>Seat Belts Secured Per ASO</span>
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="seatBeltsSecured" class="tui-checkbox-small">
+                    <span>Seat Belts Secured Per ASO</span>
+                  </div>
                   <span class="checkbox-subscript" *ngIf="reportForm.get('seatBeltsSecuredTime')?.value">
                     {{ reportForm.get('seatBeltsSecuredTime')?.value }}
                   </span>
@@ -286,11 +294,8 @@
                 </ion-col>
                 <ion-col size="4">
                   <tui-textfield class="full-width select-field">
-                    <input tuiSelect formControlName="wheelsUpSite" placeholder="-- Select Site --">
+                    <select tuiSelect formControlName="wheelsUpSite" [items]="wheelsSiteOptions" placeholder="-- Select Site --"></select>
                     <label>Site</label>
-                    <ng-template tuiDataList>
-                      <tui-data-list-wrapper [items]="wheelsSiteOptions"></tui-data-list-wrapper>
-                    </ng-template>
                   </tui-textfield>
                 </ion-col>
                 <ion-col size="4">
@@ -350,11 +355,8 @@
                 </ion-col>
                 <ion-col size="4">
                   <tui-textfield class="full-width select-field">
-                    <input tuiSelect formControlName="wheelsDownSite" placeholder="-- Select Site --">
+                    <select tuiSelect formControlName="wheelsDownSite" [items]="wheelsSiteOptions" placeholder="-- Select Site --"></select>
                     <label>Site</label>
-                    <ng-template tuiDataList>
-                      <tui-data-list-wrapper [items]="wheelsSiteOptions"></tui-data-list-wrapper>
-                    </ng-template>
                   </tui-textfield>
                 </ion-col>
                 <ion-col size="4">
@@ -389,7 +391,7 @@
               </div>
 
               <label class="checkbox-inline ion-margin-top">
-                <input tuiCheckbox type="checkbox" formControlName="ronUsed">
+                <input tuiCheckbox type="checkbox" formControlName="ronUsed" class="tui-checkbox-small">
                 <span>Use if RON</span>
               </label>
               <ion-row *ngIf="reportForm.get('ronUsed')?.value">
@@ -468,13 +470,17 @@
             <div class="section-block section-tight">
               <div class="section-title">Narcotics Report</div>
               <div class="checkbox-row">
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" [(ngModel)]="narcRecordNaChecked" (ngModelChange)="onNarcRecordChange($event, 'N/A')" [ngModelOptions]="{standalone: true}">
-                  <span>N/A</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" [(ngModel)]="narcRecordNaChecked" (ngModelChange)="onNarcRecordChange($event, 'N/A')" [ngModelOptions]="{standalone: true}" class="tui-checkbox-small">
+                    <span>N/A</span>
+                  </div>
                 </label>
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" [(ngModel)]="narcRecordAdminChecked" (ngModelChange)="onNarcRecordChange($event, 'Administered')" [ngModelOptions]="{standalone: true}">
-                  <span>Administered</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" [(ngModel)]="narcRecordAdminChecked" (ngModelChange)="onNarcRecordChange($event, 'Administered')" [ngModelOptions]="{standalone: true}" class="tui-checkbox-small">
+                    <span>Administered</span>
+                  </div>
                 </label>
               </div>
             </div>
@@ -483,13 +489,17 @@
             <div class="section-block section-tight">
               <div class="section-title">Medication Report</div>
               <div class="checkbox-row">
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" [(ngModel)]="medRecordNaChecked" (ngModelChange)="onMedicationRecordChange($event, 'N/A')" [ngModelOptions]="{standalone: true}">
-                  <span>N/A</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" [(ngModel)]="medRecordNaChecked" (ngModelChange)="onMedicationRecordChange($event, 'N/A')" [ngModelOptions]="{standalone: true}" class="tui-checkbox-small">
+                    <span>N/A</span>
+                  </div>
                 </label>
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" [(ngModel)]="medRecordAdminChecked" (ngModelChange)="onMedicationRecordChange($event, 'Administered')" [ngModelOptions]="{standalone: true}">
-                  <span>Administered</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" [(ngModel)]="medRecordAdminChecked" (ngModelChange)="onMedicationRecordChange($event, 'Administered')" [ngModelOptions]="{standalone: true}" class="tui-checkbox-small">
+                    <span>Administered</span>
+                  </div>
                 </label>
               </div>
             </div>
@@ -511,7 +521,7 @@
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6" class="ion-align-self-center">
                   <label class="checkbox-inline">
-                    <input tuiCheckbox type="checkbox" formControlName="receivedCare">
+                    <input tuiCheckbox type="checkbox" formControlName="receivedCare" class="tui-checkbox-small">
                     <span>Received care</span>
                   </label>
                 </ion-col>
@@ -534,122 +544,68 @@
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Cleared Medical with FOIC</div>
-              <label class="checkbox-inline">
-                <input tuiCheckbox type="checkbox" formControlName="clearedMedicalWithFoic">
+              <label class="checkbox-inline ion-margin-bottom">
+                <input tuiCheckbox type="checkbox" formControlName="clearedMedicalWithFoic" class="tui-checkbox-small">
                 <span>Cleared Medical with FOIC</span>
               </label>
               <ion-row>
-                <ion-col size="12" size-sm="6" size-md="3">
+                <ion-col size="12" size-sm="4" size-md="4">
                   <div class="number-stepper">
                     <tui-textfield class="full-width">
-                      <input tuiTextfield type="number" formControlName="paxTotal">
+                      <input tuiInputNumber [step]="1" formControlName="paxTotal">
                       <label># PAX Total</label>
-                      <span class="stepper-inline">
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxTotal', 1)" aria-label="Increase PAX total">
-                          <ion-icon name="add" aria-hidden="true"></ion-icon>
-                        </button>
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxTotal', -1)" aria-label="Decrease PAX total">
-                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
-                        </button>
-                      </span>
                     </tui-textfield>
                   </div>
                 </ion-col>
-                <ion-col size="12" size-sm="6" size-md="3">
+                <ion-col size="12" size-sm="4" size-md="4">
                   <div class="number-stepper">
                     <tui-textfield class="full-width">
-                      <input tuiTextfield type="number" formControlName="paxFemales">
+                      <input tuiInputNumber [step]="1" formControlName="paxFemales">
                       <label># PAX Females</label>
-                      <span class="stepper-inline">
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxFemales', 1)" aria-label="Increase PAX females">
-                          <ion-icon name="add" aria-hidden="true"></ion-icon>
-                        </button>
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxFemales', -1)" aria-label="Decrease PAX females">
-                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
-                        </button>
-                      </span>
                     </tui-textfield>
                   </div>
                 </ion-col>
-                <ion-col size="12" size-sm="6" size-md="3">
-                  <div class="number-stepper number-stepper--standard">
-                    <tui-textfield class="full-width">
-                      <input tuiTextfield type="number" formControlName="paxFemaleNotPregnantConfirmed">
-                      <label>Pre-flight not pregnant</label>
-                      <span class="stepper-inline">
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxFemaleNotPregnantConfirmed', 1)" aria-label="Increase pre-flight not pregnant count">
-                          <ion-icon name="add" aria-hidden="true"></ion-icon>
-                        </button>
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxFemaleNotPregnantConfirmed', -1)" aria-label="Decrease pre-flight not pregnant count">
-                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
-                        </button>
-                      </span>
-                    </tui-textfield>
-                  </div>
-                </ion-col>
-                <ion-col size="12" size-sm="6" size-md="3">
+                <ion-col size="12" size-sm="4" size-md="4">
                   <div class="number-stepper">
                     <tui-textfield class="full-width">
-                      <input tuiTextfield type="number" formControlName="paxMale">
+                      <input tuiInputNumber [step]="1" formControlName="paxMale">
                       <label># PAX Male</label>
-                      <span class="stepper-inline">
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxMale', 1)" aria-label="Increase PAX male">
-                          <ion-icon name="add" aria-hidden="true"></ion-icon>
-                        </button>
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxMale', -1)" aria-label="Decrease PAX male">
-                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
-                        </button>
-                      </span>
                     </tui-textfield>
                   </div>
                 </ion-col>
               </ion-row>
-              <ion-row>
-                <ion-col size="12" size-sm="6" size-md="3">
+              <ion-row class="ion-margin-top">
+                <ion-col size="12" size-sm="6" size-md="6">
                   <div class="number-stepper">
                     <tui-textfield class="full-width">
-                      <input tuiTextfield type="number" formControlName="paxMinors">
-                      <label># PAX Minors</label>
-                      <span class="stepper-inline">
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxMinors', 1)" aria-label="Increase PAX minors">
-                          <ion-icon name="add" aria-hidden="true"></ion-icon>
-                        </button>
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxMinors', -1)" aria-label="Decrease PAX minors">
-                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
-                        </button>
-                      </span>
-                    </tui-textfield>
-                  </div>
-                </ion-col>
-                <ion-col size="12" size-sm="6" size-md="3">
-                  <div class="number-stepper">
-                    <tui-textfield class="full-width">
-                      <input tuiTextfield type="number" formControlName="paxWithMedications">
-                      <label># PAX with Medications</label>
-                      <span class="stepper-inline">
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxWithMedications', 1)" aria-label="Increase PAX with medications">
-                          <ion-icon name="add" aria-hidden="true"></ion-icon>
-                        </button>
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxWithMedications', -1)" aria-label="Decrease PAX with medications">
-                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
-                        </button>
-                      </span>
+                      <input tuiInputNumber [step]="1" formControlName="paxFemaleNotPregnantConfirmed">
+                      <label>Pre-flight not pregnant</label>
                     </tui-textfield>
                   </div>
                 </ion-col>
                 <ion-col size="12" size-sm="6" size-md="6">
                   <div class="number-stepper">
                     <tui-textfield class="full-width">
-                      <input tuiTextfield type="number" formControlName="paxNeeding72HrAssessment">
-                      <label># PAX needing &lt;72-hour RN assessment</label>
-                      <span class="stepper-inline">
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxNeeding72HrAssessment', 1)" aria-label="Increase PAX needing 72-hour RN assessment">
-                          <ion-icon name="add" aria-hidden="true"></ion-icon>
-                        </button>
-                        <button tuiButton appearance="secondary" size="s" type="button" class="stepper-button" (click)="updatePaxCount('paxNeeding72HrAssessment', -1)" aria-label="Decrease PAX needing 72-hour RN assessment">
-                          <ion-icon name="remove" aria-hidden="true"></ion-icon>
-                        </button>
-                      </span>
+                      <input tuiInputNumber [step]="1" formControlName="paxMinors">
+                      <label># PAX Minors</label>
+                    </tui-textfield>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row class="ion-margin-top">
+                <ion-col size="12" size-sm="6" size-md="6">
+                  <div class="number-stepper">
+                    <tui-textfield class="full-width">
+                      <input tuiInputNumber [step]="1" formControlName="paxWithMedications">
+                      <label># PAX with Medications</label>
+                    </tui-textfield>
+                  </div>
+                </ion-col>
+                <ion-col size="12" size-sm="6" size-md="6">
+                  <div class="number-stepper">
+                    <tui-textfield class="full-width">
+                      <input tuiInputNumber [step]="1" formControlName="paxNeeding72HrAssessment">
+                      <label># PAX needing &lt;72-hour assessment</label>
                     </tui-textfield>
                   </div>
                 </ion-col>
@@ -665,13 +621,17 @@
             <div class="section-block section-tight">
               <div class="section-title">Operational</div>
               <div class="checkbox-row">
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" formControlName="allPaxSafelyOnboarded">
-                  <span>All PAX safely on-boarded</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="allPaxSafelyOnboarded" class="tui-checkbox-small">
+                    <span>All PAX safely on-boarded</span>
+                  </div>
                 </label>
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" formControlName="allPaxGivenFoodWaterLavBreaks">
-                  <span>All PAX given food, water and lavatory breaks</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="allPaxGivenFoodWaterLavBreaks" class="tui-checkbox-small">
+                    <span>All PAX given food, water and lavatory breaks</span>
+                  </div>
                 </label>
               </div>
             </div>
@@ -736,29 +696,41 @@
             <div class="section-block section-tight">
               <div class="section-title">Special Circumstances</div>
               <div class="checkbox-row">
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstancePaxWrapped">
-                  <span>PAX wrapped</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstancePaxWrapped" class="tui-checkbox-small">
+                    <span>PAX wrapped</span>
+                  </div>
                 </label>
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalComplaintAssessed">
-                  <span>EMS Contacted</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalComplaintAssessed" class="tui-checkbox-small">
+                    <span>EMS Contacted</span>
+                  </div>
                 </label>
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalControlContacted">
-                  <span>Vighter Medical Control contacted</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalControlContacted" class="tui-checkbox-small">
+                    <span>Vighter Medical Control contacted</span>
+                  </div>
                 </label>
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceSiteSupervisorAdvised">
-                  <span>Site supervisor advised</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceSiteSupervisorAdvised" class="tui-checkbox-small">
+                    <span>Site supervisor advised</span>
+                  </div>
                 </label>
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalEmergencyOnboardEms">
-                  <span>Medical emergency on-board EMS contacted</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalEmergencyOnboardEms" class="tui-checkbox-small">
+                    <span>Medical emergency on-board EMS contacted</span>
+                  </div>
                 </label>
-                <label class="checkbox-inline">
-                  <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceViolentIncident">
-                  <span>Violent Incident</span>
+                <label class="checkbox-item">
+                  <div class="checkbox-label-content">
+                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceViolentIncident" class="tui-checkbox-small">
+                    <span>Violent Incident</span>
+                  </div>
                 </label>
               </div>
             </div>

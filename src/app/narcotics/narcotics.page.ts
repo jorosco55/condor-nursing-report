@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
-import { TuiButton, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
+import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { timeOutline } from 'ionicons/icons';
+import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiNativeSelect } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { NarcoticEntry, NursingReport } from '../models/report.model';
@@ -19,11 +21,16 @@ import SignaturePad from 'signature_pad';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule,
-    TuiTextfieldComponent,
-    TuiTextfieldDirective,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonRow,
+    IonCol,
+    TuiTextfield,
     TuiNativeSelect,
-    TuiButton
+    TuiButton,
+    TuiIcon
   ]
 })
 export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
@@ -69,6 +76,10 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
   private toastCtrl = inject(ToastController);
+
+  constructor() {
+    addIcons({ timeOutline });
+  }
 
   ngOnInit() {
     this.rnList = this.reportService.rnList;

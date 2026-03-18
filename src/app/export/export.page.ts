@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons } from '@ionic/angular/standalone';
 import { TuiButton } from '@taiga-ui/core';
 import SignaturePad from 'signature_pad';
 import * as pdfMake from 'pdfmake/build/pdfmake';
@@ -16,7 +16,11 @@ import { ReportService } from '../services/report.service';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
     TuiButton
   ]
 })

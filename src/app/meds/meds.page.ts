@@ -1,8 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
-import { TuiButton, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
+import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { swapVerticalOutline, heartOutline, pulseOutline, thermometerOutline, waterOutline, speedometerOutline } from 'ionicons/icons';
+import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox, TuiNativeSelect } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { PaxMedicationEntry, NursingReport } from '../models/report.model';
@@ -16,12 +18,18 @@ import { PaxMedicationEntry, NursingReport } from '../models/report.model';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule,
-    TuiTextfieldComponent,
-    TuiTextfieldDirective,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonRow,
+    IonCol,
+    IonIcon,
+    TuiTextfield,
     TuiNativeSelect,
     TuiCheckbox,
-    TuiButton
+    TuiButton,
+    TuiIcon
   ]
 })
 export class MedsPage implements OnInit {
@@ -70,6 +78,17 @@ export class MedsPage implements OnInit {
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
   private toastCtrl = inject(ToastController);
+
+  constructor() {
+    addIcons({
+      swapVerticalOutline,
+      heartOutline,
+      pulseOutline,
+      thermometerOutline,
+      waterOutline,
+      speedometerOutline
+    });
+  }
 
   ngOnInit() {
     this.initForm();

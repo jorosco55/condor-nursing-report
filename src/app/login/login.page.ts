@@ -2,8 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonicModule, ToastController } from '@ionic/angular';
-import { TuiButton, TuiTextfieldComponent, TuiTextfieldDirective } from '@taiga-ui/core';
+import { ToastController, IonContent } from '@ionic/angular/standalone';
+import { TuiButton, TuiTextfield } from '@taiga-ui/core';
 import { TuiInputPassword } from '@taiga-ui/kit';
 
 @Component({
@@ -14,9 +14,8 @@ import { TuiInputPassword } from '@taiga-ui/kit';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
-    TuiTextfieldComponent,
-    TuiTextfieldDirective,
+    IonContent,
+    TuiTextfield,
     TuiInputPassword,
     TuiButton
   ]
