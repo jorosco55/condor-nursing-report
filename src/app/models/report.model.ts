@@ -82,14 +82,21 @@ export interface NursingReport {
   delayReasons: string;
   delayEntries?: DelayEntry[];
 
-  // Special Circumstances
-  specialCircumstancePaxWrapped: boolean;
-  specialCircumstanceMedicalComplaintAssessed: boolean;
-  specialCircumstanceMedicalControlContacted: boolean;
-  specialCircumstanceSiteSupervisorAdvised: boolean;
-  specialCircumstanceMedicalEmergencyOnboardEms: boolean;
-  specialCircumstanceViolentIncident: boolean;
+  // Special Circumstances — home page toggles (one per SC tab section)
+  specialCircumstancePaxWrapped: boolean;            // WRAP Restraint
+  specialCircumstanceMedicalControlContacted: boolean; // Medical Control / Command & Escalation
+  specialCircumstanceCardiacArrest?: boolean;         // Cardiac Arrest
+  specialCircumstanceMedicalComplaintAssessed: boolean; // EMS Activation / In-Flight Medical Emergency
+  specialCircumstanceSeizure?: boolean;               // Seizure Activity
+  specialCircumstanceChestPain?: boolean;             // Chest Pain
+  specialCircumstanceViolentIncident: boolean;        // Violent Incident
+  // Legacy fields — kept for backward-compat with saved data
+  specialCircumstanceSiteSupervisorAdvised?: boolean;
+  specialCircumstanceMedicalEmergencyOnboardEms?: boolean;
   
+  // Special Circumstances (detailed form data from Special Circ. tab)
+  specialCircumstancesData?: Record<string, unknown>;
+
   // Signatures
   rnSignature?: string; // Base64
   dateSigned?: string;
@@ -138,11 +145,17 @@ export interface PaxMedicationEntry {
 }
 
 export interface NarcoticEntry {
-  aNumber: string;
-  narcoticName: string;
-  dose: string;
-  dosageUnit: string;
-  timeZ: string;
-  rnName: string;
-  rnSignature: string;
+  foicNameSiteMNum: string;
+  date: string;
+  flightNurseName: string;
+  paxId: string;
+  narcoticDescription: string;
+  amountReceived: string;
+  receivedFrom: string;
+  receivedFromSignature: string;
+  amountDispersedEnRoute: string;
+  amountRemaining: string;
+  releasedTo: string;
+  releasedToSignature: string;
+  flightNurseSignature: string;
 }

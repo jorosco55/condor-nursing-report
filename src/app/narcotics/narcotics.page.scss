@@ -1,8 +1,34 @@
-.narcotics-list {
-  display: grid;
-  gap: 12px;
+// Header branding
+.header-logo {
+  width: 36px;
+  height: 36px;
+  margin-left: 8px;
 }
 
+.powered-by {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.5px;
+  margin-right: 12px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.full-width {
+  width: 100%;
+}
+
+// Section block — matches home page card style
 .section-block {
   position: relative;
   padding: 14px 14px 16px;
@@ -10,7 +36,7 @@
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 6px 16px rgba(26, 26, 26, 0.08);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .section-block::before {
@@ -20,68 +46,47 @@
   left: 0;
   height: 4px;
   width: 100%;
+  border-radius: 10px 10px 0 0;
   background: linear-gradient(90deg, rgba(67, 82, 210, 0.6), rgba(67, 82, 210, 0.2));
 }
 
 .section-title {
   font-weight: 600;
+  font-size: 1rem;
   color: var(--ion-color-primary);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
-.section-compact {
-  margin-top: 12px;
+.section-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  .section-title {
+    margin-bottom: 0;
+  }
+}
+
+.narcotics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .narcotic-card {
-  border: 1px solid #e0e4ea;
-  border-radius: 10px;
-  padding: 12px;
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(26, 26, 26, 0.06);
+  // extends .section-block via class binding in template
 }
 
-.narcotic-card tui-textfield {
-  --t-height: var(--tui-height-l);
+.form-title-group {
+  flex: 1;
 }
 
-:host ::ng-deep .narcotic-card tui-textfield {
-  height: var(--tui-height-l);
-  --t-height: var(--tui-height-l);
-}
-
-:host ::ng-deep .narcotic-card tui-textfield .t-wrapper,
-:host ::ng-deep .narcotic-card tui-textfield .t-content,
-:host ::ng-deep .narcotic-card tui-textfield .t-field,
-:host ::ng-deep .narcotic-card tui-textfield .t-value {
-  height: var(--tui-height-l);
-  min-height: var(--tui-height-l);
-  padding-top: 0;
-  padding-bottom: 0;
-  align-items: center;
-}
-
-:host ::ng-deep .narcotic-card tui-textfield .t-clear {
-  right: 21px;
-  top: 50%;
-  transform: translateY(-50%);
-  margin: 0;
-}
-
-:host ::ng-deep .narcotic-card tui-textfield .t-clear,
-:host ::ng-deep .narcotic-card tui-textfield .t-icon {
-  position: absolute;
-}
-
-.narcotic-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-
-  h4 {
-    margin: 0;
-  }
+.form-subtitle {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 2px;
 }
 
 .narcotics-actions {
@@ -90,33 +95,110 @@
   margin-bottom: 12px;
 }
 
-.signature-field {
-  display: grid;
-  gap: 8px;
+// Custody grid — form layout using app color palette
+.custody-grid {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--ion-color-primary);
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+  margin-bottom: 8px;
 }
 
-.signature-header {
+.grid-row {
+  display: flex;
+  border-bottom: 1px solid #dfe3e8;
+  min-height: 48px;
+}
+
+.grid-row:last-child {
+  border-bottom: none;
+}
+
+.grid-label {
+  flex: 0 0 35%;
+  border-right: 1px solid #dfe3e8;
+  padding: 8px 12px;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-weight: 600;
-  color: #2d2d2d;
+  background-color: #f0f2f9;
+  color: var(--ion-color-primary);
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
-.signature-canvas-wrap {
-  position: relative;
-  border: 1px solid #dfe3e8;
-  border-radius: 8px;
-  background: #fafbfc;
-  padding: 8px;
-  min-height: 140px;
+.grid-input {
+  flex: 1;
+  padding: 4px;
   display: flex;
   align-items: stretch;
 }
 
+.double-height {
+  min-height: 80px;
+
+  .grid-label {
+    align-items: flex-start;
+    padding-top: 10px;
+  }
+}
+
+.native-input {
+  width: 100%;
+  border: none;
+  font-size: 1rem;
+  padding: 4px 8px;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  color: #2d2d2d;
+}
+
+.textarea-input {
+  width: 100%;
+  border: none;
+  font-size: 1rem;
+  padding: 8px;
+  resize: vertical;
+  background: transparent;
+  min-height: 60px;
+  outline: none;
+  font-family: inherit;
+  color: #2d2d2d;
+}
+
+:host ::ng-deep .no-border .t-wrapper {
+  background: transparent;
+  box-shadow: none !important;
+  border: none !important;
+  transition: none;
+}
+
+:host ::ng-deep .no-border.t-focused .t-wrapper {
+  box-shadow: none !important;
+}
+
+// Signature rows
+.signature-row {
+  min-height: 100px;
+}
+
+.signature-input {
+  padding: 0;
+}
+
+.signature-canvas-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 100px;
+  background: #fff;
+}
+
 .signature-canvas {
   width: 100%;
-  height: 140px;
+  height: 100%;
   display: block;
 }
 
@@ -137,51 +219,19 @@
   display: none;
 }
 
-.time-picker-input {
+.clear-sig-btn {
   position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  pointer-events: none;
-}
-
-.time-field {
-  display: grid;
-  gap: 4px;
-}
-
-.time-inline {
-  position: absolute;
-  right: 52px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  gap: 6px;
-  pointer-events: auto;
-  z-index: 2;
-}
-
-.time-field tui-textfield {
-  --t-end: 6.25rem;
-}
-
-.time-inline button {
-  font-size: 0.7rem;
-  line-height: 1;
-  min-height: 24px;
-  padding: 0 6px;
-  opacity: 1;
-  filter: none;
-  -webkit-font-smoothing: auto;
-}
-
-.time-error {
-  font-size: 0.75rem;
-  color: #b00020;
-  margin-top: 4px;
+  top: 4px;
+  right: 4px;
+  z-index: 10;
 }
 
 .field-alert {
   box-shadow: 0 0 0 1px #b00020 inset;
-  border-radius: 12px;
+  border-radius: 4px;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

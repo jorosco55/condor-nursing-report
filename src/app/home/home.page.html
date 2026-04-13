@@ -695,43 +695,107 @@
           <ion-col size="12">
             <div class="section-block section-tight">
               <div class="section-title">Special Circumstances</div>
-              <div class="checkbox-row">
-                <label class="checkbox-item">
-                  <div class="checkbox-label-content">
-                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstancePaxWrapped" class="tui-checkbox-small">
-                    <span>PAX wrapped</span>
+              <p class="sc-hint">Check <strong>Yes</strong> for any that occurred. Full documentation in the <strong>Special Circ.</strong> tab.</p>
+              <div class="sc-yn-list">
+
+                <div class="sc-yn-row">
+                  <span class="sc-yn-label">WRAP Restraint</span>
+                  <div class="sc-yn-options">
+                    <label class="sc-yn-btn" [class.active]="reportForm.get('specialCircumstancePaxWrapped')?.value === true">
+                      <input tuiCheckbox type="checkbox" formControlName="specialCircumstancePaxWrapped" class="tui-checkbox-small sc-yn-hidden">
+                      Yes
+                    </label>
+                    <label class="sc-yn-btn sc-yn-no" [class.active]="reportForm.get('specialCircumstancePaxWrapped')?.value === false">
+                      <input type="checkbox" class="sc-yn-hidden" [checked]="reportForm.get('specialCircumstancePaxWrapped')?.value === false" (change)="setScNo('specialCircumstancePaxWrapped', $event)">
+                      No
+                    </label>
                   </div>
-                </label>
-                <label class="checkbox-item">
-                  <div class="checkbox-label-content">
-                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalComplaintAssessed" class="tui-checkbox-small">
-                    <span>EMS Contacted</span>
+                </div>
+
+                <div class="sc-yn-row">
+                  <span class="sc-yn-label">Medical Control / Command & Escalation</span>
+                  <div class="sc-yn-options">
+                    <label class="sc-yn-btn" [class.active]="reportForm.get('specialCircumstanceMedicalControlContacted')?.value === true">
+                      <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalControlContacted" class="tui-checkbox-small sc-yn-hidden">
+                      Yes
+                    </label>
+                    <label class="sc-yn-btn sc-yn-no" [class.active]="reportForm.get('specialCircumstanceMedicalControlContacted')?.value === false">
+                      <input type="checkbox" class="sc-yn-hidden" [checked]="reportForm.get('specialCircumstanceMedicalControlContacted')?.value === false" (change)="setScNo('specialCircumstanceMedicalControlContacted', $event)">
+                      No
+                    </label>
                   </div>
-                </label>
-                <label class="checkbox-item">
-                  <div class="checkbox-label-content">
-                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalControlContacted" class="tui-checkbox-small">
-                    <span>Vighter Medical Control contacted</span>
+                </div>
+
+                <div class="sc-yn-row">
+                  <span class="sc-yn-label">Cardiac Arrest</span>
+                  <div class="sc-yn-options">
+                    <label class="sc-yn-btn" [class.active]="reportForm.get('specialCircumstanceCardiacArrest')?.value === true">
+                      <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceCardiacArrest" class="tui-checkbox-small sc-yn-hidden">
+                      Yes
+                    </label>
+                    <label class="sc-yn-btn sc-yn-no" [class.active]="reportForm.get('specialCircumstanceCardiacArrest')?.value === false">
+                      <input type="checkbox" class="sc-yn-hidden" [checked]="reportForm.get('specialCircumstanceCardiacArrest')?.value === false" (change)="setScNo('specialCircumstanceCardiacArrest', $event)">
+                      No
+                    </label>
                   </div>
-                </label>
-                <label class="checkbox-item">
-                  <div class="checkbox-label-content">
-                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceSiteSupervisorAdvised" class="tui-checkbox-small">
-                    <span>Site supervisor advised</span>
+                </div>
+
+                <div class="sc-yn-row">
+                  <span class="sc-yn-label">EMS Activation / In-Flight Medical Emergency</span>
+                  <div class="sc-yn-options">
+                    <label class="sc-yn-btn" [class.active]="reportForm.get('specialCircumstanceMedicalComplaintAssessed')?.value === true">
+                      <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalComplaintAssessed" class="tui-checkbox-small sc-yn-hidden">
+                      Yes
+                    </label>
+                    <label class="sc-yn-btn sc-yn-no" [class.active]="reportForm.get('specialCircumstanceMedicalComplaintAssessed')?.value === false">
+                      <input type="checkbox" class="sc-yn-hidden" [checked]="reportForm.get('specialCircumstanceMedicalComplaintAssessed')?.value === false" (change)="setScNo('specialCircumstanceMedicalComplaintAssessed', $event)">
+                      No
+                    </label>
                   </div>
-                </label>
-                <label class="checkbox-item">
-                  <div class="checkbox-label-content">
-                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceMedicalEmergencyOnboardEms" class="tui-checkbox-small">
-                    <span>Medical emergency on-board EMS contacted</span>
+                </div>
+
+                <div class="sc-yn-row">
+                  <span class="sc-yn-label">Seizure Activity</span>
+                  <div class="sc-yn-options">
+                    <label class="sc-yn-btn" [class.active]="reportForm.get('specialCircumstanceSeizure')?.value === true">
+                      <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceSeizure" class="tui-checkbox-small sc-yn-hidden">
+                      Yes
+                    </label>
+                    <label class="sc-yn-btn sc-yn-no" [class.active]="reportForm.get('specialCircumstanceSeizure')?.value === false">
+                      <input type="checkbox" class="sc-yn-hidden" [checked]="reportForm.get('specialCircumstanceSeizure')?.value === false" (change)="setScNo('specialCircumstanceSeizure', $event)">
+                      No
+                    </label>
                   </div>
-                </label>
-                <label class="checkbox-item">
-                  <div class="checkbox-label-content">
-                    <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceViolentIncident" class="tui-checkbox-small">
-                    <span>Violent Incident</span>
+                </div>
+
+                <div class="sc-yn-row">
+                  <span class="sc-yn-label">Chest Pain</span>
+                  <div class="sc-yn-options">
+                    <label class="sc-yn-btn" [class.active]="reportForm.get('specialCircumstanceChestPain')?.value === true">
+                      <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceChestPain" class="tui-checkbox-small sc-yn-hidden">
+                      Yes
+                    </label>
+                    <label class="sc-yn-btn sc-yn-no" [class.active]="reportForm.get('specialCircumstanceChestPain')?.value === false">
+                      <input type="checkbox" class="sc-yn-hidden" [checked]="reportForm.get('specialCircumstanceChestPain')?.value === false" (change)="setScNo('specialCircumstanceChestPain', $event)">
+                      No
+                    </label>
                   </div>
-                </label>
+                </div>
+
+                <div class="sc-yn-row">
+                  <span class="sc-yn-label">Violent Incident</span>
+                  <div class="sc-yn-options">
+                    <label class="sc-yn-btn" [class.active]="reportForm.get('specialCircumstanceViolentIncident')?.value === true">
+                      <input tuiCheckbox type="checkbox" formControlName="specialCircumstanceViolentIncident" class="tui-checkbox-small sc-yn-hidden">
+                      Yes
+                    </label>
+                    <label class="sc-yn-btn sc-yn-no" [class.active]="reportForm.get('specialCircumstanceViolentIncident')?.value === false">
+                      <input type="checkbox" class="sc-yn-hidden" [checked]="reportForm.get('specialCircumstanceViolentIncident')?.value === false" (change)="setScNo('specialCircumstanceViolentIncident', $event)">
+                      No
+                    </label>
+                  </div>
+                </div>
+
               </div>
             </div>
           </ion-col>

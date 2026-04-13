@@ -13,11 +13,13 @@ export class ReportService {
   private medicationRecordStatusSubject = new BehaviorSubject<string>('');
   private hasNarcoticSelectionSubject = new BehaviorSubject<boolean>(false);
   private hasMedsSelectionSubject = new BehaviorSubject<boolean>(false);
+  private scAlertSubject = new BehaviorSubject<boolean>(false);
 
   narcRecordStatus$ = this.narcRecordStatusSubject.asObservable();
   medicationRecordStatus$ = this.medicationRecordStatusSubject.asObservable();
   hasNarcoticSelection$ = this.hasNarcoticSelectionSubject.asObservable();
   hasMedsSelection$ = this.hasMedsSelectionSubject.asObservable();
+  scAlert$ = this.scAlertSubject.asObservable();
 
   readonly rnList: string[] = [
     'Sarah Johnson, RN',
@@ -50,14 +52,29 @@ export class ReportService {
     this.hasMedsSelectionSubject.next(hasSelection);
   }
 
+  setScAlert(value: boolean) {
+    this.scAlertSubject.next(value);
+  }
+
   async hydrateNarcoticsState(): Promise<void> {
     const report = await this.getLatestReport();
     this.setNarcRecordStatus(report?.narcRecordStatus || '');
     this.setMedicationRecordStatus(report?.medicationRecordStatus || '');
-    const hasSelection = (report?.narcotics || []).some(entry => (entry.narcoticName || '').trim().length > 0);
+    const hasSelection = (report?.narcotics || []).some(entry => (entry.narcoticDescription || '').trim().length > 0);
     this.setHasNarcoticSelection(hasSelection);
     const hasMedsSelection = (report?.paxMedicated || []).some(entry => (entry.medication || '').trim().length > 0);
     this.setHasMedsSelection(hasMedsSelection);
+
+    const scAlert = !!(
+      report?.specialCircumstancePaxWrapped ||
+      report?.specialCircumstanceMedicalControlContacted ||
+      report?.specialCircumstanceCardiacArrest ||
+      report?.specialCircumstanceMedicalComplaintAssessed ||
+      report?.specialCircumstanceSeizure ||
+      report?.specialCircumstanceChestPain ||
+      report?.specialCircumstanceViolentIncident
+    );
+    this.setScAlert(scAlert);
   }
 
   async saveReport(report: NursingReport): Promise<void> {

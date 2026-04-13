@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { ToastController, IonContent, IonHeader, IonToolbar, IonButtons, IonTitle, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { timeOutline, add, remove } from 'ionicons/icons';
@@ -93,6 +94,8 @@ export class HomePage implements OnInit, OnDestroy {
   visibleFlightRns = 2;
   readonly maxFlightRns = 5;
 
+  private scFormSub?: Subscription;
+
   transferOfCareSites: string[] = ['IWA', 'ELP', 'ALX', 'HRL'];
   wheelsSiteOptions: string[] = this.transferOfCareSites;
   siteStopsOptions: string[] = this.transferOfCareSites;
@@ -133,10 +136,27 @@ export class HomePage implements OnInit, OnDestroy {
     this.loadLatestDraft();
     this.setupKeyboardListeners();
     this.enableTouchScrolling();
+
+    // Keep the SC tab alert in sync whenever any SC toggle changes
+    this.scFormSub = this.reportForm.valueChanges.subscribe(() => this.emitScAlert());
   }
 
   ngOnDestroy() {
     this.removeKeyboardListeners();
+    this.scFormSub?.unsubscribe();
+  }
+
+  private emitScAlert() {
+    const v = this.reportForm.value;
+    const anyYes =
+      v.specialCircumstancePaxWrapped === true ||
+      v.specialCircumstanceMedicalControlContacted === true ||
+      v.specialCircumstanceCardiacArrest === true ||
+      v.specialCircumstanceMedicalComplaintAssessed === true ||
+      v.specialCircumstanceSeizure === true ||
+      v.specialCircumstanceChestPain === true ||
+      v.specialCircumstanceViolentIncident === true;
+    this.reportService.setScAlert(anyYes);
   }
 
   async setupKeyboardListeners() {
@@ -250,10 +270,11 @@ export class HomePage implements OnInit, OnDestroy {
 
       // Special Circumstances
       specialCircumstancePaxWrapped: [false],
-      specialCircumstanceMedicalComplaintAssessed: [false],
       specialCircumstanceMedicalControlContacted: [false],
-      specialCircumstanceSiteSupervisorAdvised: [false],
-      specialCircumstanceMedicalEmergencyOnboardEms: [false],
+      specialCircumstanceCardiacArrest: [false],
+      specialCircumstanceMedicalComplaintAssessed: [false],
+      specialCircumstanceSeizure: [false],
+      specialCircumstanceChestPain: [false],
       specialCircumstanceViolentIncident: [false]
     });
 
@@ -697,6 +718,17 @@ export class HomePage implements OnInit, OnDestroy {
     this.medRecordNaChecked = control.value === 'N/A';
     this.medRecordAdminChecked = control.value === 'Administered';
     this.reportService.setMedicationRecordStatus(control.value || '');
+  }
+
+  setScNo(controlName: string, event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    const control = this.reportForm.get(controlName);
+    if (!control) return;
+    // "No" checkbox checked → set value to false (uncheck "Yes")
+    // "No" checkbox unchecked → leave as-is (null-ish state, keep false)
+    if (checked) {
+      control.setValue(false, { emitEvent: true });
+    }
   }
 
   onPreflightCheckChange(

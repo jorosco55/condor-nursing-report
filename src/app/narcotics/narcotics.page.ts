@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol } from '@ionic/angular/standalone';
+import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonButtons } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { timeOutline } from 'ionicons/icons';
+import { timeOutline, closeCircleOutline } from 'ionicons/icons';
 import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiNativeSelect } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
@@ -27,6 +27,7 @@ import SignaturePad from 'signature_pad';
     IonContent,
     IonRow,
     IonCol,
+    IonButtons,
     TuiTextfield,
     TuiNativeSelect,
     TuiButton,
@@ -38,7 +39,10 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
   narcoticsRequired = false;
   private destroy$ = new Subject<void>();
   private currentNarcoticsAdministered = false;
-  private signaturePads: SignaturePad[] = [];
+  
+  // We will manage signature pads in a map keyed by pad ID to keep track of multiple canvases per entry
+  private signaturePads = new Map<string, SignaturePad>();
+  
   private signaturePadOptions = {
     minWidth: 1,
     maxWidth: 3,
@@ -49,25 +53,7 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
     backgroundColor: 'rgb(255, 255, 255)'
   };
 
-  @ViewChildren('rnSignatureCanvas') rnSignatureCanvases!: QueryList<ElementRef<HTMLCanvasElement>>;
-
-  narcoticOptions: string[] = [
-    'Morphine',
-    'Fentanyl',
-    'Ketamine',
-    'Midazolam',
-    'Lorazepam',
-    'Hydromorphone',
-    'Oxycodone',
-    'Diazepam',
-    'Dilaudid',
-    'Hydrocodone',
-    'Codeine',
-    'Tramadol'
-  ];
-
-  dosageUnits: string[] = ['mg', 'mcg', 'g', 'mL', 'units', 'oz'];
-  doseOptions: string[] = ['0.5', '1', '2', '5', '10', '20', '50', '100'];
+  @ViewChildren('signatureCanvas') signatureCanvases!: QueryList<ElementRef<HTMLCanvasElement>>;
 
   rnList: string[] = [];
 
@@ -78,7 +64,7 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
   private toastCtrl = inject(ToastController);
 
   constructor() {
-    addIcons({ timeOutline });
+    addIcons({ timeOutline, closeCircleOutline });
   }
 
   ngOnInit() {
@@ -102,7 +88,7 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.setupSignaturePads();
-    this.rnSignatureCanvases.changes
+    this.signatureCanvases.changes
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.setupSignaturePads());
     window.addEventListener('resize', this.handleSignatureResize);
@@ -132,38 +118,70 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  setupSignaturePads() {
-    const canvases = this.rnSignatureCanvases?.toArray() ?? [];
-    this.signaturePads = canvases.map((canvasRef, index) => {
-      const canvas = canvasRef.nativeElement;
-      this.resizeSignatureCanvas(canvas);
-      this.attachSignatureTouchHandlers(canvas);
-      const pad = new SignaturePad(canvas, this.signaturePadOptions);
-      const existingValue = this.entries.at(index)?.get('rnSignature')?.value;
-      if (existingValue) {
-        pad.fromDataURL(existingValue);
-      }
-      (pad as unknown as { onEnd?: () => void }).onEnd = () => {
-        const control = this.entries.at(index)?.get('rnSignature');
-        if (!control) return;
-        control.setValue(pad.isEmpty() ? '' : pad.toDataURL());
-      };
-      return pad;
-    });
+  getControlValue(index: number, controlName: string): string {
+    return this.entries.at(index)?.get(controlName)?.value || '';
   }
 
-  clearSignature(index: number) {
-    const pad = this.signaturePads[index];
+  setupSignaturePads() {
+    const canvases = this.signatureCanvases?.toArray() ?? [];
+    
+    // Create new pads if missing
+    canvases.forEach((canvasRef) => {
+      const canvas = canvasRef.nativeElement;
+      const padId = canvas.dataset['padId'];
+      const index = parseInt(canvas.dataset['index'] || '0', 10);
+      const controlName = canvas.dataset['controlName'] || '';
+      
+      if (!padId || !controlName) return;
+
+      if (!this.signaturePads.has(padId)) {
+        this.resizeSignatureCanvas(canvas);
+        this.attachSignatureTouchHandlers(canvas);
+        const pad = new SignaturePad(canvas, this.signaturePadOptions);
+        
+        const existingValue = this.entries.at(index)?.get(controlName)?.value;
+        if (existingValue) {
+          pad.fromDataURL(existingValue);
+        }
+        
+        // Listeners
+        (pad as unknown as { onEnd?: () => void }).onEnd = () => {
+          const control = this.entries.at(index)?.get(controlName);
+          if (!control) return;
+          control.setValue(pad.isEmpty() ? '' : pad.toDataURL());
+        };
+        
+        this.signaturePads.set(padId, pad);
+      }
+    });
+
+    // Cleanup old pads
+    const currentPadIds = canvases.map(c => c.nativeElement.dataset['padId']).filter(Boolean) as string[];
+    for (const [padId, pad] of this.signaturePads.entries()) {
+      if (!currentPadIds.includes(padId)) {
+        pad.off();
+        this.signaturePads.delete(padId);
+      }
+    }
+  }
+
+  clearSignature(padId: string, index: number, controlName: string) {
+    const pad = this.signaturePads.get(padId);
     if (pad) {
       pad.clear();
     }
-    this.entries.at(index)?.get('rnSignature')?.setValue('');
+    this.entries.at(index)?.get(controlName)?.setValue('');
   }
 
   private handleSignatureResize = () => {
-    this.signaturePads.forEach((pad, index) => {
-      const canvas = this.rnSignatureCanvases?.toArray()[index]?.nativeElement;
-      if (!canvas) return;
+    this.signatureCanvases?.toArray().forEach(canvasRef => {
+      const canvas = canvasRef.nativeElement;
+      const padId = canvas.dataset['padId'];
+      if (!padId) return;
+      
+      const pad = this.signaturePads.get(padId);
+      if (!pad) return;
+
       const data = pad.isEmpty() ? '' : pad.toDataURL();
       this.resizeSignatureCanvas(canvas);
       pad.clear();
@@ -197,84 +215,20 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
 
   createEntry(data?: Partial<NarcoticEntry>): FormGroup {
     return this.fb.group({
-      aNumber: [data?.aNumber || ''],
-      narcoticName: [data?.narcoticName || ''],
-      dose: [data?.dose || ''],
-      dosageUnit: [data?.dosageUnit || ''],
-      timeZ: [data?.timeZ || '', [this.timeHHMMValidator]],
-      rnName: [data?.rnName || ''],
-      rnSignature: [data?.rnSignature || '']
+      foicNameSiteMNum: [data?.foicNameSiteMNum || ''],
+      date: [data?.date || new Date().toISOString().split('T')[0]],
+      flightNurseName: [data?.flightNurseName || ''],
+      paxId: [data?.paxId || ''],
+      narcoticDescription: [data?.narcoticDescription || ''],
+      amountReceived: [data?.amountReceived || ''],
+      receivedFrom: [data?.receivedFrom || ''],
+      receivedFromSignature: [data?.receivedFromSignature || ''],
+      amountDispersedEnRoute: [data?.amountDispersedEnRoute || ''],
+      amountRemaining: [data?.amountRemaining || ''],
+      releasedTo: [data?.releasedTo || ''],
+      releasedToSignature: [data?.releasedToSignature || ''],
+      flightNurseSignature: [data?.flightNurseSignature || '']
     });
-  }
-
-  timeHHMMValidator(control: AbstractControl): ValidationErrors | null {
-    const value = (control.value || '').toString().trim();
-    if (!value) return null;
-    const isValid = /^([01]\d|2[0-3])[0-5]\d$/.test(value) || /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
-    return isValid ? null : { invalidTime: true };
-  }
-
-  stampEntryTime(index: number) {
-    const control = this.entries.at(index).get('timeZ');
-    if (!control) return;
-    control.setValue(this.getCurrentTimestamp());
-  }
-
-  stampEntryTimeOnFocus(index: number) {
-    const control = this.entries.at(index).get('timeZ');
-    if (!control) return;
-    const currentValue = (control.value || '').toString().trim();
-    if (currentValue) return;
-    control.setValue(this.getCurrentTimestamp());
-  }
-
-  handleEntryTimeBlur(index: number) {
-    const control = this.entries.at(index).get('timeZ');
-    if (!control) return;
-    const rawValue = (control.value || '').toString().trim();
-    if (!rawValue) {
-      control.setValue(this.getCurrentTimestamp());
-      return;
-    }
-    const normalized = this.normalizeTimeValue(rawValue);
-    if (normalized !== rawValue) {
-      control.setValue(normalized);
-    }
-  }
-
-  normalizeTimeValue(value: string): string {
-    if (/^\d{4}$/.test(value)) {
-      return value;
-    }
-    const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(value);
-    if (match) {
-      return `${match[1]}${match[2]}`;
-    }
-    return value;
-  }
-
-  openTimePicker(input: HTMLInputElement) {
-    if (typeof input.showPicker === 'function') {
-      input.showPicker();
-    } else {
-      input.focus();
-    }
-  }
-
-  applyEntryTimePicker(event: Event, index: number) {
-    const input = event.target as HTMLInputElement;
-    const rawValue = (input.value || '').toString().trim();
-    if (!rawValue) return;
-    const normalized = this.normalizeTimeValue(rawValue);
-    const control = this.entries.at(index).get('timeZ');
-    if (!control) return;
-    control.setValue(normalized);
-    control.markAsTouched();
-  }
-
-  getCurrentTimestamp(): string {
-    const now = new Date();
-    return now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0');
   }
 
   async loadLatestReport() {
@@ -287,13 +241,19 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
     const entriesFromReport = report.narcotics || [];
     while (entriesFromReport.length < this.minEntries) {
       entriesFromReport.push({
-        aNumber: '',
-        narcoticName: '',
-        dose: '',
-        dosageUnit: '',
-        timeZ: '',
-        rnName: '',
-        rnSignature: ''
+        foicNameSiteMNum: '',
+        date: new Date().toISOString().split('T')[0],
+        flightNurseName: '',
+        paxId: '',
+        narcoticDescription: '',
+        amountReceived: '',
+        receivedFrom: '',
+        receivedFromSignature: '',
+        amountDispersedEnRoute: '',
+        amountRemaining: '',
+        releasedTo: '',
+        releasedToSignature: '',
+        flightNurseSignature: ''
       });
     }
 
@@ -306,7 +266,7 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
 
   applyRequiredNarcotic(isRequired: boolean) {
     const firstEntry = this.entries.at(0) as FormGroup | undefined;
-    const narcoticControl = firstEntry?.get('narcoticName');
+    const narcoticControl = firstEntry?.get('narcoticDescription');
     if (!narcoticControl) return;
 
     this.narcoticsRequired = isRequired;
@@ -320,8 +280,8 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
 
   hasAnyNarcoticSelection(): boolean {
     return this.entries.controls.some(control => {
-      const narcoticName = control.get('narcoticName')?.value || '';
-      return narcoticName.trim().length > 0;
+      const narcoticDesc = control.get('narcoticDescription')?.value || '';
+      return narcoticDesc.trim().length > 0;
     });
   }
 

@@ -1,0 +1,3257 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Special Circumstances</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="container">
+    <div class="sc-nav-pills">
+      <button class="sc-nav-pill" [class.is-active]="sectionOpen.wrap" type="button" (click)="openAndScrollTo('wrap', 'sc-wrap')">WRAP</button>
+      <button class="sc-nav-pill" [class.is-active]="sectionOpen.medControl" type="button" (click)="openAndScrollTo('medControl', 'sc-med-control')">Med Control</button>
+      <button class="sc-nav-pill" [class.is-active]="sectionOpen.cardiacArrest" type="button" (click)="openAndScrollTo('cardiacArrest', 'sc-cardiac')">Cardiac</button>
+      <button class="sc-nav-pill" [class.is-active]="sectionOpen.ems" type="button" (click)="openAndScrollTo('ems', 'sc-ems')">EMS</button>
+      <button class="sc-nav-pill" [class.is-active]="sectionOpen.seizure" type="button" (click)="openAndScrollTo('seizure', 'sc-seizure')">Seizure</button>
+      <button class="sc-nav-pill" [class.is-active]="sectionOpen.chestPain" type="button" (click)="openAndScrollTo('chestPain', 'sc-chest-pain')">Chest Pain</button>
+      <button class="sc-nav-pill" [class.is-active]="sectionOpen.violentIncident" type="button" (click)="openAndScrollTo('violentIncident', 'sc-violent')">Violent</button>
+    </div>
+
+    <form [formGroup]="scForm">
+
+      <!-- ══════════════════════════════════════════
+           WRAP RESTRAINT — QUICK ASSESSMENT & MONITORING NOTE
+           ══════════════════════════════════════════ -->
+      <div class="sc-section" [class.is-open]="sectionOpen.wrap">
+        <div class="sc-category-label">Special Circumstances</div>
+        <div class="sc-section-toggle" (click)="toggleSection('wrap')" role="button" tabindex="0">
+          <h2 class="sc-form-title" id="sc-wrap">WRAP Restraint – Quick Assessment &amp; Monitoring Note</h2>
+          <ion-icon [name]="sectionOpen.wrap ? 'chevron-up-outline' : 'chevron-down-outline'" class="sc-chevron"></ion-icon>
+        </div>
+        <div class="sc-section-body">
+
+      <!-- Incident Info -->
+      <div class="section-block">
+        <div class="section-title">Incident Info</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div class="time-field">
+              <div *ngIf="scTriggers.wrap" class="sc-required-banner">Required!</div>
+              <tui-textfield class="full-width" [class.sc-required-field]="scTriggers.wrap">
+                <input tuiTextfield formControlName="wrapInitiatedDateTime" type="datetime-local">
+                <label>Date/Time WRAP Initiated</label>
+              </tui-textfield>
+            </div>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="wrapLocation">
+              <label>Location</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div class="yn-field-row">
+              <span class="yn-field-label">FOIC Notified</span>
+              <div class="yn-options">
+                <label class="yn-btn" [class.active]="scForm.get('foicNotified')?.value === true">
+                  <input tuiCheckbox type="checkbox" formControlName="foicNotified" class="yn-hidden">
+                  Yes
+                </label>
+                <label class="yn-btn yn-no" [class.active]="scForm.get('foicNotified')?.value === false">
+                  <input type="checkbox" class="yn-hidden" [checked]="scForm.get('foicNotified')?.value === false" (change)="setNo('foicNotified', $event)">
+                  No
+                </label>
+              </div>
+            </div>
+            <div class="time-field" *ngIf="scForm.get('foicNotified')?.value === true">
+              <tui-textfield class="full-width">
+                <input tuiTextfield formControlName="foicNotifiedTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+                <label>Time Notified</label>
+                <span class="time-inline">
+                  <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(foicTimePicker)" aria-label="Open time picker">
+                    <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                  </button>
+                </span>
+              </tui-textfield>
+              <input #foicTimePicker type="time" class="time-picker-input" (change)="applyScTimePicker($event, 'foicNotifiedTime')">
+            </div>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <div class="yn-field-row">
+              <span class="yn-field-label">ASO Present</span>
+              <div class="yn-options">
+                <label class="yn-btn" [class.active]="scForm.get('asoPresent')?.value === true">
+                  <input tuiCheckbox type="checkbox" formControlName="asoPresent" class="yn-hidden">
+                  Yes
+                </label>
+                <label class="yn-btn yn-no" [class.active]="scForm.get('asoPresent')?.value === false">
+                  <input type="checkbox" class="yn-hidden" [checked]="scForm.get('asoPresent')?.value === false" (change)="setNo('asoPresent', $event)">
+                  No
+                </label>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Pre-Assessment Status -->
+      <div class="section-block">
+        <div class="section-title">Pre-Assessment Status</div>
+        <ion-row>
+          <ion-col size="12">
+            <tui-textfield class="full-width">
+              <textarea tuiTextarea formControlName="reasonForWrap" rows="2"></textarea>
+              <label>Reason for WRAP initiation (per FOIC)</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+        <div class="multi-check-row">
+          <span class="multi-check-label">Patient Behavior Prior to WRAP:</span>
+          <div class="multi-check-options">
+            <label class="check-chip" [class.selected]="scForm.get('behaviorAgitated')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="behaviorAgitated" class="yn-hidden">
+              Agitated
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('behaviorCombative')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="behaviorCombative" class="yn-hidden">
+              Combative
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('behaviorNonCompliant')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="behaviorNonCompliant" class="yn-hidden">
+              Non-compliant
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('behaviorOther')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="behaviorOther" class="yn-hidden">
+              Other
+            </label>
+          </div>
+          <tui-textfield class="full-width" *ngIf="scForm.get('behaviorOther')?.value">
+            <input tuiTextfield formControlName="behaviorOtherText" placeholder="Specify...">
+            <label>Other behavior</label>
+          </tui-textfield>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Nursing Role / Safety -->
+      <div class="section-block">
+        <div class="section-title">Nursing Role / Safety</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('nursingObservedOnly')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="nursingObservedOnly" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Observed only (no interference)</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('nursingVisualMonitoring')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="nursingVisualMonitoring" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Maintained visual monitoring at safe distance</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('nursingAccompaniedFoic')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="nursingAccompaniedFoic" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Accompanied by FOIC/ASO during all assessments</span>
+            </div>
+          </label>
+          <div class="yn-field-row ion-margin-top">
+            <span class="yn-field-label">Distance maintained: ≥ arm's length</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('distanceArmsLength')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="distanceArmsLength" class="yn-hidden">
+                Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('distanceArmsLength')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('distanceArmsLength')?.value === false" (change)="setNo('distanceArmsLength', $event)">
+                No
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Initial Post-Restraint Assessment (FOIC-directed) -->
+      <div class="section-block">
+        <div class="section-title">Initial Post-Restraint Assessment (FOIC-directed)</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Restraint Position</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('restraintPositionAppropriate')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="restraintPositionAppropriate" class="yn-hidden">
+                Appropriate
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('restraintPositionAppropriate')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('restraintPositionAppropriate')?.value === false" (change)="setNo('restraintPositionAppropriate', $event)">
+                Concern noted
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Upper Extremities</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('upperExtremitiesNoBlanching')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="upperExtremitiesNoBlanching" class="yn-hidden">
+                No blanching
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('upperExtremitiesNoBlanching')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('upperExtremitiesNoBlanching')?.value === false" (change)="setNo('upperExtremitiesNoBlanching', $event)">
+                Blanching noted
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Circulation</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('circulationIntact')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="circulationIntact" class="yn-hidden">
+                Intact
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('circulationIntact')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('circulationIntact')?.value === false" (change)="setNo('circulationIntact', $event)">
+                Concern noted
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Respirations</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('respirationsNormal')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="respirationsNormal" class="yn-hidden">
+                Normal
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('respirationsLabored')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="respirationsLabored" class="yn-hidden">
+                Labored
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('respirationsShallow')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="respirationsShallow" class="yn-hidden">
+                Shallow
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">SpO₂</span>
+            <tui-textfield class="spo2-field">
+              <input tuiTextfield formControlName="spo2" inputmode="numeric" placeholder="##">
+              <label>SpO₂ %</label>
+            </tui-textfield>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">LOC</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('locAlert')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="locAlert" class="yn-hidden">
+                Alert
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('locDrowsy')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="locDrowsy" class="yn-hidden">
+                Drowsy
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('locAltered')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="locAltered" class="yn-hidden">
+                Altered
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Temperature / Overheating</span>
+            <div class="yn-options">
+              <label class="yn-btn yn-no" [class.active]="scForm.get('overheatingNo')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="overheatingNo" class="yn-hidden">
+                No
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('overheatingYes')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="overheatingYes" class="yn-hidden">
+                Yes
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Ongoing Monitoring Schedule -->
+      <div class="section-block">
+        <div class="section-title">Ongoing Monitoring Schedule</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('monitorQ15x4')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="monitorQ15x4" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>q15 min x4 completed</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('monitorQ30x2')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="monitorQ30x2" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>q30 min x2 completed</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('monitorQ1hrOngoing')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="monitorQ1hrOngoing" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>q1 hr ongoing</span>
+            </div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="monitorDeviations">
+          <label>Deviations per FOIC direction</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Behavior During Monitoring -->
+      <div class="section-block">
+        <div class="section-title">Behavior During Monitoring</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('behaviorDuringCooperative')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="behaviorDuringCooperative" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Cooperative with assessment</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('behaviorDuringAgitated')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="behaviorDuringAgitated" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Agitated during assessment</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('behaviorDuringLimited')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="behaviorDuringLimited" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Assessment limited due to agitation</span>
+            </div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <textarea tuiTextarea formControlName="behaviorDuringNotes" rows="2"></textarea>
+          <label>Notes (objective only)</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Escalation / Reporting -->
+      <div class="section-block">
+        <div class="section-title">Escalation / Reporting</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Changes reported to FOIC</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('changesReportedToFoic')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="changesReportedToFoic" class="yn-hidden">
+                Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('changesReportedToFoic')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('changesReportedToFoic')?.value === false" (change)="setNo('changesReportedToFoic', $event)">
+                No
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">FOIC instructions followed regarding assessment frequency adjustment</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('foicInstructionsFollowed')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="foicInstructionsFollowed" class="yn-hidden">
+                Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('foicInstructionsFollowed')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('foicInstructionsFollowed')?.value === false" (change)="setNo('foicInstructionsFollowed', $event)">
+                No
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Visual monitoring maintained at all times</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('visualMonitoringMaintained')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="visualMonitoringMaintained" class="yn-hidden">
+                Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('visualMonitoringMaintained')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('visualMonitoringMaintained')?.value === false" (change)="setNo('visualMonitoringMaintained', $event)">
+                No
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Clinical Observations -->
+      <div class="section-block">
+        <div class="section-title">Clinical Observations</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Circulation</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('clinCirculationWnl')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="clinCirculationWnl" class="yn-hidden">
+                WNL
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('clinCirculationWnl')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('clinCirculationWnl')?.value === false" (change)="setNo('clinCirculationWnl', $event)">
+                Concern
+              </label>
+              <tui-textfield class="concern-field" *ngIf="scForm.get('clinCirculationWnl')?.value === false">
+                <input tuiTextfield formControlName="clinCirculationConcern" placeholder="Describe...">
+                <label>Detail</label>
+              </tui-textfield>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Respiratory status</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('clinRespiratoryWnl')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="clinRespiratoryWnl" class="yn-hidden">
+                WNL
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('clinRespiratoryWnl')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('clinRespiratoryWnl')?.value === false" (change)="setNo('clinRespiratoryWnl', $event)">
+                Concern
+              </label>
+              <tui-textfield class="concern-field" *ngIf="scForm.get('clinRespiratoryWnl')?.value === false">
+                <input tuiTextfield formControlName="clinRespiratoryConcern" placeholder="Describe...">
+                <label>Detail</label>
+              </tui-textfield>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Alertness</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('alertnessStable')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="alertnessStable" class="yn-hidden">
+                Stable
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('alertnessDeclining')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="alertnessDeclining" class="yn-hidden">
+                Declining
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('alertnessFluctuating')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="alertnessFluctuating" class="yn-hidden">
+                Fluctuating
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Outcome / Status -->
+      <div class="section-block">
+        <div class="section-title">Outcome / Status</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('outcomeRemainsInWrap')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="outcomeRemainsInWrap" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Remains in WRAP restraint</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('outcomeReleased')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="outcomeReleased" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Released from restraint</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('outcomeTransferred')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="outcomeTransferred" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Transferred to medical observation</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('outcomeOther')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="outcomeOther" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Other</span>
+            </div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('outcomeOther')?.value">
+          <input tuiTextfield formControlName="outcomeOtherText" placeholder="Describe...">
+          <label>Other outcome</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Documentation Note -->
+      <div class="section-block">
+        <div class="section-title">Documentation Note</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('docPrimaryNurse')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="docPrimaryNurse" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Charting completed by primary nurse</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('docSecondaryNurse')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="docSecondaryNurse" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>OR secondary nurse (NOT both)</span>
+            </div>
+          </label>
+          <div class="yn-field-row ion-margin-top">
+            <span class="yn-field-label">Objective documentation maintained</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('objectiveDocMaintained')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="objectiveDocMaintained" class="yn-hidden">
+                Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('objectiveDocMaintained')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('objectiveDocMaintained')?.value === false" (change)="setNo('objectiveDocMaintained', $event)">
+                No
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Notifications -->
+      <div class="section-block">
+        <div class="section-title">Notifications</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('notifSiteSupervisor')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="notifSiteSupervisor" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Site Supervisor notified</span>
+            </div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('notifProgramManager')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="notifProgramManager" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span>Program Manager notified</span>
+            </div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="notifTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+          <label>Time</label>
+        </tui-textfield>
+      </div>
+
+        </div><!-- /sc-section-body -->
+      </div><!-- /sc-section WRAP -->
+
+      <hr class="section-divider section-divider-heavy">
+
+
+      <!-- ══════════════════════════════════════════
+           MEDICAL CONTROL / COMMAND & ESCALATION — QUICK CHECK-OFF TOOL
+           ══════════════════════════════════════════ -->
+      <div class="sc-section" [class.is-open]="sectionOpen.medControl">
+        <div class="sc-section-toggle" (click)="toggleSection('medControl')" role="button" tabindex="0">
+          <h2 class="sc-form-title" id="sc-med-control">Medical Control / Command &amp; Escalation – Quick Check-Off Tool</h2>
+          <ion-icon [name]="sectionOpen.medControl ? 'chevron-up-outline' : 'chevron-down-outline'" class="sc-chevron"></ion-icon>
+        </div>
+        <div class="sc-section-body">
+
+      <!-- Incident Info -->
+      <div class="section-block">
+        <div class="section-title">Incident Info</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div *ngIf="scTriggers.medControl" class="sc-required-banner">Required!</div>
+            <tui-textfield class="full-width" [class.sc-required-field]="scTriggers.medControl">
+              <input tuiTextfield formControlName="medCtrlDateTime" type="datetime-local">
+              <label>Date / Time of Incident</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="medCtrlLocation">
+              <label>Location</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="medCtrlPatientName">
+              <label>Patient Name</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="medCtrlPatientId">
+              <label>ID#</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 1. Type of Medical Control Used -->
+      <div class="section-block">
+        <div class="section-title">1. Type of Medical Control Used</div>
+
+        <!-- On-Line -->
+        <div class="sub-section">
+          <label class="check-list-item" [class.selected]="scForm.get('medCtrlOnLine')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="medCtrlOnLine" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span class="sub-label-bold">On-Line Medical Control (Preferred)</span>
+            </div>
+          </label>
+          <div class="sub-indent" *ngIf="scForm.get('medCtrlOnLine')?.value">
+            <div class="check-list">
+              <label class="check-list-item" [class.selected]="scForm.get('onlinePhysicianDirecting')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="onlinePhysicianDirecting" class="yn-hidden">
+                <div class="check-list-content"><span class="check-indicator"></span><span>Physician actively directing care (live contact)</span></div>
+              </label>
+            </div>
+            <div class="multi-check-row ion-margin-top">
+              <span class="multi-check-label">Contact method:</span>
+              <div class="multi-check-options">
+                <label class="check-chip" [class.selected]="scForm.get('contactPhone')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="contactPhone" class="yn-hidden">Phone
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('contactSatPhone')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="contactSatPhone" class="yn-hidden">Satellite phone
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('contactRadio')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="contactRadio" class="yn-hidden">Radio
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('contactOther')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="contactOther" class="yn-hidden">Other
+                </label>
+              </div>
+              <tui-textfield class="full-width" *ngIf="scForm.get('contactOther')?.value">
+                <input tuiTextfield formControlName="contactOtherText" placeholder="Specify...">
+                <label>Other method</label>
+              </tui-textfield>
+            </div>
+            <ion-row class="ion-margin-top">
+              <ion-col size="12" size-sm="6">
+                <tui-textfield class="full-width">
+                  <input tuiTextfield formControlName="onlineProviderName">
+                  <label>Provider Name (if known)</label>
+                </tui-textfield>
+              </ion-col>
+              <ion-col size="12" size-sm="6">
+                <tui-textfield class="full-width">
+                  <input tuiTextfield formControlName="onlineTimeContacted" placeholder="HHMM" inputmode="numeric" maxlength="4">
+                  <label>Time Contacted</label>
+                </tui-textfield>
+              </ion-col>
+            </ion-row>
+          </div>
+        </div>
+
+        <!-- Off-Line -->
+        <div class="sub-section ion-margin-top">
+          <label class="check-list-item" [class.selected]="scForm.get('medCtrlOffLine')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="medCtrlOffLine" class="yn-hidden">
+            <div class="check-list-content">
+              <span class="check-indicator"></span>
+              <span class="sub-label-bold">Off-Line Medical Control</span>
+            </div>
+          </label>
+          <div class="sub-indent" *ngIf="scForm.get('medCtrlOffLine')?.value">
+            <div class="check-list">
+              <label class="check-list-item" [class.selected]="scForm.get('offlinePhysicianNotAvail')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="offlinePhysicianNotAvail" class="yn-hidden">
+                <div class="check-list-content"><span class="check-indicator"></span><span>Physician contact not available/impractical</span></div>
+              </label>
+              <label class="check-list-item" [class.selected]="scForm.get('offlineProtocolFollowed')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="offlineProtocolFollowed" class="yn-hidden">
+                <div class="check-list-content"><span class="check-indicator"></span><span>Protocol-based care followed</span></div>
+              </label>
+            </div>
+            <tui-textfield class="full-width ion-margin-top">
+              <input tuiTextfield formControlName="offlineReason">
+              <label>Reason</label>
+            </tui-textfield>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Communication & Escalation Pathway -->
+      <div class="section-block">
+        <div class="section-title">Communication &amp; Escalation Pathway</div>
+
+        <!-- A. Routine -->
+        <div class="escalation-tier tier-routine">
+          <div class="tier-label">A. Routine PAX Issues / Non-Urgent Concerns</div>
+          <label class="check-list-item" [class.selected]="scForm.get('escalationANotified')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="escalationANotified" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Site Supervisor / Program Manager notified</span></div>
+          </label>
+          <ion-row class="ion-margin-top" *ngIf="scForm.get('escalationANotified')?.value">
+            <ion-col size="12" size-sm="6">
+              <tui-textfield class="full-width">
+                <input tuiTextfield formControlName="escalationATime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+                <label>Time</label>
+              </tui-textfield>
+            </ion-col>
+            <ion-col size="12" size-sm="6">
+              <tui-textfield class="full-width">
+                <input tuiTextfield formControlName="escalationANameContacted">
+                <label>Name contacted</label>
+              </tui-textfield>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <!-- B. Medical Signs -->
+        <div class="escalation-tier tier-medical">
+          <div class="tier-label">B. Medical Signs/Symptoms (Non–Life Threatening)</div>
+          <label class="check-list-item" [class.selected]="scForm.get('escalationBContacted')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="escalationBContacted" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medical Control contacted</span></div>
+          </label>
+          <div class="contact-info" *ngIf="scForm.get('escalationBContacted')?.value">
+            <div class="contact-chip"><ion-icon name="call-outline"></ion-icon> (507) 205-5726</div>
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="escalationBTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+              <label>Time</label>
+            </tui-textfield>
+          </div>
+          <tui-textfield class="full-width ion-margin-top">
+            <textarea tuiTextarea formControlName="escalationBSummary" rows="2"></textarea>
+            <label>Summary of concern</label>
+          </tui-textfield>
+        </div>
+
+        <!-- C. Life-Threatening -->
+        <div class="escalation-tier tier-critical">
+          <div class="tier-label">C. Life-Threatening Signs/Symptoms</div>
+          <div class="check-list">
+            <label class="check-list-item" [class.selected]="scForm.get('escalationCEms')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="escalationCEms" class="yn-hidden">
+              <div class="check-list-content"><span class="check-indicator"></span><span>EMS / 911 activated immediately</span></div>
+            </label>
+            <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('escalationCEms')?.value">
+              <input tuiTextfield formControlName="escalationCEmsTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+              <label>Time</label>
+            </tui-textfield>
+            <label class="check-list-item" [class.selected]="scForm.get('escalationCFoicNotified')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="escalationCFoicNotified" class="yn-hidden">
+              <div class="check-list-content"><span class="check-indicator"></span><span>FOIC / Captain notified</span></div>
+            </label>
+            <label class="check-list-item" [class.selected]="scForm.get('escalationCMedControl')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="escalationCMedControl" class="yn-hidden">
+              <div class="check-list-content"><span class="check-indicator"></span><span>Medical Control notified (if feasible)</span></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 3. Clinical Situation Classification -->
+      <div class="section-block">
+        <div class="section-title">3. Clinical Situation Classification</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('clinSitRoutine')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="clinSitRoutine" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Routine concern / monitoring</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('clinSitMedicalConcern')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="clinSitMedicalConcern" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medical concern requiring guidance</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('clinSitLifeThreatening')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="clinSitLifeThreatening" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Life-threatening emergency</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 4. Actions Taken -->
+      <div class="section-block">
+        <div class="section-title">4. Actions Taken</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('actionFollowedMedCtrl')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="actionFollowedMedCtrl" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Followed Medical Control instructions</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('actionFollowedProtocol')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="actionFollowedProtocol" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Followed approved protocols (Off-line)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('actionPatientStabilized')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="actionPatientStabilized" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Patient stabilized with MEB resources</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('actionContinuedMonitoring')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="actionContinuedMonitoring" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Continued monitoring</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('actionDocumented')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="actionDocumented" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Documentation completed</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <textarea tuiTextarea formControlName="actionNotes" rows="2"></textarea>
+          <label>Notes</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 5. Outcome / Disposition -->
+      <div class="section-block">
+        <div class="section-title">5. Outcome / Disposition</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('dispositionContinuedCare')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="dispositionContinuedCare" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Continued care in place</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('dispositionTransportEms')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="dispositionTransportEms" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Transport/EMS activated</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('dispositionCareTransferredEms')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="dispositionCareTransferredEms" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Care transferred to EMS</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('dispositionMedControlOversight')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="dispositionMedControlOversight" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medical Control ongoing oversight</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 6. Communication Log -->
+      <div class="section-block">
+        <div class="section-title">6. Communication Log</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Supervisor/PM notified</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('commLogSupPm')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="commLogSupPm" class="yn-hidden">
+                Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('commLogSupPm')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('commLogSupPm')?.value === false" (change)="setNo('commLogSupPm', $event)">
+                No
+              </label>
+              <tui-textfield class="time-small" *ngIf="scForm.get('commLogSupPm')?.value === true">
+                <input tuiTextfield formControlName="commLogSupPmTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+                <label>Time</label>
+              </tui-textfield>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Medical Control contacted</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('commLogMedCtrl')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="commLogMedCtrl" class="yn-hidden">
+                Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('commLogMedCtrl')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('commLogMedCtrl')?.value === false" (change)="setNo('commLogMedCtrl', $event)">
+                No
+              </label>
+              <tui-textfield class="time-small" *ngIf="scForm.get('commLogMedCtrl')?.value === true">
+                <input tuiTextfield formControlName="commLogMedCtrlTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+                <label>Time</label>
+              </tui-textfield>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">EMS activated</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('commLogEms')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="commLogEms" class="yn-hidden">
+                Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('commLogEms')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('commLogEms')?.value === false" (change)="setNo('commLogEms', $event)">
+                No
+              </label>
+              <tui-textfield class="time-small" *ngIf="scForm.get('commLogEms')?.value === true">
+                <input tuiTextfield formControlName="commLogEmsTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+                <label>Time</label>
+              </tui-textfield>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        </div><!-- /sc-section-body -->
+      </div><!-- /sc-section Med Control -->
+
+      <hr class="section-divider section-divider-heavy">
+
+
+      <!-- ══════════════════════════════════════════
+           CARDIAC ARREST
+           ══════════════════════════════════════════ -->
+      <div class="sc-section" [class.is-open]="sectionOpen.cardiacArrest">
+        <div class="sc-section-toggle" (click)="toggleSection('cardiacArrest')" role="button" tabindex="0">
+          <h2 class="sc-form-title" id="sc-cardiac">Cardiac Arrest</h2>
+          <ion-icon [name]="sectionOpen.cardiacArrest ? 'chevron-up-outline' : 'chevron-down-outline'" class="sc-chevron"></ion-icon>
+        </div>
+        <div class="sc-section-body">
+
+      <!-- Incident Info -->
+      <div class="section-block">
+        <div class="section-title">Incident Info</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div *ngIf="scTriggers.cardiacArrest" class="sc-required-banner">Required!</div>
+            <tui-textfield class="full-width" [class.sc-required-field]="scTriggers.cardiacArrest">
+              <input tuiTextfield formControlName="caDateTime" type="datetime-local">
+              <label>Date / Time of Incident</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <div class="multi-check-row">
+              <span class="multi-check-label">Location:</span>
+              <div class="multi-check-options">
+                <label class="check-chip" [class.selected]="scForm.get('caLocationFacility')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="caLocationFacility" class="yn-hidden">Facility
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('caLocationTransport')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="caLocationTransport" class="yn-hidden">Transport
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('caLocationAircraft')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="caLocationAircraft" class="yn-hidden">Aircraft
+                </label>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caFlightTransportId">
+              <label>Flight/Transport ID</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caDestination">
+              <label>Destination</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Patient Info -->
+      <div class="section-block">
+        <div class="section-title">Patient Info</div>
+        <tui-textfield class="full-width">
+          <input tuiTextfield formControlName="caANumber">
+          <label>A-Number</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Initial Assessment -->
+      <div class="section-block">
+        <div class="section-title">Initial Assessment</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('caUnresponsive')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caUnresponsive" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Unresponsive</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caApneic')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caApneic" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Apneic</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caPulseless')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caPulseless" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Pulseless</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="caTimeArrestRecognized" placeholder="HHMM" inputmode="numeric" maxlength="4">
+          <label>Time Arrest Recognized</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Immediate Actions -->
+      <div class="section-block">
+        <div class="section-title">Immediate Actions</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('caFoicNotified')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caFoicNotified" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>FOIC notified</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caAircraftDiversion')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caAircraftDiversion" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Aircraft diversion initiated</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caCprStarted')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caCprStarted" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>CPR started immediately (30:2)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caFirmSurface')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caFirmSurface" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Firm surface positioned</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caAedRequested')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caAedRequested" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>AED requested/retrieved</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caOxygenPrepared')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caOxygenPrepared" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Oxygen prepared (when available)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caEmkObtained')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caEmkObtained" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>EMK obtained</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- CPR / Resuscitation -->
+      <div class="section-block">
+        <div class="section-title">CPR / Resuscitation</div>
+        <tui-textfield class="full-width">
+          <input tuiTextfield formControlName="caCprStartTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+          <label>Start Time CPR</label>
+        </tui-textfield>
+        <div class="yn-list ion-margin-top">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Compressions Continuous</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('caCompContinuous')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="caCompContinuous" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('caCompContinuous')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('caCompContinuous')?.value === false" (change)="setNo('caCompContinuous', $event)">No
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Airway Support</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('caAirwayBvm')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="caAirwayBvm" class="yn-hidden">BVM
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('caAirwayAdvanced')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="caAirwayAdvanced" class="yn-hidden">Advanced airway
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('caAirwayNone')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="caAirwayNone" class="yn-hidden">None
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Oxygen applied</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('caOxygenApplied')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="caOxygenApplied" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('caOxygenApplied')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('caOxygenApplied')?.value === false" (change)="setNo('caOxygenApplied', $event)">No
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- AED / Defibrillation -->
+      <div class="section-block">
+        <div class="section-title">AED / Defibrillation</div>
+        <tui-textfield class="full-width">
+          <input tuiTextfield formControlName="caAedAppliedTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+          <label>AED Applied Time</label>
+        </tui-textfield>
+        <div class="multi-check-row ion-margin-top">
+          <span class="multi-check-label">Rhythm Shockable:</span>
+          <div class="multi-check-options">
+            <label class="check-chip" [class.selected]="scForm.get('caRhythmShockable')?.value === 'yes'" (click)="setStrVal('caRhythmShockable', 'yes')">Yes</label>
+            <label class="check-chip" [class.selected]="scForm.get('caRhythmShockable')?.value === 'no'" (click)="setStrVal('caRhythmShockable', 'no')">No</label>
+            <label class="check-chip" [class.selected]="scForm.get('caRhythmShockable')?.value === 'unknown'" (click)="setStrVal('caRhythmShockable', 'unknown')">Unknown</label>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="caShocksDelivered" inputmode="numeric">
+          <label>Shocks Delivered</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Medications / IV Access -->
+      <div class="section-block">
+        <div class="section-title">Medications / IV Access</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">IV Access Established</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('caIvAccess')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="caIvAccess" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('caIvAccess')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('caIvAccess')?.value === false" (change)="setNo('caIvAccess', $event)">No
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Fluids Given</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('caFluidsGiven')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="caFluidsGiven" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('caFluidsGiven')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('caFluidsGiven')?.value === false" (change)="setNo('caFluidsGiven', $event)">No
+              </label>
+            </div>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="caMedications">
+          <label>Medications per ACLS</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ROSC -->
+      <div class="section-block">
+        <div class="section-title">Return of Spontaneous Circulation (ROSC)</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">ROSC Achieved</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('caRoscAchieved')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="caRoscAchieved" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('caRoscAchieved')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('caRoscAchieved')?.value === false" (change)="setNo('caRoscAchieved', $event)">No
+              </label>
+            </div>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('caRoscAchieved')?.value === true">
+          <input tuiTextfield formControlName="caTimeOfRosc" placeholder="HHMM" inputmode="numeric" maxlength="4">
+          <label>Time of ROSC</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Post-ROSC Status -->
+      <div class="section-block" *ngIf="scForm.get('caRoscAchieved')?.value === true">
+        <div class="section-title">Post-ROSC Status</div>
+        <ion-row>
+          <ion-col size="6" size-sm="3">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caPostBp">
+              <label>BP</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="3">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caPostHr" inputmode="numeric">
+              <label>HR</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="3">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caPostRr" inputmode="numeric">
+              <label>RR</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="3">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caPostSpo2" inputmode="numeric">
+              <label>SpO₂</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+        <div class="multi-check-row ion-margin-top">
+          <span class="multi-check-label">LOC:</span>
+          <div class="multi-check-options">
+            <label class="check-chip" [class.selected]="scForm.get('caPostLocUnresponsive')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="caPostLocUnresponsive" class="yn-hidden">Unresponsive
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('caPostLocImproving')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="caPostLocImproving" class="yn-hidden">Improving
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('caPostLocAlert')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="caPostLocAlert" class="yn-hidden">Alert
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider" *ngIf="scForm.get('caRoscAchieved')?.value === true">
+
+      <!-- Ongoing Care -->
+      <div class="section-block">
+        <div class="section-title">Ongoing Care</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('caHighFlowO2')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caHighFlowO2" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>High-flow oxygen</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caIvFluid')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caIvFluid" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>IV fluid support</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caGlucoseChecked')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caGlucoseChecked" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Glucose checked</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caContinuousMonitoring')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caContinuousMonitoring" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Continuous monitoring</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caAclsContinued')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caAclsContinued" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>ACLS continued as indicated</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Flight / Transport Actions -->
+      <div class="section-block">
+        <div class="section-title">Flight / Transport Actions</div>
+        <tui-textfield class="full-width">
+          <input tuiTextfield formControlName="caFlightTimeRemaining">
+          <label>Flight time remaining</label>
+        </tui-textfield>
+        <div class="check-list ion-margin-top">
+          <label class="check-list-item" [class.selected]="scForm.get('caDiversionConfirmed')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caDiversionConfirmed" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Diversion confirmed</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caEmsArranged')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caEmsArranged" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>EMS arranged at destination</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caMedControlConsulted')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caMedControlConsulted" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medical control consulted</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Communication / Notifications (Cardiac) -->
+      <div class="section-block">
+        <div class="section-title">Communication / Notifications</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('caFoicNotif')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caFoicNotif" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>FOIC notified</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caCaptainNotif')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caCaptainNotif" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Captain/PIC notified</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caMedControlContact')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caMedControlContact" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medical Control contacted</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caSupervisorNotif')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caSupervisorNotif" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Supervisor notified</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Handoff to EMS -->
+      <div class="section-block">
+        <div class="section-title">Handoff to EMS</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caEmsArrivalTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+              <label>EMS Arrival Time</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <div class="yn-field-row">
+              <span class="yn-field-label">Handoff Completed</span>
+              <div class="yn-options">
+                <label class="yn-btn" [class.active]="scForm.get('caHandoffCompleted')?.value === true">
+                  <input tuiCheckbox type="checkbox" formControlName="caHandoffCompleted" class="yn-hidden">Yes
+                </label>
+                <label class="yn-btn yn-no" [class.active]="scForm.get('caHandoffCompleted')?.value === false">
+                  <input type="checkbox" class="yn-hidden" [checked]="scForm.get('caHandoffCompleted')?.value === false" (change)="setNo('caHandoffCompleted', $event)">No
+                </label>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <div class="sub-section-label ion-margin-top">Key Report Given:</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caHandoffArrestTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+              <label>Arrest time</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caHandoffCprStart" placeholder="HHMM" inputmode="numeric" maxlength="4">
+              <label>CPR start time</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="4">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caHandoffAedShocks" inputmode="numeric">
+              <label>AED shocks</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="4">
+            <div class="yn-field-row">
+              <span class="yn-field-label">ROSC</span>
+              <div class="yn-options">
+                <label class="yn-btn" [class.active]="scForm.get('caHandoffRosc')?.value === true">
+                  <input tuiCheckbox type="checkbox" formControlName="caHandoffRosc" class="yn-hidden">Yes
+                </label>
+                <label class="yn-btn yn-no" [class.active]="scForm.get('caHandoffRosc')?.value === false">
+                  <input type="checkbox" class="yn-hidden" [checked]="scForm.get('caHandoffRosc')?.value === false" (change)="setNo('caHandoffRosc', $event)">No
+                </label>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="12" size-sm="4">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="caHandoffInterventions">
+              <label>Interventions</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Post-Event Actions (Cardiac) -->
+      <div class="section-block">
+        <div class="section-title">Post-Event Actions</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('caCareTransferred')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caCareTransferred" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Care transferred to EMS</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caSceneStabilized')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caSceneStabilized" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Scene stabilized</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('caDebriefCompleted')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="caDebriefCompleted" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Debrief completed with supervisor</span></div>
+          </label>
+        </div>
+      </div>
+
+        </div><!-- /sc-section-body -->
+      </div><!-- /sc-section Cardiac Arrest -->
+
+      <hr class="section-divider section-divider-heavy">
+
+
+      <!-- ══════════════════════════════════════════
+           EMS ACTIVATION / IN-FLIGHT MEDICAL EMERGENCY
+           ══════════════════════════════════════════ -->
+      <div class="sc-section" [class.is-open]="sectionOpen.ems">
+        <div class="sc-section-toggle" (click)="toggleSection('ems')" role="button" tabindex="0">
+          <h2 class="sc-form-title" id="sc-ems">EMS Activation / In-Flight Medical Emergency</h2>
+          <ion-icon [name]="sectionOpen.ems ? 'chevron-up-outline' : 'chevron-down-outline'" class="sc-chevron"></ion-icon>
+        </div>
+        <div class="sc-section-body">
+
+      <!-- Incident Info -->
+      <div class="section-block">
+        <div class="section-title">Incident Info</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div *ngIf="scTriggers.ems" class="sc-required-banner">Required!</div>
+            <tui-textfield class="full-width" [class.sc-required-field]="scTriggers.ems">
+              <input tuiTextfield formControlName="emsDateTime" type="datetime-local">
+              <label>Date / Time of Incident</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <div class="multi-check-row">
+              <span class="multi-check-label">Location:</span>
+              <div class="multi-check-options">
+                <label class="check-chip" [class.selected]="scForm.get('emsLocationGround')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="emsLocationGround" class="yn-hidden">Ground
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('emsLocationFacility')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="emsLocationFacility" class="yn-hidden">Facility
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('emsLocationAircraft')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="emsLocationAircraft" class="yn-hidden">Aircraft
+                </label>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsFlightTransportId">
+              <label>Flight/Transport ID</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsDestination">
+              <label>Destination</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Patient Info -->
+      <div class="section-block">
+        <div class="section-title">Patient Info</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsANumber">
+              <label>A#</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <div class="select-field-wrap">
+              <label class="select-label">Condition prompting EMS</label>
+              <select formControlName="emsCondition" class="native-select">
+                <option value="">— Select condition —</option>
+                <option value="Chest Pain">Chest Pain</option>
+                <option value="Respiratory Distress">Respiratory Distress</option>
+                <option value="Altered Mental Status">Altered Mental Status</option>
+                <option value="Seizure">Seizure</option>
+                <option value="Allergic Reaction">Allergic Reaction</option>
+                <option value="Hypoglycemia">Hypoglycemia</option>
+                <option value="Hypertensive Crisis">Hypertensive Crisis</option>
+                <option value="Trauma / Injury">Trauma / Injury</option>
+                <option value="Stroke / CVA">Stroke / CVA</option>
+                <option value="Syncope / Near-Syncope">Syncope / Near-Syncope</option>
+                <option value="Abdominal Emergency">Abdominal Emergency</option>
+                <option value="Psychiatric Emergency">Psychiatric Emergency</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- EMS Activation -->
+      <div class="section-block">
+        <div class="section-title">EMS Activation</div>
+        <label class="check-list-item" [class.selected]="scForm.get('emsActivated')?.value">
+          <input tuiCheckbox type="checkbox" formControlName="emsActivated" class="yn-hidden">
+          <div class="check-list-content"><span class="check-indicator"></span><span>EMS / 911 activated</span></div>
+        </label>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="emsTimeActivated" placeholder="HHMM" inputmode="numeric" maxlength="4">
+          <label>Time Activated</label>
+        </tui-textfield>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="emsReasonActivation">
+          <label>Reason for activation</label>
+        </tui-textfield>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="emsWhoActivated">
+          <label>Who activated EMS</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Initial Assessment (EMS) -->
+      <div class="section-block">
+        <div class="section-title">Initial Assessment</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">LOC</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('emsLocAlert')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="emsLocAlert" class="yn-hidden">Alert
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('emsLocAltered')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="emsLocAltered" class="yn-hidden">Altered
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('emsLocUnresponsive')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="emsLocUnresponsive" class="yn-hidden">Unresponsive
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Condition</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('emsCondStable')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="emsCondStable" class="yn-hidden">Stable
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('emsCondUnstable')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="emsCondUnstable" class="yn-hidden">Unstable
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('emsCondCritical')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="emsCondCritical" class="yn-hidden">Critical
+              </label>
+            </div>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="emsPrimarySymptoms">
+          <label>Primary symptoms / injury</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Interventions Prior to EMS Arrival -->
+      <div class="section-block">
+        <div class="section-title">Interventions Prior to EMS Arrival</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('emsAirwayMgmt')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsAirwayMgmt" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Airway management</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsOxygen')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsOxygen" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Oxygen administered</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsIvAccess')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsIvAccess" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>IV access established</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsFluids')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsFluids" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Fluids given</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsMedGiven')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsMedGiven" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medications given</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('emsMedGiven')?.value">
+          <input tuiTextfield formControlName="emsMedDetails">
+          <label>Medications detail</label>
+        </tui-textfield>
+        <div class="check-list ion-margin-top">
+          <label class="check-list-item" [class.selected]="scForm.get('emsPositioning')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsPositioning" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Positioning / supportive care</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsMonitoring')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsMonitoring" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Continuous monitoring</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <textarea tuiTextarea formControlName="emsInterventionNotes" rows="2"></textarea>
+          <label>Notes</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Vital Signs (EMS) -->
+      <div class="section-block">
+        <div class="section-title">Vital Signs</div>
+        <ion-row>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsBp">
+              <label>BP</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsHr" inputmode="numeric">
+              <label>HR</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsRr" inputmode="numeric">
+              <label>RR</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsTemp">
+              <label>Temp</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsSpo2" inputmode="numeric">
+              <label>SpO₂</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="emsTrendNotes">
+          <label>Trend Notes</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Patient Status During Care -->
+      <div class="section-block">
+        <div class="section-title">Patient Status During Care</div>
+        <div class="multi-check-row">
+          <div class="multi-check-options">
+            <label class="check-chip" [class.selected]="scForm.get('emsStatusImproved')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="emsStatusImproved" class="yn-hidden">Improved
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('emsStatusUnchanged')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="emsStatusUnchanged" class="yn-hidden">Unchanged
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('emsStatusWorsened')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="emsStatusWorsened" class="yn-hidden">Worsened
+            </label>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <textarea tuiTextarea formControlName="emsStatusNotes" rows="2"></textarea>
+          <label>Notes</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- EMS Handoff -->
+      <div class="section-block">
+        <div class="section-title">EMS Handoff</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsTimeArrived" placeholder="HHMM" inputmode="numeric" maxlength="4">
+              <label>Time EMS arrived</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <div class="yn-field-row">
+              <span class="yn-field-label">Report given to EMS</span>
+              <div class="yn-options">
+                <label class="yn-btn" [class.active]="scForm.get('emsReportGiven')?.value === true">
+                  <input tuiCheckbox type="checkbox" formControlName="emsReportGiven" class="yn-hidden">Yes
+                </label>
+                <label class="yn-btn yn-no" [class.active]="scForm.get('emsReportGiven')?.value === false">
+                  <input type="checkbox" class="yn-hidden" [checked]="scForm.get('emsReportGiven')?.value === false" (change)="setNo('emsReportGiven', $event)">No
+                </label>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <tui-textfield class="full-width ion-margin-top">
+          <textarea tuiTextarea formControlName="emsHandoffFindings" rows="3"></textarea>
+          <label>Key findings reported</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Post-Handoff Actions -->
+      <div class="section-block">
+        <div class="section-title">Post-Handoff Actions</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('emsCareTransferred')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsCareTransferred" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Care transferred to EMS</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsPaxNoLongerInCustody')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsPaxNoLongerInCustody" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>PAX no longer in custody of medical team</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsSceneStabilized')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsSceneStabilized" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Scene stabilized</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Flight / Transport Decision -->
+      <div class="section-block">
+        <div class="section-title">Flight / Transport Decision (if applicable)</div>
+        <tui-textfield class="full-width">
+          <input tuiTextfield formControlName="emsFlightTimeRemaining">
+          <label>Flight time remaining</label>
+        </tui-textfield>
+        <div class="check-list ion-margin-top">
+          <label class="check-list-item" [class.selected]="scForm.get('emsContinueFlight')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsContinueFlight" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Continue flight (no diversion needed)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsEmsAtDestination')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsEmsAtDestination" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>EMS at destination arranged</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsDiversionConsidered')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsDiversionConsidered" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Diversion considered / initiated</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <textarea tuiTextarea formControlName="emsDecisionReason" rows="2"></textarea>
+          <label>Reason for decision</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Communication / Notifications (EMS) -->
+      <div class="section-block">
+        <div class="section-title">Communication / Notifications</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('emsFoicNotified')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsFoicNotified" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>FOIC notified</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsCaptainNotified')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsCaptainNotified" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Captain/PIC notified</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('emsSupervisorNotified')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="emsSupervisorNotified" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Supervisor notified</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="emsTimeNotified" placeholder="HHMM" inputmode="numeric" maxlength="4">
+          <label>Time notified</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Debrief -->
+      <div class="section-block">
+        <div class="section-title">Debrief</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Supervisor contacted after handoff</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('emsSupervisorContacted')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="emsSupervisorContacted" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('emsSupervisorContacted')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('emsSupervisorContacted')?.value === false" (change)="setNo('emsSupervisorContacted', $event)">No
+              </label>
+            </div>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="emsDebriefTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+          <label>Time</label>
+        </tui-textfield>
+        <tui-textfield class="full-width ion-margin-top">
+          <textarea tuiTextarea formControlName="emsDebriefSummary" rows="3"></textarea>
+          <label>Summary of debrief</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Agency Transferred -->
+      <div class="section-block">
+        <div class="section-title">Agency Transferred</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsAgencyName">
+              <label>Name / Title / Agency</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="emsAgencyDateTime" type="datetime-local">
+              <label>Date / Time</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Quick Reminders -->
+      <div class="section-block quick-reminders">
+        <div class="section-title">Quick Reminders</div>
+        <ul class="reminders-list">
+          <li>Always stabilize first using MEB resources</li>
+          <li>Stay with patient until EMS assumes care</li>
+          <li>Provide a clear, concise handoff report</li>
+          <li>Know flight time remaining before considering diversion</li>
+          <li>Diversion decisions require careful risk-benefit judgment</li>
+          <li>Always complete post-event supervisor debrief</li>
+        </ul>
+      </div>
+
+        </div><!-- /sc-section-body -->
+      </div><!-- /sc-section EMS -->
+
+      <hr class="section-divider section-divider-heavy">
+
+
+      <!-- ══════════════════════════════════════════
+           SEIZURE ACTIVITY
+           ══════════════════════════════════════════ -->
+      <div class="sc-section" [class.is-open]="sectionOpen.seizure">
+        <div class="sc-section-toggle" (click)="toggleSection('seizure')" role="button" tabindex="0">
+          <h2 class="sc-form-title" id="sc-seizure">Seizure Activity</h2>
+          <ion-icon [name]="sectionOpen.seizure ? 'chevron-up-outline' : 'chevron-down-outline'" class="sc-chevron"></ion-icon>
+        </div>
+        <div class="sc-section-body">
+
+      <!-- Incident Info -->
+      <div class="section-block">
+        <div class="section-title">Incident Info</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div *ngIf="scTriggers.seizure" class="sc-required-banner">Required!</div>
+            <tui-textfield class="full-width" [class.sc-required-field]="scTriggers.seizure">
+              <input tuiTextfield formControlName="szDateTime" type="datetime-local">
+              <label>Date / Time of Incident</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <div class="multi-check-row">
+              <span class="multi-check-label">Location:</span>
+              <div class="multi-check-options">
+                <label class="check-chip" [class.selected]="scForm.get('szLocationFacility')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="szLocationFacility" class="yn-hidden">Facility
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('szLocationTransport')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="szLocationTransport" class="yn-hidden">Transport
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('szLocationAircraft')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="szLocationAircraft" class="yn-hidden">Aircraft
+                </label>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="szNotifiedBy">
+              <label>Notified by (ASO)</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <div class="yn-field-row">
+              <span class="yn-field-label">FOIC Notified</span>
+              <div class="yn-options">
+                <label class="yn-btn" [class.active]="scForm.get('szFoicNotified')?.value === true">
+                  <input tuiCheckbox type="checkbox" formControlName="szFoicNotified" class="yn-hidden">Yes
+                </label>
+                <label class="yn-btn yn-no" [class.active]="scForm.get('szFoicNotified')?.value === false">
+                  <input type="checkbox" class="yn-hidden" [checked]="scForm.get('szFoicNotified')?.value === false" (change)="setNo('szFoicNotified', $event)">No
+                </label>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Patient Info -->
+      <div class="section-block">
+        <div class="section-title">Patient Info</div>
+        <tui-textfield class="full-width">
+          <input tuiTextfield formControlName="szANumber">
+          <label>A#</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Seizure Event -->
+      <div class="section-block">
+        <div class="section-title">Seizure Event</div>
+        <ion-row>
+          <ion-col size="12" size-sm="4">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="szTimeStarted" placeholder="HHMM" inputmode="numeric" maxlength="4">
+              <label>Time Seizure Started</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="4">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="szTimeEnded" placeholder="HHMM" inputmode="numeric" maxlength="4">
+              <label>Time Seizure Ended</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="4">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="szDuration">
+              <label>Duration</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+        <div class="sub-section-label ion-margin-top">Observed Activity</div>
+        <div class="multi-check-row">
+          <div class="multi-check-options">
+            <label class="check-chip" [class.selected]="scForm.get('szTonicClonic')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szTonicClonic" class="yn-hidden">Tonic-Clonic
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('szFocal')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szFocal" class="yn-hidden">Focal
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('szUnknownType')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szUnknownType" class="yn-hidden">Unknown
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('szFullBody')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szFullBody" class="yn-hidden">Full body
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('szPartial')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szPartial" class="yn-hidden">Partial
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('szOtherActivity')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szOtherActivity" class="yn-hidden">Other
+            </label>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('szOtherActivity')?.value">
+          <input tuiTextfield formControlName="szOtherActivityText" placeholder="Describe...">
+          <label>Other activity</label>
+        </tui-textfield>
+        <div class="check-list ion-margin-top">
+          <label class="check-list-item" [class.selected]="scForm.get('szLossOfConsciousness')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szLossOfConsciousness" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Loss of consciousness</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szIncontinence')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szIncontinence" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Incontinence</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szOralTrauma')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szOralTrauma" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Oral trauma</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Immediate Actions (During Seizure) -->
+      <div class="section-block">
+        <div class="section-title">Immediate Actions (During Seizure)</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('szPositionedOnSide')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szPositionedOnSide" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Positioned on side (recovery position)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szAirwayProtected')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szAirwayProtected" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Airway protected / head turned</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szInjuryPrevention')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szInjuryPrevention" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Injury prevention (stabilized by staff)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szStayedWithPatient')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szStayedWithPatient" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Stayed with patient continuously</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Post-Ictal Assessment -->
+      <div class="section-block">
+        <div class="section-title">Post-Ictal Assessment</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">LOC</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('szPostLocAlert')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szPostLocAlert" class="yn-hidden">Alert
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('szPostLocConfused')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szPostLocConfused" class="yn-hidden">Confused
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('szPostLocUnresponsive')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szPostLocUnresponsive" class="yn-hidden">Unresponsive
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Behavior</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('szBehaviorCalm')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szBehaviorCalm" class="yn-hidden">Calm
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('szBehaviorAgitated')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szBehaviorAgitated" class="yn-hidden">Agitated
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('szBehaviorLethargic')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szBehaviorLethargic" class="yn-hidden">Lethargic
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Airway</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('szAirwayPatent')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szAirwayPatent" class="yn-hidden">Patent
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('szAirwayCompromised')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szAirwayCompromised" class="yn-hidden">Compromised
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Complaints</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('szComplaintHeadache')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szComplaintHeadache" class="yn-hidden">Headache
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('szComplaintFatigue')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szComplaintFatigue" class="yn-hidden">Fatigue
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('szComplaintOther')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="szComplaintOther" class="yn-hidden">Other
+              </label>
+            </div>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('szComplaintOther')?.value">
+          <input tuiTextfield formControlName="szComplaintOtherText" placeholder="Describe...">
+          <label>Other complaint</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Vitals (Post-Seizure) -->
+      <div class="section-block">
+        <div class="section-title">Vitals (Post-Seizure)</div>
+        <ion-row>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width"><input tuiTextfield formControlName="szBp"><label>BP</label></tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width"><input tuiTextfield formControlName="szHr" inputmode="numeric"><label>HR</label></tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width"><input tuiTextfield formControlName="szRr" inputmode="numeric"><label>RR</label></tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width"><input tuiTextfield formControlName="szTemp"><label>Temp</label></tui-textfield>
+          </ion-col>
+          <ion-col size="6" size-sm="2">
+            <tui-textfield class="full-width"><input tuiTextfield formControlName="szSpo2" inputmode="numeric"><label>SpO₂</label></tui-textfield>
+          </ion-col>
+        </ion-row>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="szRepeatVitals">
+          <label>Repeat Vitals</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- History -->
+      <div class="section-block">
+        <div class="section-title">History</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Known seizure disorder</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('szKnownSeizureDisorder')?.value === 'yes'" (click)="setStrVal('szKnownSeizureDisorder', 'yes')">Yes</label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('szKnownSeizureDisorder')?.value === 'no'" (click)="setStrVal('szKnownSeizureDisorder', 'no')">No</label>
+              <label class="yn-btn" [class.active]="scForm.get('szKnownSeizureDisorder')?.value === 'unknown'" (click)="setStrVal('szKnownSeizureDisorder', 'unknown')">Unknown</label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Medications reviewed</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('szMedicationsReviewed')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="szMedicationsReviewed" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('szMedicationsReviewed')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('szMedicationsReviewed')?.value === false" (change)="setNo('szMedicationsReviewed', $event)">No
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Allergies reviewed</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('szAllergiesReviewed')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="szAllergiesReviewed" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('szAllergiesReviewed')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('szAllergiesReviewed')?.value === false" (change)="setNo('szAllergiesReviewed', $event)">No
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Interventions (Seizure) -->
+      <div class="section-block">
+        <div class="section-title">Interventions</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('szOxygen')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szOxygen" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Oxygen administered</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szIvAccess')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szIvAccess" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>IV access / saline lock</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szFluids')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szFluids" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Fluids initiated</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szAirwaySupport')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szAirwaySupport" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Airway support</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szMovedToMonitored')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szMovedToMonitored" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Moved to monitored area (forward aircraft if applicable)</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Clinical Considerations -->
+      <div class="section-block">
+        <div class="section-title">Clinical Considerations</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('szProlongedSeizure')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szProlongedSeizure" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Prolonged seizure (&gt;5 min)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szRecurrentSeizures')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szRecurrentSeizures" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Recurrent seizures</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szNoPriorHistory')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szNoPriorHistory" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>No prior seizure history</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szExtendedPostIctal')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szExtendedPostIctal" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Extended post-ictal phase</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Response / Status -->
+      <div class="section-block">
+        <div class="section-title">Response / Status</div>
+        <div class="multi-check-row">
+          <div class="multi-check-options">
+            <label class="check-chip" [class.selected]="scForm.get('szReturnedToBaseline')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szReturnedToBaseline" class="yn-hidden">Returned to baseline
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('szImproving')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szImproving" class="yn-hidden">Improving
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('szNoChange')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szNoChange" class="yn-hidden">No change
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('szWorsening')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="szWorsening" class="yn-hidden">Worsening
+            </label>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="szStatusNotes">
+          <label>Notes</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Notifications / Escalation (Seizure) -->
+      <div class="section-block">
+        <div class="section-title">Notifications / Escalation</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('szFoicUpdated')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szFoicUpdated" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>FOIC updated</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szMedControlConsulted')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szMedControlConsulted" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medical Control consulted</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szCaptainNotified')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szCaptainNotified" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Captain (PIC) notified</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szEmsRequested')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szEmsRequested" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>EMS requested at destination</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szSupervisorNotified')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szSupervisorNotified" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Supervisor / Program Manager notified</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Disposition (Seizure) -->
+      <div class="section-block">
+        <div class="section-title">Disposition</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('szContinueMonitoring')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szContinueMonitoring" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Continue monitoring</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szPrepareEmsHandoff')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szPrepareEmsHandoff" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Prepare for EMS handoff</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('szDiversionConsidered')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="szDiversionConsidered" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Diversion considered</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Monitoring (Seizure) -->
+      <div class="section-block">
+        <div class="section-title">Monitoring</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Frequent reassessment</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('szFrequentReassessment')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="szFrequentReassessment" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('szFrequentReassessment')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('szFrequentReassessment')?.value === false" (change)="setNo('szFrequentReassessment', $event)">No
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Continuous observation</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('szContinuousObservation')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="szContinuousObservation" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('szContinuousObservation')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('szContinuousObservation')?.value === false" (change)="setNo('szContinuousObservation', $event)">No
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        </div><!-- /sc-section-body -->
+      </div><!-- /sc-section Seizure -->
+
+      <hr class="section-divider section-divider-heavy">
+
+
+      <!-- ══════════════════════════════════════════
+           CHEST PAIN
+           ══════════════════════════════════════════ -->
+      <div class="sc-section" [class.is-open]="sectionOpen.chestPain">
+        <div class="sc-section-toggle" (click)="toggleSection('chestPain')" role="button" tabindex="0">
+          <h2 class="sc-form-title" id="sc-chest-pain">Chest Pain</h2>
+          <ion-icon [name]="sectionOpen.chestPain ? 'chevron-up-outline' : 'chevron-down-outline'" class="sc-chevron"></ion-icon>
+        </div>
+        <div class="sc-section-body">
+
+      <!-- Incident Info -->
+      <div class="section-block">
+        <div class="section-title">Incident Info</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div *ngIf="scTriggers.chestPain" class="sc-required-banner">Required!</div>
+            <tui-textfield class="full-width" [class.sc-required-field]="scTriggers.chestPain">
+              <input tuiTextfield formControlName="cpDateTime" type="datetime-local">
+              <label>Date / Time of Incident</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <div class="multi-check-row">
+              <span class="multi-check-label">Location:</span>
+              <div class="multi-check-options">
+                <label class="check-chip" [class.selected]="scForm.get('cpLocationFacility')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="cpLocationFacility" class="yn-hidden">Facility
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('cpLocationTransport')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="cpLocationTransport" class="yn-hidden">Transport
+                </label>
+                <label class="check-chip" [class.selected]="scForm.get('cpLocationAircraft')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="cpLocationAircraft" class="yn-hidden">Aircraft
+                </label>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="cpEscortStaff">
+          <label>Escort Staff</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Patient Info -->
+      <div class="section-block">
+        <div class="section-title">Patient Info</div>
+        <tui-textfield class="full-width">
+          <input tuiTextfield formControlName="cpANumber">
+          <label>A#</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Initial Status -->
+      <div class="section-block">
+        <div class="section-title">Initial Status</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Mobility</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('cpAmbulatory')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpAmbulatory" class="yn-hidden">Ambulatory
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpAssisted')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpAssisted" class="yn-hidden">Assisted
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('cpUnableToAmbulate')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpUnableToAmbulate" class="yn-hidden">Unable to ambulate
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">LOC</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('cpLocAlert')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpLocAlert" class="yn-hidden">Alert
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpLocAltered')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpLocAltered" class="yn-hidden">Altered
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('cpLocUnresponsive')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpLocUnresponsive" class="yn-hidden">Unresponsive
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Distress</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('cpDistressNone')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpDistressNone" class="yn-hidden">None
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpDistressMild')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpDistressMild" class="yn-hidden">Mild
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpDistressMod')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpDistressMod" class="yn-hidden">Mod
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('cpDistressSevere')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpDistressSevere" class="yn-hidden">Severe
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Subjective -->
+      <div class="section-block">
+        <div class="section-title">Subjective (Patient Statement)</div>
+        <tui-textfield class="full-width">
+          <textarea tuiTextarea formControlName="cpPatientStatement" rows="2"></textarea>
+          <label>Patient statement</label>
+        </tui-textfield>
+        <div class="sub-section-label ion-margin-top">Pain Assessment</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Onset</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('cpOnsetSudden')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpOnsetSudden" class="yn-hidden">Sudden
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpOnsetGradual')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpOnsetGradual" class="yn-hidden">Gradual
+              </label>
+              <tui-textfield class="time-small">
+                <input tuiTextfield formControlName="cpOnsetTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+                <label>Time</label>
+              </tui-textfield>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Location</span>
+            <tui-textfield class="concern-field">
+              <input tuiTextfield formControlName="cpPainLocation">
+              <label>Describe</label>
+            </tui-textfield>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Radiation</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('cpRadiationNone')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpRadiationNone" class="yn-hidden">None
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpRadiationArm')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpRadiationArm" class="yn-hidden">Arm
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpRadiationJaw')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpRadiationJaw" class="yn-hidden">Jaw
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpRadiationBack')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpRadiationBack" class="yn-hidden">Back
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpRadiationOther')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpRadiationOther" class="yn-hidden">Other
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row" *ngIf="scForm.get('cpRadiationOther')?.value">
+            <span class="yn-list-label">Radiation detail</span>
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="cpRadiationOtherText" placeholder="Specify...">
+              <label>Detail</label>
+            </tui-textfield>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Quality</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('cpQualityPressure')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpQualityPressure" class="yn-hidden">Pressure
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpQualitySharp')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpQualitySharp" class="yn-hidden">Sharp
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpQualityBurning')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpQualityBurning" class="yn-hidden">Burning
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('cpQualityTightness')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="cpQualityTightness" class="yn-hidden">Tightness
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Severity (0–10)</span>
+            <tui-textfield class="spo2-field">
+              <input tuiTextfield formControlName="cpPainSeverity" inputmode="numeric" maxlength="2">
+              <label>Score</label>
+            </tui-textfield>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Duration</span>
+            <tui-textfield class="concern-field">
+              <input tuiTextfield formControlName="cpDuration">
+              <label>Describe</label>
+            </tui-textfield>
+          </div>
+        </div>
+        <div class="sub-section-label ion-margin-top">Associated Symptoms</div>
+        <div class="multi-check-options" style="gap:6px; flex-wrap:wrap; display:flex;">
+          <label class="check-chip" [class.selected]="scForm.get('cpSob')?.value"><input tuiCheckbox type="checkbox" formControlName="cpSob" class="yn-hidden">SOB</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpNausea')?.value"><input tuiCheckbox type="checkbox" formControlName="cpNausea" class="yn-hidden">Nausea</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpVomiting')?.value"><input tuiCheckbox type="checkbox" formControlName="cpVomiting" class="yn-hidden">Vomiting</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpDiaphoresis')?.value"><input tuiCheckbox type="checkbox" formControlName="cpDiaphoresis" class="yn-hidden">Diaphoresis</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpDizziness')?.value"><input tuiCheckbox type="checkbox" formControlName="cpDizziness" class="yn-hidden">Dizziness</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpPalpitations')?.value"><input tuiCheckbox type="checkbox" formControlName="cpPalpitations" class="yn-hidden">Palpitations</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpAnxiety')?.value"><input tuiCheckbox type="checkbox" formControlName="cpAnxiety" class="yn-hidden">Anxiety</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpCough')?.value"><input tuiCheckbox type="checkbox" formControlName="cpCough" class="yn-hidden">Cough</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpFever')?.value"><input tuiCheckbox type="checkbox" formControlName="cpFever" class="yn-hidden">Fever</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpOtherSymptom')?.value"><input tuiCheckbox type="checkbox" formControlName="cpOtherSymptom" class="yn-hidden">Other</label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('cpOtherSymptom')?.value">
+          <input tuiTextfield formControlName="cpOtherSymptomText" placeholder="Specify...">
+          <label>Other symptom</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Vitals (Chest Pain) -->
+      <div class="section-block">
+        <div class="section-title">Vitals (Baseline &amp; Trending)</div>
+        <ion-row>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="cpBp"><label>BP</label></tui-textfield></ion-col>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="cpHr" inputmode="numeric"><label>HR</label></tui-textfield></ion-col>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="cpRr" inputmode="numeric"><label>RR</label></tui-textfield></ion-col>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="cpTemp"><label>Temp</label></tui-textfield></ion-col>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="cpSpo2" inputmode="numeric"><label>SpO₂</label></tui-textfield></ion-col>
+        </ion-row>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="cpRepeatVitals">
+          <label>Repeat Vitals</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Focused Assessment -->
+      <div class="section-block">
+        <div class="section-title">Focused Assessment</div>
+        <div class="multi-check-options" style="gap:6px; flex-wrap:wrap; display:flex;">
+          <label class="check-chip" [class.selected]="scForm.get('cpCardiacHistory')?.value"><input tuiCheckbox type="checkbox" formControlName="cpCardiacHistory" class="yn-hidden">Cardiac history</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpHtn')?.value"><input tuiCheckbox type="checkbox" formControlName="cpHtn" class="yn-hidden">HTN</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpDiabetes')?.value"><input tuiCheckbox type="checkbox" formControlName="cpDiabetes" class="yn-hidden">Diabetes</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpSmoker')?.value"><input tuiCheckbox type="checkbox" formControlName="cpSmoker" class="yn-hidden">Smoker</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpAnxietyHistory')?.value"><input tuiCheckbox type="checkbox" formControlName="cpAnxietyHistory" class="yn-hidden">Anxiety/Panic history</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpGerd')?.value"><input tuiCheckbox type="checkbox" formControlName="cpGerd" class="yn-hidden">GERD/Indigestion</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpTrauma')?.value"><input tuiCheckbox type="checkbox" formControlName="cpTrauma" class="yn-hidden">Trauma/Injury to chest</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpMedsReviewed')?.value"><input tuiCheckbox type="checkbox" formControlName="cpMedsReviewed" class="yn-hidden">Medications reviewed</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpAllergiesReviewed')?.value"><input tuiCheckbox type="checkbox" formControlName="cpAllergiesReviewed" class="yn-hidden">Allergies reviewed</label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Rule-Out Considerations -->
+      <div class="section-block">
+        <div class="section-title">Rule-Out Considerations (check if suspected)</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('cpRoCardiac')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpRoCardiac" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Cardiac (ACS/MI)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpRoAnxiety')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpRoAnxiety" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Anxiety / Panic</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpRoGerd')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpRoGerd" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>GERD / Indigestion</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpRoMusculoskeletal')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpRoMusculoskeletal" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Musculoskeletal</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpRoPulmonary')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpRoPulmonary" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Pulmonary (PE, pneumothorax, pleurisy, HTN)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpRoOther')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpRoOther" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Other</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('cpRoOther')?.value">
+          <input tuiTextfield formControlName="cpRoOtherText" placeholder="Specify...">
+          <label>Other</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Interventions (Chest Pain) -->
+      <div class="section-block">
+        <div class="section-title">Interventions</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('cpMovedToObservation')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpMovedToObservation" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Moved to observation area (front of aircraft if applicable)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpAedAvailable')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpAedAvailable" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>AED available</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpOxygen')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpOxygen" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Oxygen initiated</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpIvAccess')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpIvAccess" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>IV access established</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpFluids')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpFluids" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Fluids given</span></div>
+          </label>
+        </div>
+        <div class="sub-section-label ion-margin-top">Medications</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('cpAsa')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpAsa" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>ASA 81mg x4 (chewed)</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpNtg')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpNtg" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>NTG SL given</span></div>
+          </label>
+        </div>
+        <div class="ntg-detail-row ion-margin-top" *ngIf="scForm.get('cpNtg')?.value">
+          <tui-textfield class="spo2-field">
+            <input tuiTextfield formControlName="cpNtgDoses" inputmode="numeric" maxlength="2">
+            <label># Doses</label>
+          </tui-textfield>
+          <div class="ntg-warning">
+            <tui-textfield class="spo2-field">
+              <input tuiTextfield formControlName="cpSbpPriorNtg" inputmode="numeric">
+              <label>SBP prior</label>
+            </tui-textfield>
+            <span class="ntg-hold-note">⚠ Hold if SBP &lt;100</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Response to Treatment -->
+      <div class="section-block">
+        <div class="section-title">Response to Treatment</div>
+        <div class="multi-check-options" style="gap:6px; flex-wrap:wrap; display:flex;">
+          <label class="check-chip" [class.selected]="scForm.get('cpResponseImproved')?.value"><input tuiCheckbox type="checkbox" formControlName="cpResponseImproved" class="yn-hidden">Improved</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpResponseNoChange')?.value"><input tuiCheckbox type="checkbox" formControlName="cpResponseNoChange" class="yn-hidden">No change</label>
+          <label class="check-chip" [class.selected]="scForm.get('cpResponseWorsened')?.value"><input tuiCheckbox type="checkbox" formControlName="cpResponseWorsened" class="yn-hidden">Worsened</label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="cpResponseNotes">
+          <label>Notes</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Notifications / Escalation (Chest Pain) -->
+      <div class="section-block">
+        <div class="section-title">Notifications / Escalation</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('cpFoicNotified')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpFoicNotified" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>FOIC notified</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpMedControl')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpMedControl" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medical Control consulted</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpSupervisorNotified')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpSupervisorNotified" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Supervisor / Program Manager notified</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Disposition (Chest Pain) -->
+      <div class="section-block">
+        <div class="section-title">Disposition</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('cpContinueMonitoring')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpContinueMonitoring" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Continue monitoring</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpEmsRequested')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpEmsRequested" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>EMS requested</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('cpDiversionInitiated')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="cpDiversionInitiated" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Transport / diversion initiated</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Monitoring (Chest Pain) -->
+      <div class="section-block">
+        <div class="section-title">Monitoring</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Frequent vitals</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('cpFrequentVitals')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="cpFrequentVitals" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('cpFrequentVitals')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('cpFrequentVitals')?.value === false" (change)="setNo('cpFrequentVitals', $event)">No
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Reassessment completed</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('cpReassessmentCompleted')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="cpReassessmentCompleted" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('cpReassessmentCompleted')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('cpReassessmentCompleted')?.value === false" (change)="setNo('cpReassessmentCompleted', $event)">No
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        </div><!-- /sc-section-body -->
+      </div><!-- /sc-section Chest Pain -->
+
+      <hr class="section-divider section-divider-heavy">
+
+
+      <!-- ══════════════════════════════════════════
+           VIOLENT INCIDENT
+           ══════════════════════════════════════════ -->
+      <div class="sc-section" [class.is-open]="sectionOpen.violentIncident">
+        <div class="sc-section-toggle" (click)="toggleSection('violentIncident')" role="button" tabindex="0">
+          <h2 class="sc-form-title" id="sc-violent">Violent Incident</h2>
+          <ion-icon [name]="sectionOpen.violentIncident ? 'chevron-up-outline' : 'chevron-down-outline'" class="sc-chevron"></ion-icon>
+        </div>
+        <div class="sc-section-body">
+
+      <!-- Incident Info -->
+      <div class="section-block">
+        <div class="section-title">Incident Info</div>
+        <ion-row>
+          <ion-col size="12" size-sm="6">
+            <div *ngIf="scTriggers.violentIncident" class="sc-required-banner">Required!</div>
+            <tui-textfield class="full-width" [class.sc-required-field]="scTriggers.violentIncident">
+              <input tuiTextfield formControlName="viDateTimeIncident" type="datetime-local">
+              <label>Date/Time Incident</label>
+            </tui-textfield>
+          </ion-col>
+          <ion-col size="12" size-sm="6">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="viAssessmentTime" placeholder="HHMM" inputmode="numeric" maxlength="4">
+              <label>Assessment Time</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="viLocation">
+          <label>Location</label>
+        </tui-textfield>
+        <div class="multi-check-row ion-margin-top">
+          <span class="multi-check-label">Type:</span>
+          <div class="multi-check-options">
+            <label class="check-chip" [class.selected]="scForm.get('viTypeInmateInmate')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="viTypeInmateInmate" class="yn-hidden">Inmate/Inmate
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('viTypeInmateStaff')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="viTypeInmateStaff" class="yn-hidden">Inmate/Staff
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('viTypeUseOfForce')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="viTypeUseOfForce" class="yn-hidden">Use of Force
+            </label>
+            <label class="check-chip" [class.selected]="scForm.get('viTypeOther')?.value">
+              <input tuiCheckbox type="checkbox" formControlName="viTypeOther" class="yn-hidden">Other
+            </label>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('viTypeOther')?.value">
+          <input tuiTextfield formControlName="viTypeOtherText" placeholder="Specify...">
+          <label>Other type</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- PAX Info -->
+      <div class="section-block">
+        <div class="section-title">PAX Info</div>
+        <tui-textfield class="full-width">
+          <textarea tuiTextarea formControlName="viPaxIds" rows="3"></textarea>
+          <label>PAX ID# (one per line — add multiple as needed)</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Initial Status (Violent) -->
+      <div class="section-block">
+        <div class="section-title">Initial Status</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Mobility</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viAmbulatory')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viAmbulatory" class="yn-hidden">Ambulatory
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('viWheelchair')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viWheelchair" class="yn-hidden">Wheelchair
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viStretcher')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viStretcher" class="yn-hidden">Stretcher
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">LOC</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viLocAlert')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viLocAlert" class="yn-hidden">Alert
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('viLocAltered')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viLocAltered" class="yn-hidden">Altered
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viLocUnresponsive')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viLocUnresponsive" class="yn-hidden">Unresponsive
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Behavior</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viBehaviorCalm')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viBehaviorCalm" class="yn-hidden">Calm
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('viBehaviorAgitated')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viBehaviorAgitated" class="yn-hidden">Agitated
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viBehaviorCombative')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viBehaviorCombative" class="yn-hidden">Combative
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('viBehaviorOther')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viBehaviorOther" class="yn-hidden">Other
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row" *ngIf="scForm.get('viBehaviorOther')?.value">
+            <span class="yn-list-label">Behavior detail</span>
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="viBehaviorOtherText" placeholder="Specify...">
+              <label>Detail</label>
+            </tui-textfield>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Distress</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viDistressNone')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viDistressNone" class="yn-hidden">None
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('viDistressMild')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viDistressMild" class="yn-hidden">Mild
+              </label>
+              <label class="yn-btn" [class.active]="scForm.get('viDistressMod')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viDistressMod" class="yn-hidden">Mod
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viDistressSevere')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viDistressSevere" class="yn-hidden">Severe
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Subjective (Violent) -->
+      <div class="section-block">
+        <div class="section-title">Subjective (Patient Statement)</div>
+        <tui-textfield class="full-width">
+          <textarea tuiTextarea formControlName="viPatientStatement" rows="2"></textarea>
+          <label>Patient statement</label>
+        </tui-textfield>
+        <ion-row class="ion-margin-top">
+          <ion-col size="12" size-sm="4">
+            <tui-textfield class="full-width">
+              <input tuiTextfield formControlName="viPainScale" inputmode="numeric" maxlength="2">
+              <label>Pain (0–10)</label>
+            </tui-textfield>
+          </ion-col>
+        </ion-row>
+        <div class="multi-check-options ion-margin-top" style="gap:6px; flex-wrap:wrap; display:flex;">
+          <label class="check-chip" [class.selected]="scForm.get('viHeadache')?.value"><input tuiCheckbox type="checkbox" formControlName="viHeadache" class="yn-hidden">Headache</label>
+          <label class="check-chip" [class.selected]="scForm.get('viDizziness')?.value"><input tuiCheckbox type="checkbox" formControlName="viDizziness" class="yn-hidden">Dizziness</label>
+          <label class="check-chip" [class.selected]="scForm.get('viLocSymptom')?.value"><input tuiCheckbox type="checkbox" formControlName="viLocSymptom" class="yn-hidden">LOC</label>
+          <label class="check-chip" [class.selected]="scForm.get('viNausea')?.value"><input tuiCheckbox type="checkbox" formControlName="viNausea" class="yn-hidden">N/V</label>
+          <label class="check-chip" [class.selected]="scForm.get('viSob')?.value"><input tuiCheckbox type="checkbox" formControlName="viSob" class="yn-hidden">SOB</label>
+          <label class="check-chip" [class.selected]="scForm.get('viPain')?.value"><input tuiCheckbox type="checkbox" formControlName="viPain" class="yn-hidden">Pain</label>
+          <label class="check-chip" [class.selected]="scForm.get('viOtherComplaint')?.value"><input tuiCheckbox type="checkbox" formControlName="viOtherComplaint" class="yn-hidden">Other</label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('viOtherComplaint')?.value">
+          <input tuiTextfield formControlName="viOtherComplaintText" placeholder="Specify...">
+          <label>Other complaint</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Vitals (Violent) -->
+      <div class="section-block">
+        <div class="section-title">Vitals</div>
+        <ion-row>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="viBp"><label>BP</label></tui-textfield></ion-col>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="viHr" inputmode="numeric"><label>HR</label></tui-textfield></ion-col>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="viRr" inputmode="numeric"><label>RR</label></tui-textfield></ion-col>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="viTemp"><label>Temp</label></tui-textfield></ion-col>
+          <ion-col size="6" size-sm="2"><tui-textfield class="full-width"><input tuiTextfield formControlName="viSpo2" inputmode="numeric"><label>SpO₂</label></tui-textfield></ion-col>
+        </ion-row>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Primary Survey -->
+      <div class="section-block">
+        <div class="section-title">Primary Survey</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Airway</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viAirwayPatent')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viAirwayPatent" class="yn-hidden">Patent
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viAirwayCompromised')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viAirwayCompromised" class="yn-hidden">Compromised
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Breathing</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viBreathingNormal')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viBreathingNormal" class="yn-hidden">Normal
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viBreathingLabored')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viBreathingLabored" class="yn-hidden">Labored
+              </label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Circulation</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viCirculationStable')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viCirculationStable" class="yn-hidden">Stable
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viCirculationBleeding')?.value">
+                <input tuiCheckbox type="checkbox" formControlName="viCirculationBleeding" class="yn-hidden">Bleeding
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Injury Assessment -->
+      <div class="section-block">
+        <div class="section-title">Injury Assessment (check &amp; note location/size)</div>
+        <label class="check-list-item" [class.selected]="scForm.get('viNoneObserved')?.value">
+          <input tuiCheckbox type="checkbox" formControlName="viNoneObserved" class="yn-hidden">
+          <div class="check-list-content"><span class="check-indicator"></span><span>None observed</span></div>
+        </label>
+        <div class="injury-row ion-margin-top">
+          <label class="check-chip" [class.selected]="scForm.get('viAbrasionChecked')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viAbrasionChecked" class="yn-hidden">Abrasion
+          </label>
+          <tui-textfield class="injury-detail" *ngIf="scForm.get('viAbrasionChecked')?.value">
+            <input tuiTextfield formControlName="viAbrasion" placeholder="Location/size...">
+            <label>Detail</label>
+          </tui-textfield>
+        </div>
+        <div class="injury-row">
+          <label class="check-chip" [class.selected]="scForm.get('viLacerationChecked')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viLacerationChecked" class="yn-hidden">Laceration
+          </label>
+          <tui-textfield class="injury-detail" *ngIf="scForm.get('viLacerationChecked')?.value">
+            <input tuiTextfield formControlName="viLaceration" placeholder="Location/size...">
+            <label>Detail</label>
+          </tui-textfield>
+        </div>
+        <div class="injury-row">
+          <label class="check-chip" [class.selected]="scForm.get('viContusionChecked')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viContusionChecked" class="yn-hidden">Contusion
+          </label>
+          <tui-textfield class="injury-detail" *ngIf="scForm.get('viContusionChecked')?.value">
+            <input tuiTextfield formControlName="viContusion" placeholder="Location/size...">
+            <label>Detail</label>
+          </tui-textfield>
+        </div>
+        <div class="injury-row">
+          <label class="check-chip" [class.selected]="scForm.get('viSwellingChecked')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viSwellingChecked" class="yn-hidden">Swelling
+          </label>
+          <tui-textfield class="injury-detail" *ngIf="scForm.get('viSwellingChecked')?.value">
+            <input tuiTextfield formControlName="viSwelling" placeholder="Location/size...">
+            <label>Detail</label>
+          </tui-textfield>
+        </div>
+        <div class="injury-row">
+          <label class="check-chip" [class.selected]="scForm.get('viBleedingControlled')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viBleedingControlled" class="yn-hidden">Bleeding – Controlled
+          </label>
+          <label class="check-chip" [class.selected]="scForm.get('viBleedingActive')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viBleedingActive" class="yn-hidden">Bleeding – Active
+          </label>
+        </div>
+        <div class="sub-section-label ion-margin-top">Head Injury Signs:</div>
+        <div class="multi-check-options" style="gap:6px; flex-wrap:wrap; display:flex;">
+          <label class="check-chip" [class.selected]="scForm.get('viHeadInjuryNone')?.value"><input tuiCheckbox type="checkbox" formControlName="viHeadInjuryNone" class="yn-hidden">None</label>
+          <label class="check-chip" [class.selected]="scForm.get('viHeadInjuryLoc')?.value"><input tuiCheckbox type="checkbox" formControlName="viHeadInjuryLoc" class="yn-hidden">LOC</label>
+          <label class="check-chip" [class.selected]="scForm.get('viHeadInjuryConfusion')?.value"><input tuiCheckbox type="checkbox" formControlName="viHeadInjuryConfusion" class="yn-hidden">Confusion</label>
+          <label class="check-chip" [class.selected]="scForm.get('viHeadInjuryVomiting')?.value"><input tuiCheckbox type="checkbox" formControlName="viHeadInjuryVomiting" class="yn-hidden">Vomiting</label>
+          <label class="check-chip" [class.selected]="scForm.get('viHeadInjuryUnequal')?.value"><input tuiCheckbox type="checkbox" formControlName="viHeadInjuryUnequal" class="yn-hidden">Unequal pupils</label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Neuro Check -->
+      <div class="section-block">
+        <div class="section-title">Neuro Check</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">A&amp;O</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viAoPerson')?.value"><input tuiCheckbox type="checkbox" formControlName="viAoPerson" class="yn-hidden">Person</label>
+              <label class="yn-btn" [class.active]="scForm.get('viAoPlace')?.value"><input tuiCheckbox type="checkbox" formControlName="viAoPlace" class="yn-hidden">Place</label>
+              <label class="yn-btn" [class.active]="scForm.get('viAoTime')?.value"><input tuiCheckbox type="checkbox" formControlName="viAoTime" class="yn-hidden">Time</label>
+              <label class="yn-btn" [class.active]="scForm.get('viAoSituation')?.value"><input tuiCheckbox type="checkbox" formControlName="viAoSituation" class="yn-hidden">Situation</label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Pupils</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viPupilsEqual')?.value"><input tuiCheckbox type="checkbox" formControlName="viPupilsEqual" class="yn-hidden">Equal</label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viPupilsUnequal')?.value"><input tuiCheckbox type="checkbox" formControlName="viPupilsUnequal" class="yn-hidden">Unequal</label>
+              <label class="yn-btn" [class.active]="scForm.get('viPupilsReactive')?.value"><input tuiCheckbox type="checkbox" formControlName="viPupilsReactive" class="yn-hidden">Reactive</label>
+            </div>
+          </div>
+          <div class="yn-list-row">
+            <span class="yn-list-label">Motor/Sensory</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viMotorNormal')?.value"><input tuiCheckbox type="checkbox" formControlName="viMotorNormal" class="yn-hidden">Normal</label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viMotorDeficit')?.value"><input tuiCheckbox type="checkbox" formControlName="viMotorDeficit" class="yn-hidden">Deficit</label>
+              <tui-textfield class="concern-field" *ngIf="scForm.get('viMotorDeficit')?.value">
+                <input tuiTextfield formControlName="viMotorDeficitText" placeholder="Describe...">
+                <label>Detail</label>
+              </tui-textfield>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Use of Force / Restraints -->
+      <div class="section-block">
+        <div class="section-title">Use of Force / Restraints</div>
+        <label class="check-list-item" [class.selected]="scForm.get('viNotApplicable')?.value">
+          <input tuiCheckbox type="checkbox" formControlName="viNotApplicable" class="yn-hidden">
+          <div class="check-list-content"><span class="check-indicator"></span><span>Not applicable</span></div>
+        </label>
+        <div *ngIf="!scForm.get('viNotApplicable')?.value">
+          <tui-textfield class="full-width ion-margin-top">
+            <input tuiTextfield formControlName="viForceType">
+            <label>Force Type</label>
+          </tui-textfield>
+          <div class="yn-list ion-margin-top">
+            <div class="yn-list-row">
+              <span class="yn-list-label">Restraints Applied</span>
+              <div class="yn-options">
+                <label class="yn-btn" [class.active]="scForm.get('viRestraints')?.value">
+                  <input tuiCheckbox type="checkbox" formControlName="viRestraints" class="yn-hidden">Yes
+                </label>
+              </div>
+            </div>
+            <div class="yn-list-row" *ngIf="scForm.get('viRestraints')?.value">
+              <span class="yn-list-label">Circulation Checked</span>
+              <div class="yn-options">
+                <label class="yn-btn" [class.active]="scForm.get('viCirculationChecked')?.value === true">
+                  <input tuiCheckbox type="checkbox" formControlName="viCirculationChecked" class="yn-hidden">Yes
+                </label>
+                <label class="yn-btn yn-no" [class.active]="scForm.get('viCirculationChecked')?.value === false">
+                  <input type="checkbox" class="yn-hidden" [checked]="scForm.get('viCirculationChecked')?.value === false" (change)="setNo('viCirculationChecked', $event)">No
+                </label>
+              </div>
+            </div>
+          </div>
+          <tui-textfield class="full-width ion-margin-top">
+            <input tuiTextfield formControlName="viForceInjuries">
+            <label>Injuries related to force</label>
+          </tui-textfield>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Interventions (Violent) -->
+      <div class="section-block">
+        <div class="section-title">Interventions</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('viIntNone')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viIntNone" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>None</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('viFirstAid')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viFirstAid" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>First Aid</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('viWoundCare')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viWoundCare" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Wound Care</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('viIce')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viIce" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Ice</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('viMedication')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viMedication" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medication</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('viMedication')?.value">
+          <input tuiTextfield formControlName="viMedicationText" placeholder="Specify...">
+          <label>Medication detail</label>
+        </tui-textfield>
+        <div class="check-list ion-margin-top">
+          <label class="check-list-item" [class.selected]="scForm.get('viImmobilization')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viImmobilization" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Immobilization</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('viOtherIntervention')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viOtherIntervention" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Other</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top" *ngIf="scForm.get('viOtherIntervention')?.value">
+          <input tuiTextfield formControlName="viOtherInterventionText" placeholder="Specify...">
+          <label>Other intervention</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Disposition (Violent) -->
+      <div class="section-block">
+        <div class="section-title">Disposition</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('viReturnToFacility')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viReturnToFacility" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Return to Facility</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('viObservationFlight')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viObservationFlight" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Observation with separation on Flight</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('viEmsTransfer')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viEmsTransfer" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>EMS transfer</span></div>
+          </label>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Notifications (Violent) -->
+      <div class="section-block">
+        <div class="section-title">Notifications</div>
+        <div class="check-list">
+          <label class="check-list-item" [class.selected]="scForm.get('viSiteSupervisor')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viSiteSupervisor" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Site Supervisor</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('viMedicalDirector')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viMedicalDirector" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>Medical Director</span></div>
+          </label>
+          <label class="check-list-item" [class.selected]="scForm.get('viFoicAdvised')?.value">
+            <input tuiCheckbox type="checkbox" formControlName="viFoicAdvised" class="yn-hidden">
+            <div class="check-list-content"><span class="check-indicator"></span><span>FOIC advised</span></div>
+          </label>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="viOtherNotif">
+          <label>Other notification</label>
+        </tui-textfield>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Follow-Up -->
+      <div class="section-block">
+        <div class="section-title">Follow-Up</div>
+        <div class="yn-list">
+          <div class="yn-list-row">
+            <span class="yn-list-label">Recheck needed</span>
+            <div class="yn-options">
+              <label class="yn-btn" [class.active]="scForm.get('viRecheckNeeded')?.value === true">
+                <input tuiCheckbox type="checkbox" formControlName="viRecheckNeeded" class="yn-hidden">Yes
+              </label>
+              <label class="yn-btn yn-no" [class.active]="scForm.get('viRecheckNeeded')?.value === false">
+                <input type="checkbox" class="yn-hidden" [checked]="scForm.get('viRecheckNeeded')?.value === false" (change)="setNo('viRecheckNeeded', $event)">No
+              </label>
+              <tui-textfield class="time-small" *ngIf="scForm.get('viRecheckNeeded')?.value === true">
+                <input tuiTextfield formControlName="viRecheckWhen" placeholder="When?">
+                <label>When</label>
+              </tui-textfield>
+            </div>
+          </div>
+        </div>
+        <tui-textfield class="full-width ion-margin-top">
+          <input tuiTextfield formControlName="viSpecialInstructions">
+          <label>Special instructions</label>
+        </tui-textfield>
+      </div>
+
+        </div><!-- /sc-section-body -->
+      </div><!-- /sc-section Violent Incident -->
+
+      <!-- Save -->
+      <div class="ion-margin-top ion-padding">
+        <button tuiButton appearance="primary" size="l" class="full-width" type="button" (click)="save()">
+          Save Special Circumstances
+        </button>
+      </div>
+
+    </form>
+  </div>
+</ion-content>

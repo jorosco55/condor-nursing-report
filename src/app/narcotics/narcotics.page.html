@@ -1,107 +1,184 @@
 <ion-header>
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <img src="assets/images/condor-logo.svg" alt="Condor" class="header-logo">
+    </ion-buttons>
     <ion-title>Narcotics</ion-title>
+    <ion-buttons slot="end">
+      <span class="powered-by">Powered by Condor</span>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div class="container">
     <form [formGroup]="narcoticsForm">
-      <h2 class="ion-text-center">Narcotics</h2>
 
-      <div class="section-block">
-        <div class="section-title">Narcotics</div>
-        <div formArrayName="entries" class="narcotics-list">
-          <div *ngFor="let entry of entries.controls; let i = index" [formGroupName]="i" class="narcotic-card">
-            <div class="narcotic-card-header">
-              <h4>Narcotic {{ i + 1 }}</h4>
-              <button *ngIf="i > 0" tuiButton appearance="secondary" size="s" type="button" (click)="removeEntry(i)">
-                Remove
-              </button>
+      <div formArrayName="entries" class="narcotics-list">
+        <div *ngFor="let entry of entries.controls; let i = index" [formGroupName]="i" class="narcotic-card section-block">
+
+          <div class="narcotic-card-header section-title-row">
+            <div class="form-title-group">
+              <div class="section-title">Narcotic Custody Record</div>
+              <div class="form-subtitle">
+                For use ONLY if PAX presents to flight line without narcotic custody record from facility
+              </div>
+            </div>
+            <button *ngIf="entries.length > 1" tuiButton appearance="secondary" size="s" type="button" (click)="removeEntry(i)">
+              Remove Record
+            </button>
+          </div>
+
+          <div class="custody-grid">
+            <div class="grid-row">
+              <div class="grid-label">FOIC name / Site / M#</div>
+              <div class="grid-input">
+                <tui-textfield class="full-width no-border">
+                  <input tuiTextfield formControlName="foicNameSiteMNum">
+                </tui-textfield>
+              </div>
+            </div>
+            
+            <div class="grid-row">
+              <div class="grid-label">Date :</div>
+              <div class="grid-input">
+                <input type="date" class="native-input" formControlName="date">
+              </div>
             </div>
 
-            <ion-row>
-              <ion-col size="12" size-sm="6" size-md="3">
-                <tui-textfield class="full-width">
-                  <input tuiTextfield formControlName="aNumber">
-                  <label>A-Number</label>
+            <div class="grid-row">
+              <div class="grid-label">Flight Nurse name :</div>
+              <div class="grid-input">
+                <tui-textfield class="full-width select-field no-border">
+                  <select tuiSelect formControlName="flightNurseName" [items]="rnList">
+                    <option value="" disabled selected>-- Select RN --</option>
+                    <option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</option>
+                  </select>
                 </tui-textfield>
-              </ion-col>
+              </div>
+            </div>
 
-              <ion-col size="12" size-sm="6" size-md="4">
-                <tui-textfield class="full-width select-field" [class.field-alert]="narcoticsRequired && !hasAnyNarcoticSelection()">
-                  <select tuiSelect formControlName="narcoticName" [items]="narcoticOptions" placeholder="-- Select --"></select>
-                  <label>Narcotic</label>
+            <div class="grid-row">
+              <div class="grid-label">PAX ID# (A-number) :</div>
+              <div class="grid-input">
+                <tui-textfield class="full-width no-border">
+                  <input tuiTextfield formControlName="paxId">
                 </tui-textfield>
-              </ion-col>
+              </div>
+            </div>
 
-              <ion-col size="12" size-sm="6" size-md="2">
-                <tui-textfield class="full-width select-field">
-                  <select tuiSelect formControlName="dose" [items]="doseOptions" placeholder="-- Select --"></select>
-                  <label>Dose</label>
+            <div class="grid-row double-height">
+              <div class="grid-label">Narcotic Description :<br>(Drug Name, mg, frequency)</div>
+              <div class="grid-input">
+                <textarea class="textarea-input" formControlName="narcoticDescription" [class.field-alert]="narcoticsRequired && !hasAnyNarcoticSelection()"></textarea>
+              </div>
+            </div>
+
+            <div class="grid-row">
+              <div class="grid-label">Amount Received :</div>
+              <div class="grid-input">
+                <tui-textfield class="full-width no-border">
+                  <input tuiTextfield formControlName="amountReceived" placeholder="Quantity #">
                 </tui-textfield>
-              </ion-col>
+              </div>
+            </div>
 
-              <ion-col size="12" size-sm="6" size-md="3">
-                <tui-textfield class="full-width select-field">
-                  <select tuiSelect formControlName="dosageUnit" [items]="dosageUnits" placeholder="-- Select --"></select>
-                  <label>Dosage Unit</label>
-                </tui-textfield>
-              </ion-col>
-            </ion-row>
+            <div class="grid-row double-height">
+              <div class="grid-label">Received from :<br>(Name, badge #, facility name origination)</div>
+              <div class="grid-input">
+                <textarea class="textarea-input" formControlName="receivedFrom"></textarea>
+              </div>
+            </div>
 
-            <ion-row>
-              <ion-col size="12" size-sm="6" size-md="4">
-                <div class="time-field">
-                  <tui-textfield class="full-width">
-                    <input tuiTextfield formControlName="timeZ" placeholder="HHMM" inputmode="numeric" maxlength="4" (focus)="stampEntryTimeOnFocus(i)" (blur)="handleEntryTimeBlur(i)">
-                    <label>Time</label>
-                    <span class="time-inline">
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="stampEntryTime(i)">Now</button>
-                      <button tuiButton size="s" appearance="secondary" type="button" (click)="openTimePicker(narcTimePicker)" aria-label="Open time picker">Pick</button>
-                    </span>
-                  </tui-textfield>
-                  <input #narcTimePicker type="time" class="time-picker-input" (change)="applyEntryTimePicker($event, i)">
-                  <div class="time-error" *ngIf="entries.at(i).get('timeZ')?.hasError('invalidTime') && entries.at(i).get('timeZ')?.touched">
-                    Use HHMM (0000-2359).
-                  </div>
+            <div class="grid-row signature-row">
+              <div class="grid-label">Received from - Signature :</div>
+              <div class="grid-input signature-input">
+                <div class="signature-canvas-wrap" [class.has-signature]="getControlValue(i, 'receivedFromSignature')">
+                  <canvas #signatureCanvas 
+                          class="signature-canvas" 
+                          [attr.data-pad-id]="'recv-sig-' + i" 
+                          [attr.data-index]="i" 
+                          data-control-name="receivedFromSignature"></canvas>
+                  <button tuiButton appearance="flat" size="s" class="clear-sig-btn" type="button" (click)="clearSignature('recv-sig-' + i, i, 'receivedFromSignature')">
+                    Clear
+                  </button>
+                  <div class="signature-hint" *ngIf="!getControlValue(i, 'receivedFromSignature')">Sign here</div>
                 </div>
-              </ion-col>
+              </div>
+            </div>
 
-              <ion-col size="12" size-sm="6" size-md="4">
-                <tui-textfield class="full-width select-field">
-                  <select tuiSelect formControlName="rnName" [items]="rnList" placeholder="-- Select RN --"></select>
-                  <label>RN</label>
+            <div class="grid-row">
+              <div class="grid-label">Amount dispersed en route (if any) :</div>
+              <div class="grid-input">
+                <tui-textfield class="full-width no-border">
+                  <input tuiTextfield formControlName="amountDispersedEnRoute" placeholder="Quantity #">
                 </tui-textfield>
-              </ion-col>
-            </ion-row>
+              </div>
+            </div>
 
-            <ion-row>
-              <ion-col size="12">
-                <div class="signature-field">
-                  <div class="signature-header">
-                    <span>RN Signature</span>
-                    <button tuiButton appearance="secondary" size="s" type="button" (click)="clearSignature(i)">Clear</button>
-                  </div>
-                  <div class="signature-canvas-wrap" [class.has-signature]="entry.get('rnSignature')?.value">
-                    <canvas #rnSignatureCanvas class="signature-canvas"></canvas>
-                    <div class="signature-hint">Sign here (finger or stylus)</div>
-                  </div>
+            <div class="grid-row">
+              <div class="grid-label">Amount remaining :</div>
+              <div class="grid-input">
+                <tui-textfield class="full-width no-border">
+                  <input tuiTextfield formControlName="amountRemaining" placeholder="Quantity #">
+                </tui-textfield>
+              </div>
+            </div>
+
+            <div class="grid-row double-height">
+              <div class="grid-label">Released to:<br>(Name, badge #, receiving facility or location name)</div>
+              <div class="grid-input">
+                <textarea class="textarea-input" formControlName="releasedTo"></textarea>
+              </div>
+            </div>
+
+            <div class="grid-row signature-row">
+              <div class="grid-label">Released to - Signature :</div>
+              <div class="grid-input signature-input">
+                <div class="signature-canvas-wrap" [class.has-signature]="getControlValue(i, 'releasedToSignature')">
+                  <canvas #signatureCanvas 
+                          class="signature-canvas" 
+                          [attr.data-pad-id]="'rel-sig-' + i" 
+                          [attr.data-index]="i" 
+                          data-control-name="releasedToSignature"></canvas>
+                  <button tuiButton appearance="flat" size="s" class="clear-sig-btn" type="button" (click)="clearSignature('rel-sig-' + i, i, 'releasedToSignature')">
+                    Clear
+                  </button>
+                  <div class="signature-hint" *ngIf="!getControlValue(i, 'releasedToSignature')">Sign here</div>
                 </div>
-              </ion-col>
-            </ion-row>
+              </div>
+            </div>
+
+            <div class="grid-row signature-row">
+              <div class="grid-label">Flight Nurse Signature :</div>
+              <div class="grid-input signature-input">
+                <div class="signature-canvas-wrap" [class.has-signature]="getControlValue(i, 'flightNurseSignature')">
+                  <canvas #signatureCanvas 
+                          class="signature-canvas" 
+                          [attr.data-pad-id]="'fn-sig-' + i" 
+                          [attr.data-index]="i" 
+                          data-control-name="flightNurseSignature"></canvas>
+                  <button tuiButton appearance="flat" size="s" class="clear-sig-btn" type="button" (click)="clearSignature('fn-sig-' + i, i, 'flightNurseSignature')">
+                    Clear
+                  </button>
+                  <div class="signature-hint" *ngIf="!getControlValue(i, 'flightNurseSignature')">Sign here</div>
+                </div>
+              </div>
+            </div>
+            
           </div>
-        </div>
-        <div class="narcotics-actions">
-          <button tuiButton appearance="primary" size="m" type="button" (click)="addEntry()">
-            Add Narco
-          </button>
         </div>
       </div>
 
-      <div class="ion-margin-top ion-padding">
+      <div class="narcotics-actions ion-margin-top">
+        <button tuiButton size="m" appearance="secondary" type="button" (click)="addEntry()">
+          Add Another Record
+        </button>
+      </div>
+
+      <div class="ion-margin-top">
         <button tuiButton appearance="primary" size="l" class="full-width" type="button" (click)="saveNarcotics()">
-          Save Narcotics
+          Save Record(s)
         </button>
       </div>
     </form>
