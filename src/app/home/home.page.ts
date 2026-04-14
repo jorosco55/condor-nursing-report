@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { ToastController, IonContent, IonHeader, IonToolbar, IonButtons, IonTitle, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { timeOutline, add, remove } from 'ionicons/icons';
-import { TuiButton, TuiDataList, TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { TuiButton, TuiDataList, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox, TuiDataListWrapper, TuiInputNumber, TuiNativeSelect, TuiSelect, TuiTextarea } from '@taiga-ui/kit';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { Capacitor } from '@capacitor/core';
@@ -72,8 +72,7 @@ type PaxCountControl =
     TuiNativeSelect,
     TuiTextarea,
     TuiCheckbox,
-    TuiButton,
-    TuiIcon
+    TuiButton
   ]
 })
 export class HomePage implements OnInit, OnDestroy {

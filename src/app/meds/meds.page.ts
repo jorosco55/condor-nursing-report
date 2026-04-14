@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } f
 import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { swapVerticalOutline, heartOutline, pulseOutline, thermometerOutline, waterOutline, speedometerOutline } from 'ionicons/icons';
-import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { TuiButton, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox, TuiNativeSelect } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { PaxMedicationEntry, NursingReport } from '../models/report.model';
@@ -28,8 +28,7 @@ import { PaxMedicationEntry, NursingReport } from '../models/report.model';
     TuiTextfield,
     TuiNativeSelect,
     TuiCheckbox,
-    TuiButton,
-    TuiIcon
+    TuiButton
   ]
 })
 export class MedsPage implements OnInit {

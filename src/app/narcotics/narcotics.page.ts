@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonButtons } from '@ionic/angular/standalone';
+import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { timeOutline, closeCircleOutline } from 'ionicons/icons';
-import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { TuiButton, TuiTextfield } from '@taiga-ui/core';
 import { TuiNativeSelect } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { NarcoticEntry, NursingReport } from '../models/report.model';
@@ -25,13 +25,10 @@ import SignaturePad from 'signature_pad';
     IonToolbar,
     IonTitle,
     IonContent,
-    IonRow,
-    IonCol,
     IonButtons,
     TuiTextfield,
     TuiNativeSelect,
-    TuiButton,
-    TuiIcon
+    TuiButton
   ]
 })
 export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {

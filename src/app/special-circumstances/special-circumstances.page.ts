@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { callOutline, timeOutline, chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
-import { TuiButton, TuiTextfield, TuiIcon } from '@taiga-ui/core';
+import { TuiButton, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox, TuiTextarea } from '@taiga-ui/kit';
 import { ReportService } from '../services/report.service';
 import { NursingReport } from '../models/report.model';
@@ -30,8 +30,7 @@ type ScSectionKey = 'wrap' | 'medControl' | 'cardiacArrest' | 'ems' | 'seizure' 
     TuiTextfield,
     TuiCheckbox,
     TuiTextarea,
-    TuiButton,
-    TuiIcon
+    TuiButton
   ]
 })
 export class SpecialCircumstancesPage implements OnInit {
