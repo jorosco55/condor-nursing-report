@@ -1,16 +1,23 @@
 import { Component, OnDestroy, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { ToastController, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { timeOutline, closeCircleOutline } from 'ionicons/icons';
-import { TuiButton, TuiTextfield } from '@taiga-ui/core';
-import { TuiNativeSelect } from '@taiga-ui/kit';
+import { TuiButton } from '@taiga-ui/core';
 import { ReportService } from '../services/report.service';
 import { NarcoticEntry, NursingReport } from '../models/report.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import SignaturePad from 'signature_pad';
+
+interface NarcoticFieldRow {
+  key: keyof NarcoticEntry;
+  labelLines: string[];
+  rowClass?: string;
+  fields: FormlyFieldConfig[];
+}
 
 @Component({
   selector: 'app-narcotics',
@@ -26,8 +33,7 @@ import SignaturePad from 'signature_pad';
     IonTitle,
     IonContent,
     IonButtons,
-    TuiTextfield,
-    TuiNativeSelect,
+    FormlyModule,
     TuiButton
   ]
 })
@@ -56,6 +62,31 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
 
   private minEntries = 1;
 
+  topFieldRows: NarcoticFieldRow[] = [
+    this.buildFieldRow('foicNameSiteMNum', ['FOIC name / Site / M#'], 'condor-text'),
+    this.buildFieldRow('date', ['Date :'], 'condor-date'),
+    this.buildFieldRow('flightNurseName', ['Flight Nurse name :'], 'condor-select', {
+      placeholder: '-- Select RN --',
+      options: []
+    }),
+    this.buildFieldRow('paxId', ['PAX ID# (A-number) :'], 'condor-text'),
+    this.buildFieldRow('narcoticDescription', ['Narcotic Description :', '(Drug Name, mg, frequency)'], 'condor-textarea', {}, 'double-height'),
+    this.buildFieldRow('amountReceived', ['Amount Received :'], 'condor-text', {
+      placeholder: 'Quantity #'
+    }),
+    this.buildFieldRow('receivedFrom', ['Received from :', '(Name, badge #, facility name origination)'], 'condor-textarea', {}, 'double-height')
+  ];
+
+  bottomFieldRows: NarcoticFieldRow[] = [
+    this.buildFieldRow('amountDispersedEnRoute', ['Amount dispersed en route (if any) :'], 'condor-text', {
+      placeholder: 'Quantity #'
+    }),
+    this.buildFieldRow('amountRemaining', ['Amount remaining :'], 'condor-text', {
+      placeholder: 'Quantity #'
+    }),
+    this.buildFieldRow('releasedTo', ['Released to:', '(Name, badge #, receiving facility or location name)'], 'condor-textarea', {}, 'double-height')
+  ];
+
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
   private toastCtrl = inject(ToastController);
@@ -66,6 +97,7 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.rnList = this.reportService.rnList;
+    this.setFieldOptions('flightNurseName', this.rnList);
     this.initForm();
     this.loadLatestReport();
 
@@ -117,6 +149,49 @@ export class NarcoticsPage implements OnInit, AfterViewInit, OnDestroy {
 
   getControlValue(index: number, controlName: string): string {
     return this.entries.at(index)?.get(controlName)?.value || '';
+  }
+
+  asFormGroup(control: unknown): FormGroup {
+    return control as FormGroup;
+  }
+
+  isNarcoticAlertRow(row: NarcoticFieldRow): boolean {
+    return row.key === 'narcoticDescription' && this.narcoticsRequired && !this.hasAnyNarcoticSelection();
+  }
+
+  private buildFieldRow(
+    key: keyof NarcoticEntry,
+    labelLines: string[],
+    type: string,
+    props: Record<string, unknown> = {},
+    rowClass = ''
+  ): NarcoticFieldRow {
+    return {
+      key,
+      labelLines,
+      rowClass,
+      fields: [
+        {
+          key,
+          type,
+          props: {
+            noBorder: true,
+            ...props
+          }
+        }
+      ]
+    };
+  }
+
+  private setFieldOptions(key: keyof NarcoticEntry, options: string[]) {
+    [...this.topFieldRows, ...this.bottomFieldRows]
+      .filter(row => row.key === key)
+      .forEach(row => {
+        row.fields[0].props = {
+          ...row.fields[0].props,
+          options
+        };
+      });
   }
 
   setupSignaturePads() {

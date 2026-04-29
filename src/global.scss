@@ -14,12 +14,6 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-:root {
-  --ion-background-color: #eee9f8;
-  --ion-text-color: #212529;
-  --app-surface-tint: #eef2f7;
-}
-
 // ============================================
 // Touch Screen & Scroll Optimizations
 // ============================================
@@ -70,7 +64,7 @@ ion-content {
     -webkit-overflow-scrolling: touch;
     overflow-scrolling: touch;
     scrollbar-width: thin;
-    scrollbar-color: #9aa0a6 transparent;
+    scrollbar-color: var(--app-color-scrollbar, #9aa0a6) transparent;
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
@@ -88,14 +82,14 @@ ion-content::part(scroll)::-webkit-scrollbar {
 }
 
 ion-content::part(scroll)::-webkit-scrollbar-thumb {
-  background: #9aa0a6;
-  border-radius: 8px;
+  background: var(--app-color-scrollbar, #9aa0a6);
+  border-radius: var(--app-radius-md);
   border: 2px solid transparent;
   background-clip: content-box;
 }
 
 ion-content::part(scroll)::-webkit-scrollbar-thumb:hover {
-  background: #7f868d;
+  background: var(--app-color-scrollbar-hover, #7f868d);
   background-clip: content-box;
 }
 
@@ -176,10 +170,10 @@ ion-button:active {
 }
 
 .signature-pad {
-  border: 1px solid #ccc;
+  border: 1px solid var(--app-color-border);
   width: 100%;
   height: 200px;
-  background: white;
+  background: var(--app-color-surface);
 }
 
 
@@ -215,7 +209,7 @@ tui-textfield label {
 .container {
   background: var(--app-surface-tint);
   padding: 12px;
-  border-radius: 8px;
+  border-radius: var(--app-radius-md);
 }
 
 // ============================================
@@ -280,8 +274,8 @@ ion-content {
   bottom: var(--keyboard-height);
   left: 0;
   right: 0;
-  background: #f0f0f0;
-  border-top: 1px solid #ccc;
+  background: var(--app-color-primary-soft);
+  border-top: 1px solid var(--app-color-border);
   padding: 8px 16px;
   display: flex;
   justify-content: flex-end;
@@ -291,7 +285,7 @@ ion-content {
   button {
     padding: 6px 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--app-radius-xs);
     background: var(--ion-color-primary);
     color: white;
     font-weight: 500;

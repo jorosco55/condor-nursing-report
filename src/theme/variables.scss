@@ -1,2 +1,45 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+@use './tokens' as tokens;
+
+:root {
+  --ion-color-primary: #{tokens.$color-primary};
+  --ion-color-primary-rgb: 67, 82, 210;
+  --ion-color-primary-contrast: #{tokens.$color-on-primary};
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #3b48b9;
+  --ion-color-primary-tint: #5664d7;
+
+  --ion-background-color: #{tokens.$color-background};
+  --ion-text-color: #{tokens.$color-text};
+
+  --app-color-primary-soft: #{tokens.$color-primary-soft};
+  --app-color-danger: #{tokens.$color-danger};
+  --app-color-danger-bright: #{tokens.$color-danger-bright};
+  --app-color-neutral: #{tokens.$color-neutral};
+  --app-color-page-surface: #{tokens.$color-page-surface};
+  --app-color-surface: #{tokens.$color-surface};
+  --app-color-surface-muted: #{tokens.$color-surface-muted};
+  --app-color-border: #{tokens.$color-border};
+  --app-color-border-control: #{tokens.$color-border-control};
+  --app-color-divider: #{tokens.$color-divider};
+  --app-color-divider-subtle: #{tokens.$color-divider-subtle};
+  --app-color-text-heading: #{tokens.$color-text-heading};
+  --app-color-text-strong: #{tokens.$color-text-strong};
+  --app-color-text-muted: #{tokens.$color-text-muted};
+  --app-color-text-subtle: #{tokens.$color-text-subtle};
+  --app-color-scrollbar: #{tokens.$color-scrollbar};
+  --app-color-scrollbar-hover: #{tokens.$color-scrollbar-hover};
+  --app-surface-tint: #eef2f7;
+
+  --app-radius-xs: #{tokens.$radius-xs};
+  --app-radius-sm: #{tokens.$radius-sm};
+  --app-radius-md: #{tokens.$radius-md};
+  --app-radius-lg: #{tokens.$radius-lg};
+  --app-radius-pill: #{tokens.$radius-pill};
+
+  --app-shadow-page: #{tokens.$shadow-page};
+  --app-shadow-card: #{tokens.$shadow-card};
+  --app-shadow-list-item: #{tokens.$shadow-list-item};
+  --app-touch-target-min: #{tokens.$touch-target-min};
+}

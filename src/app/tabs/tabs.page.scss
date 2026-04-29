@@ -1,4 +1,4 @@
 .tab-alert {
-  --color: #b00020;
-  --color-selected: #b00020;
+  --color: var(--app-color-danger);
+  --color-selected: var(--app-color-danger);
 }

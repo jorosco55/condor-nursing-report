@@ -1,10 +1,7 @@
+@use '../../theme/tokens' as tokens;
+
 .container {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: #f8f9fa;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  @include tokens.page-container(1000px, tokens.$space-xl);
 }
 
 ion-list {
@@ -12,11 +9,11 @@ ion-list {
 }
 
 ion-item {
-  --background: #ffffff;
+  --background: #{tokens.$color-surface};
   margin-bottom: 12px;
-  border-radius: 10px;
-  border: 1px solid #e6e6e6;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  border-radius: tokens.$radius-lg;
+  border: 1px solid tokens.$color-border-muted;
+  box-shadow: tokens.$shadow-list-item;
 }
 
 ion-item:last-child {
@@ -70,28 +67,28 @@ ion-item::part(native) {
 
 .record-title {
   font-weight: 600;
-  color: #2d2d2d;
+  color: tokens.$color-text-strong;
 }
 
 .record-meta {
   display: flex;
   gap: 12px;
   font-size: 0.85rem;
-  color: #666;
+  color: tokens.$color-text-muted;
 }
 
 .mock-pill {
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: tokens.$radius-pill;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  background: #fff4e6;
-  color: #b85c00;
-  border: 1px solid #ffd8a8;
+  background: tokens.$color-mock-surface;
+  color: tokens.$color-mock-text;
+  border: 1px solid tokens.$color-mock-border;
 }
 
 .record-actions {
@@ -103,9 +100,9 @@ ion-item::part(native) {
 .record-details {
   margin-top: 10px;
   padding: 8px 12px;
-  background: #ffffff;
-  border-radius: 6px;
-  border: 1px solid #e5e5e5;
+  background: tokens.$color-surface;
+  border-radius: tokens.$radius-sm;
+  border: 1px solid tokens.$color-border-muted;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 6px 12px;
@@ -113,15 +110,15 @@ ion-item::part(native) {
 
 .detail-item {
   font-size: 0.85rem;
-  color: #4a4a4a;
+  color: tokens.$color-text-chip;
 }
 
 .empty-state {
   text-align: center;
   padding: 32px 16px;
-  border: 1px dashed #d0d0d0;
-  border-radius: 8px;
-  background: #ffffff;
+  border: 1px dashed tokens.$color-border-control;
+  border-radius: tokens.$radius-md;
+  background: tokens.$color-surface;
 }
 
 .empty-title {
@@ -130,7 +127,7 @@ ion-item::part(native) {
 }
 
 .empty-subtitle {
-  color: #666;
+  color: tokens.$color-text-muted;
   margin-bottom: 16px;
 }
 

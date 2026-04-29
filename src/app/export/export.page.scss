@@ -1,32 +1,12 @@
-// Header branding
-.header-logo {
-  width: 36px;
-  height: 36px;
-  margin-left: 8px;
-}
+@use '../../theme/tokens' as tokens;
 
-.powered-by {
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-  letter-spacing: 0.5px;
-  margin-right: 12px;
-}
+@include tokens.header-branding;
 
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  background: #f8f9fa;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-
-  // Touch-friendly container
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  @include tokens.page-container(800px);
 
   .signature-container {
-    background: white;
+    background: tokens.$color-surface;
   }
 }
 
@@ -36,14 +16,14 @@
 
 .section-divider {
   border: none;
-  border-top: 1px solid #e1e4ea;
+  border-top: 1px solid tokens.$color-divider;
 }
 
 .signature-container {
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid tokens.$color-border;
+  border-radius: tokens.$radius-xs;
   margin-top: 10px;
-  background: #f9f9f9;
+  background: tokens.$color-surface-muted;
 
   // Prevent pull-to-refresh and other gestures
   overscroll-behavior: contain;

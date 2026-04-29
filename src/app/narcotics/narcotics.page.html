@@ -30,63 +30,19 @@
           </div>
 
           <div class="custody-grid">
-            <div class="grid-row">
-              <div class="grid-label">FOIC name / Site / M#</div>
-              <div class="grid-input">
-                <tui-textfield class="full-width no-border">
-                  <input tuiTextfield formControlName="foicNameSiteMNum">
-                </tui-textfield>
+            <div *ngFor="let row of topFieldRows" class="grid-row" [class.double-height]="row.rowClass === 'double-height'">
+              <div class="grid-label">
+                <ng-container *ngFor="let labelLine of row.labelLines; let last = last">
+                  {{ labelLine }}<br *ngIf="!last">
+                </ng-container>
               </div>
-            </div>
-            
-            <div class="grid-row">
-              <div class="grid-label">Date :</div>
-              <div class="grid-input">
-                <input type="date" class="native-input" formControlName="date">
-              </div>
-            </div>
-
-            <div class="grid-row">
-              <div class="grid-label">Flight Nurse name :</div>
-              <div class="grid-input">
-                <tui-textfield class="full-width select-field no-border">
-                  <select tuiSelect formControlName="flightNurseName" [items]="rnList">
-                    <option value="" disabled selected>-- Select RN --</option>
-                    <option *ngFor="let rn of rnList" [value]="rn">{{ rn }}</option>
-                  </select>
-                </tui-textfield>
-              </div>
-            </div>
-
-            <div class="grid-row">
-              <div class="grid-label">PAX ID# (A-number) :</div>
-              <div class="grid-input">
-                <tui-textfield class="full-width no-border">
-                  <input tuiTextfield formControlName="paxId">
-                </tui-textfield>
-              </div>
-            </div>
-
-            <div class="grid-row double-height">
-              <div class="grid-label">Narcotic Description :<br>(Drug Name, mg, frequency)</div>
-              <div class="grid-input">
-                <textarea class="textarea-input" formControlName="narcoticDescription" [class.field-alert]="narcoticsRequired && !hasAnyNarcoticSelection()"></textarea>
-              </div>
-            </div>
-
-            <div class="grid-row">
-              <div class="grid-label">Amount Received :</div>
-              <div class="grid-input">
-                <tui-textfield class="full-width no-border">
-                  <input tuiTextfield formControlName="amountReceived" placeholder="Quantity #">
-                </tui-textfield>
-              </div>
-            </div>
-
-            <div class="grid-row double-height">
-              <div class="grid-label">Received from :<br>(Name, badge #, facility name origination)</div>
-              <div class="grid-input">
-                <textarea class="textarea-input" formControlName="receivedFrom"></textarea>
+              <div class="grid-input" [class.field-alert]="isNarcoticAlertRow(row)">
+                <formly-form
+                  class="full-width"
+                  [form]="asFormGroup(entry)"
+                  [fields]="row.fields"
+                  [model]="asFormGroup(entry).value">
+                </formly-form>
               </div>
             </div>
 
@@ -107,28 +63,19 @@
               </div>
             </div>
 
-            <div class="grid-row">
-              <div class="grid-label">Amount dispersed en route (if any) :</div>
-              <div class="grid-input">
-                <tui-textfield class="full-width no-border">
-                  <input tuiTextfield formControlName="amountDispersedEnRoute" placeholder="Quantity #">
-                </tui-textfield>
+            <div *ngFor="let row of bottomFieldRows" class="grid-row" [class.double-height]="row.rowClass === 'double-height'">
+              <div class="grid-label">
+                <ng-container *ngFor="let labelLine of row.labelLines; let last = last">
+                  {{ labelLine }}<br *ngIf="!last">
+                </ng-container>
               </div>
-            </div>
-
-            <div class="grid-row">
-              <div class="grid-label">Amount remaining :</div>
               <div class="grid-input">
-                <tui-textfield class="full-width no-border">
-                  <input tuiTextfield formControlName="amountRemaining" placeholder="Quantity #">
-                </tui-textfield>
-              </div>
-            </div>
-
-            <div class="grid-row double-height">
-              <div class="grid-label">Released to:<br>(Name, badge #, receiving facility or location name)</div>
-              <div class="grid-input">
-                <textarea class="textarea-input" formControlName="releasedTo"></textarea>
+                <formly-form
+                  class="full-width"
+                  [form]="asFormGroup(entry)"
+                  [fields]="row.fields"
+                  [model]="asFormGroup(entry).value">
+                </formly-form>
               </div>
             </div>
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Condor Formly Cleanup"
+  short_description: "Refactor Condor forms with DRY Formly field patterns."
+  default_prompt: "Use this skill when refactoring Condor form pages to Formly-backed generic fields while preserving project behavior."

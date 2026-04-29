@@ -1,27 +1,15 @@
+@use '../../theme/tokens' as tokens;
+
 .section-block {
-  position: relative;
-  padding: 14px 14px 16px;
-  border: 1px solid #dfe3e8;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0 6px 16px rgba(26, 26, 26, 0.08);
-  overflow: hidden;
+  @include tokens.section-block(hidden);
 }
 
 .section-block::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 4px;
-  width: 100%;
-  background: linear-gradient(90deg, rgba(67, 82, 210, 0.6), rgba(67, 82, 210, 0.2));
+  @include tokens.section-accent(0);
 }
 
 .section-title {
-  font-weight: 600;
-  color: var(--ion-color-primary);
-  margin-bottom: 8px;
+  @include tokens.section-title;
 }
 
 .meds-row {
@@ -30,22 +18,17 @@
 
 .med-card {
   border: 1px solid #e6e9ef;
-  border-radius: 10px;
-  background: #ffffff;
+  border-radius: tokens.$radius-lg;
+  background: tokens.$color-surface;
   padding: 12px;
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.03);
+  box-shadow: tokens.$shadow-inset-subtle;
   position: relative;
   overflow: hidden;
 }
 
 .med-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
+  @include tokens.section-accent(0);
   height: 3px;
-  width: 100%;
-  background: linear-gradient(90deg, rgba(67, 82, 210, 0.6), rgba(67, 82, 210, 0.2));
 }
 
 .card-title {
@@ -139,13 +122,13 @@
 
 hr.card-divider {
   border: none;
-  border-top: 1px solid #e1e4ea;
+  border-top: 1px solid tokens.$color-divider;
   margin: 16px 0;
 }
 
 
 .vitals-section {
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid tokens.$color-border-muted;
   padding-top: 12px;
   margin-top: 8px;
 }
@@ -161,7 +144,7 @@ hr.card-divider {
 
 .vitals-hint {
   font-size: 0.85rem;
-  color: #7a7a7a;
+  color: tokens.$color-scrollbar-hover;
   margin-bottom: 8px;
 }
 
@@ -179,8 +162,8 @@ hr.card-divider {
   gap: 6px;
   padding: 8px;
   border: 1px solid #eef0f2;
-  border-radius: 6px;
-  background: #fafafa;
+  border-radius: tokens.$radius-sm;
+  background: tokens.$color-surface-muted;
 }
 
 .vitals-item ion-icon {
@@ -195,7 +178,7 @@ hr.card-divider {
 .vitals-item label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #4a4a4a;
+  color: tokens.$color-text-chip;
   order: 2;
   display: block;
   width: 100%;
@@ -234,7 +217,7 @@ hr.card-divider {
 
 .vitals-unit {
   font-size: 0.75rem;
-  color: #7a7a7a;
+  color: tokens.$color-scrollbar-hover;
   letter-spacing: 0.02em;
 }
 
@@ -249,7 +232,7 @@ hr.card-divider {
 
 .bp-divider {
   font-weight: 600;
-  color: #666;
+  color: tokens.$color-text-muted;
   line-height: 1;
   margin: 0 4px;
   align-self: center;
@@ -265,9 +248,9 @@ hr.card-divider {
   max-width: 220px;
   min-height: 56px;
   padding: 6px 10px;
-  border: 1px solid #dfe3e8;
-  border-radius: 8px;
-  background: #ffffff;
+  border: 1px solid tokens.$color-border;
+  border-radius: tokens.$radius-md;
+  background: tokens.$color-surface;
 }
 
 .bp-input {
@@ -281,7 +264,7 @@ hr.card-divider {
 
 .bp-combined-field:focus-within {
   border-color: var(--ion-color-primary);
-  box-shadow: 0 0 0 1px rgba(67, 82, 210, 0.15);
+  box-shadow: 0 0 0 1px tokens.$color-primary-tint;
 }
 
 .bp-combined-field input {
@@ -293,17 +276,17 @@ hr.card-divider {
   background: transparent;
   text-align: center;
   font-size: 0.95rem;
-  color: #2d2d2d;
+  color: tokens.$color-text-strong;
 }
 
 .bp-label {
   font-size: 0.7rem;
-  color: #7a7a7a;
+  color: tokens.$color-scrollbar-hover;
   letter-spacing: 0.02em;
 }
 
 .bp-combined-field input::placeholder {
-  color: #9aa0a6;
+  color: tokens.$color-scrollbar;
 }
 
 .checkbox-inline {
@@ -314,6 +297,5 @@ hr.card-divider {
 }
 
 .field-alert {
-  box-shadow: 0 0 0 1px #b00020 inset;
-  border-radius: 12px;
+  @include tokens.field-alert(tokens.$radius-xl);
 }
